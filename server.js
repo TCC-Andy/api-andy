@@ -16,7 +16,7 @@ app.use(express.json());
 mongoose.connect('mongodb+srv://andy:abttccandy@tcc-andy-valzi.gcp.mongodb.net/andy?retryWrites=true&w=majority',{
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000
+    serverSelectionTimeoutMS: 2000
 }).then(function () {
     console.log('Banco de dados conectado.');
 }).catch(err => console.log(err));
