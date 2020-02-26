@@ -11,11 +11,13 @@ app.use(cors());
 app.use(express.json());
 
 //iniciando o DB
-mongoose.connect('mongodb://localhost:27017/nodeMongoDB',
-{
-useNewUrlParser:true,
-useUnifiedTopology: true
-});
+mongoose.connect('mongodb://localhost:27017/nodeMongoDB',{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000
+}).then(function () {
+    console.log('Banco de dados conectado.');
+}).catch(err => console.log(err));
 
 
 
