@@ -2,8 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const requireDir = require("require-dir");
 const cors = require("cors");
+
 //iniciando a application
 const app = express();
+
 //aplicação pode ser usada em qualquer dominio
 app.use(cors());
 
@@ -11,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 //iniciando o DB
-mongoose.connect('mongodb://localhost:27017/nodeMongoDB',{
+mongoose.connect('mongodb+srv://andy:abttccandy@tcc-andy-valzi.gcp.mongodb.net/andy?retryWrites=true&w=majority',{
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000
@@ -19,18 +21,13 @@ mongoose.connect('mongodb://localhost:27017/nodeMongoDB',{
     console.log('Banco de dados conectado.');
 }).catch(err => console.log(err));
 
-
-
-
 requireDir("./src/models");
-//require("./src/models/user.js");
 
 app.use('/rota',require('./src/routes'));
 
-
-
-
 //iniciando o servidor
-app.listen(3001,function(){
+const port = process.env.PORT || 3001;
+
+app.listen(port,function(){
     console.log("Porta 3001 aberta");
 });
