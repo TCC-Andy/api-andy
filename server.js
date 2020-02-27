@@ -29,5 +29,5 @@ app.use('/rota',require('./src/routes'));
 const port = process.env.PORT || 3001;
 
 app.listen(port,function(){
-    console.log("Porta "+port+" aberta");
+    console.log("Porta "+port+"  aberta");
 });
