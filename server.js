@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 //iniciando o DB
-mongoose.connect('mongodb+srv://andy:abttccandy@tcc-andy-valzi.gcp.mongodb.net/andy?retryWrites=true&w=majority',{
+mongoose.connect(process.env.MONGO_URL,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 2000
