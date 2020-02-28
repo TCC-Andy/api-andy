@@ -14,7 +14,11 @@ return res.json(usuario);
 
 async store(req,res){
 const usuario = await Usuario.create(req.body);
-return res.json(usuario);
+return res.json({
+    status: 401,
+    menssagem: 'Cadastrado com sucesso',
+    usuario
+    });
 },
 
 async update(req,res){
