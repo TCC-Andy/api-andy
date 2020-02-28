@@ -27,8 +27,6 @@ requireDir("./src/models");
 app.use('/rota',require('./src/routes'));
 
 //iniciando o servidor
-const port = process.env.PORT || 3001;
+//const port = process.env.PORT || 3001;
 
-app.listen(port,function(){
-    console.log("Porta "+port+"  aberta");
-});
+app.listen(process.env.PORT || 3000);
