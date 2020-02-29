@@ -29,4 +29,7 @@ app.use(require('./src/routes'));
 //iniciando o servidor
 //const port = process.env.PORT || 3001;
 
-app.listen(process.env.PORT || 3001);
+//app.listen(process.env.PORT || 3001);
+app.listen(process.env.PORT || 3001,function(){
+    console.log("Porta "+(process.env.PORT || 3001)+" aberta");
+});

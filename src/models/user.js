@@ -1,23 +1,33 @@
 const mongoose = require("mongoose")
 
 const UsuarioSchema = new mongoose.Schema({
-    nome:{
+    nome: {
         type: String,
         required: true,
     },
-    sobrenome:{
+    sobrenome: {
         type: String,
         required: true,
     },
-    status:{
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+    },
+    senha:{
+        type: String,
+        required: true, 
+    },
+    status: {
         type: Number,
-        required: true,
+        default:1
     },
-    criadoEm:{
+    criadoEm: {
         type: Date,
         default: Date.now,
     }
 
 });
 //Registrar um model na aplicacao , agora o model Usuario vai estar disponivel com os atributos.
-mongoose.model('Usuario',UsuarioSchema);
+mongoose.model('Usuario', UsuarioSchema);

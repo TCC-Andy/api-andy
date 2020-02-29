@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Usuario= mongoose.model("Usuario");
 
 module.exports = {
-async index(req,res){
+async showUsers(req,res){
     const usuarios = await Usuario.find();
     return res.json(usuarios);
 },
@@ -12,10 +12,10 @@ const usuario = await Usuario.findById(req.params.id);
 return res.json(usuario);
 },
 
-async store(req,res){
+async createUser(req,res){
 const usuario = await Usuario.create(req.body);
 return res.json({
-    status: 401,
+    status: 200,
     menssagem: 'Cadastrado com sucesso',
     usuario
     });

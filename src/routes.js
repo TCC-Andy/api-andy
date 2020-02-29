@@ -5,9 +5,9 @@ const UserController = require("./controllers/UserController");
 
 
 //criando primeira rota
-routes.get("/todosUsuarios",UserController.index);
+routes.get("/showUsers",UserController.showUsers);
 routes.get("/unicoUsuarios/:id",UserController.show);
-routes.post("/criarUsuario",UserController.store);
+routes.post("/createUser",UserController.createUser);
 routes.put("/atualizaUsuarios/:id",UserController.update);
 routes.delete("/deletaUsuarios/:id",UserController.destroy);
 
