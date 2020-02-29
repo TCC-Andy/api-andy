@@ -1,4 +1,5 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const UsuarioSchema = new mongoose.Schema({
     nome: {
@@ -29,5 +30,7 @@ const UsuarioSchema = new mongoose.Schema({
     }
 
 });
+
+
 //Registrar um model na aplicacao , agora o model Usuario vai estar disponivel com os atributos.
 mongoose.model('Usuario', UsuarioSchema);
