@@ -18,7 +18,8 @@ const UsuarioSchema = new mongoose.Schema({
     },
     senha:{
         type: String,
-        required: true, 
+        required: true,
+        select: false,  
     },
     status: {
         type: Number,
@@ -30,6 +31,13 @@ const UsuarioSchema = new mongoose.Schema({
     }
 
 });
+//Evento antes de salvar
+UsuarioSchema.pre('save',async function(next) {
+    const hash = await bcrypt.hash(this.senha,10);
+    this.senha = hash;
+    next();
+});
+
 
 
 //Registrar um model na aplicacao , agora o model Usuario vai estar disponivel com os atributos.

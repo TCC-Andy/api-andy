@@ -16,34 +16,35 @@ module.exports = {
 
     async createUser(req, res) {
 
-        const { nome, sobrenome, email, senha } = req.body;
-        if ((!nome) || (!sobrenome) || (!email) || (!senha)) {
-            return res.json({
-                status: 406,
-                menssagem: 'Todos os campos precisam ser preenchidos',
-            })
-        }
-        //@ e . depois somente
-        if (!validator.validate(email)) {
-            return res.json({
-                status: 406,
-                menssagem: 'Formato do email não é valido',
-            })
-
-        }
-        if (await Usuario.findOne({ email })) {
-            return res.json({
-                status: 412,
-                menssagem: 'Usuario ja existe',
-            })
-        }
-        //Melhorar a logica usando funções
-        const usr = req.body
-        usr.senha = bcrypt.hashSync(senha, bcrypt.genSaltSync(9))
-        // console.log( bcrypt.compareSync("vscfode", usr.senha))
-
         try {
-            const usuario = await Usuario.create(usr);
+            const { nome, sobrenome, email, senha } = req.body;
+
+            if ((!nome) || (!sobrenome) || (!email) || (!senha)) {
+                return res.json({
+                    status: 406,
+                    menssagem: 'Todos os campos precisam ser preenchidos',
+                })
+            }
+            //@ e . depois somente
+            if (!validator.validate(email)) {
+                return res.json({
+                    status: 406,
+                    menssagem: 'Formato do email não é valido',
+                })
+
+            }
+            if (await Usuario.findOne({ email })) {
+                return res.json({
+                    status: 412,
+                    menssagem: 'Usuario ja existe',
+                })
+            }
+
+
+            const usuario = await Usuario.create(req.body);
+
+            //Não voltar senha
+            usuario.senha = undefined;
             return res.json({
                 status: 200,
                 menssagem: 'Cadastrado com sucesso',
@@ -54,6 +55,44 @@ module.exports = {
         }
 
     },
+
+    async authenticate(req, res) {
+        const { email, senha } = req.body;
+
+        const usuario = await Usuario.findOne({ email }).select('+senha');
+
+        //Verificar se caso não encontrar o email vai mostrar a mensagem abaixo
+        /*
+                if (!usuario) {
+                    return res.json({
+                        status: 400,
+                        menssagem: 'Usuario não encontrado',
+        
+                    });
+                }
+        */
+
+        if ((!usuario) || (!bcrypt.compareSync(senha, usuario.senha))) {
+            return res.json({
+                status: 400,
+                menssagem: 'Email e/ou senha incorreto(s)',
+
+            });
+        };
+
+        return res.json({
+            status: 200,
+            menssagem: 'Usuario encontrado',
+            usuario
+        });
+
+
+
+
+    },
+
+
+
 
     async update(req, res) {
         const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false });
