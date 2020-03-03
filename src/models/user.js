@@ -30,7 +30,7 @@ const UsuarioSchema = new mongoose.Schema({
         default: Date.now,
     }
 
-});
+}); 
 //Evento antes de salvar
 UsuarioSchema.pre('save',async function(next) {
     const hash = await bcrypt.hash(this.senha,10);
