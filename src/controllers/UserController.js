@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("email-validator");
 const bcrypt = require("bcrypt");
 const Usuario = mongoose.model("Usuario");
+const emailService = require('../services/emailService');
 
 module.exports = {
     async showUsers(req, res) {
@@ -42,6 +43,7 @@ module.exports = {
 
 
             const usuario = await Usuario.create(req.body);
+            emailService.send(req.body.email, req.body.nome);
 
             //Não voltar senha
             usuario.senha = undefined;
@@ -61,7 +63,7 @@ module.exports = {
 
         const usuario = await Usuario.findOne({ email }).select('+senha');
 
-        //Verificar se caso não encontrar o email vai mostrar a mensagem abaixo
+        //Verificar se caso não encontrar o email retornar ou não a mensagem abaixo
         /*
                 if (!usuario) {
                     return res.json({
@@ -86,12 +88,7 @@ module.exports = {
             usuario
         });
 
-
-
-
     },
-
-
 
 
     async update(req, res) {

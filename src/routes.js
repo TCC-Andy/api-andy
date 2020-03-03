@@ -3,8 +3,6 @@ const routes = express.Router();
 const UserController = require("./controllers/UserController");
 
 
-
-
 routes.get("/showUsers",UserController.showUsers);
 routes.get("/retrieveUser/:id",UserController.show);
 routes.post("/createUser",UserController.createUser);
