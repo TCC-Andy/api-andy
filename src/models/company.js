@@ -1,28 +1,24 @@
 const mongoose = require("mongoose");
 
 
-const ServicoSchema = new mongoose.Schema({
+const CompanySchema = new mongoose.Schema({
     nome: {
         type: String,
         required: true,
     },
-    descricao: {
+    nomeFantasia: {
         type: String,
         required: true,
     },
-    //Preco e tempo por enquanto como Number, mudar depois
-    preco: {
+    CNPJ: {
         type: Number,
         required: true,
     },
-    tempo: {
-        type: Number,
+    categoria: {
+        type:String,
         required: true,
     },
-    idEmpresa: {
-        type: Number,
-        required: true,
-    },
+ 
     status: {
         type: Number,
         default: 1
@@ -31,4 +27,4 @@ const ServicoSchema = new mongoose.Schema({
 });
 
 
-mongoose.model('Servicos', ServicoSchema);
+mongoose.model('Empresas', CompanySchema);

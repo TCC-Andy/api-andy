@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
-const Servico = mongoose.model("Servicos");
+const Empresa = mongoose.model("Empresas");
 
 
 module.exports = {
-    async createService(req, res) {
+    async createCompany(req, res) {
 
         try {
-            //const { nome, descricao, preco, tempo, idEmpresa, status } = req.body;
+           // const { nome, descricao, preco, tempo, idEmpresa, status } = req.body;
 
-            const service = await Servico.create(req.body);
+            const empresa = await Empresa.create(req.body)
 
             return res.json({
                 status: 200,
@@ -21,8 +21,8 @@ module.exports = {
 
     },
 
-    async showServices(req, res) {
-        const servicos = await Servico.find();
+    async showCompanies(req, res) {
+        const servicos = await Empresa.find();
         return res.json(servicos);
     },
 
