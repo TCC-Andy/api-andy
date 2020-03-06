@@ -16,24 +16,32 @@ const UsuarioSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
     },
-    senha:{
+    senha: {
         type: String,
         required: true,
-        select: false,  
+        select: false,
     },
     status: {
         type: Number,
-        default:1
+        default: 1
+    },
+    pwdToken: {
+        type: String,
+        select: false,
+    },
+    pwdExpires: {
+        type: Date,
+        select: false,
     },
     criadoEm: {
         type: Date,
         default: Date.now,
     }
 
-}); 
+});
 //Evento antes de salvar
-UsuarioSchema.pre('save',async function(next) {
-    const hash = await bcrypt.hash(this.senha,10);
+UsuarioSchema.pre('save', async function (next) {
+    const hash = await bcrypt.hash(this.senha, 10);
     this.senha = hash;
     next();
 });

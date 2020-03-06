@@ -8,7 +8,7 @@ const ServicoSchema = new mongoose.Schema({
     },
     descricao: {
         type: String,
-        required: true,
+        required: true, 
     },
     //Preco e tempo por enquanto como Number, mudar depois
     preco: {

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("email-validator");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 const Usuario = mongoose.model("Usuario");
 const emailService = require('../services/emailService');
 
@@ -43,7 +44,7 @@ module.exports = {
 
 
             const usuario = await Usuario.create(req.body);
-            emailService.send(req.body.email, req.body.nome);
+            emailService.send(1,req.body.email, req.body.nome);
 
             //Não voltar senha
             usuario.senha = undefined;
@@ -88,6 +89,64 @@ module.exports = {
             usuario
         });
 
+    },
+
+    async sendEmailToken(req, res) {
+        const { email,nome } = req.body;
+
+        try {
+            const user = await Usuario.findOne({ email });
+            if (!user) {
+                return res.json({
+                    status: 400,
+                    menssagem: 'Usuario não encontrado',
+                });
+            }
+                const token = crypto.randomBytes(20).toString('hex');
+                const now = new Date();
+                now.setHours(now.getHours()+1);
+
+                await Usuario.findByIdAndUpdate(user.id,{
+                    '$set':{
+                        pwdToken:token,
+                        pwdExpires:now,
+                    }
+                });
+                
+/*
+                 mailer.sendMail({
+                to:email,
+                from: "andy.services.it@gmail.com",
+                template:"recoverPassword",
+                context: {token},
+            },(err)=>{
+                if(err)
+                return res.status(400).send({error : "Não pode enviar email"});
+            
+                return res.send();
+            })
+
+*/
+
+
+
+
+emailService.send(2,req.body.email, req.body.nome,token,user.get("_id").toString());
+
+return res.json({
+                
+    status: 400,
+    menssagem: 'Foi',
+});
+
+        } catch (err) {
+            console.log(err)
+            return res.json({
+                
+                status: 400,
+                menssagem: 'Erro em recuperar o email',
+            });
+        }
     },
 
 

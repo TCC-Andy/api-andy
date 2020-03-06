@@ -18,7 +18,24 @@ const CompanySchema = new mongoose.Schema({
         type:String,
         required: true,
     },
- 
+    //Pesquisar a sintaxe correta para endereco
+    endereco: {
+        rua: {
+            type: String
+        },
+        bairro: {
+            type:String
+        },
+        cep:{
+            type:String
+        },
+        latitude:{
+            type:Number
+        },
+        longitude:{
+            type:Number
+        }
+    },
     status: {
         type: Number,
         default: 1
@@ -26,5 +43,4 @@ const CompanySchema = new mongoose.Schema({
 
 });
 
-
-mongoose.model('Empresas', CompanySchema);
+mongoose.model('Empresas',CompanySchema);

@@ -1,8 +1,16 @@
 const nodemailer = require("nodemailer");
 
 
-exports.send = async (to,nome) => {
-let transporter = nodemailer.createTransport({
+exports.send = async (flag,to,nome,token,id) => {
+if(flag==1){
+    subject="Seja bem vindo"
+    html="<h3>Ola "+nome+". Bem vindo a Andy Services</h3>"
+    console.log("é dois")
+}else if(flag==2){
+    subject="Redefinir senha"
+    html="<h3>Acesse o seguinte endereço para  alterar a senha: </br>http://tccandyapi.herokuapp.com/resetPassword/"+token+"/"+id+"</h3>"
+}
+const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
     secure: true,
@@ -19,10 +27,10 @@ let transporter = nodemailer.createTransport({
 
 transporter.sendMail({
     from: "Andy Services <andy.services.it@gmail.com>",
-    to: to,
-    subject: "Andy esta ao seu dispor!",
+    to,
+    subject,
     //text: "Testando o corpo do email",
-    html: "<h3>Bem vindo "+nome+" !!</h3></br>Venha conhecer um mundo de facilidades! Bem vindo a Andy Services!"
+    html,
 }).then(message => {
     console.log(message);
 }).catch(err => {

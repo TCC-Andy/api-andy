@@ -8,7 +8,7 @@ module.exports = {
         try {
            // const { nome, descricao, preco, tempo, idEmpresa, status } = req.body;
 
-            const empresa = await Empresa.create(req.body)
+            const empresa = await Empresa.create(req.body);
 
             return res.json({
                 status: 200,
@@ -25,10 +25,5 @@ module.exports = {
         const servicos = await Empresa.find();
         return res.json(servicos);
     },
-
-
-
-
-
 
 }
