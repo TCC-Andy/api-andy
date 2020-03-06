@@ -135,8 +135,8 @@ emailService.send(2,req.body.email, req.body.nome,token,user.get("_id").toString
 
 return res.json({
                 
-    status: 400,
-    menssagem: 'Foi',
+    status: 200,
+    menssagem: 'Email enviado',
 });
 
         } catch (err) {
@@ -147,6 +147,36 @@ return res.json({
                 menssagem: 'Erro em recuperar o email',
             });
         }
+    },
+
+    async resetPassword(req, res) {
+        const actualToken = req.params.token;
+        const usuario = await Usuario.findById(req.params.id).select('+pwdToken pwdExpires');
+        
+        if (!usuario) {
+            return res.json({
+                status: 400,
+                menssagem: 'Usuario não encontrado',
+            });
+        }
+        const now = new Date();
+        if((actualToken!==usuario.pwdToken)||(now>usuario.pwdExpires)){
+            return res.json({
+                status: 400,
+                menssagem: 'Token invalido',
+            });
+        }
+        //Verificar como avançar, envio o usuario para que chamem a nova tela para digitar senha, etc...
+        //Alex ja carrega a pagina e verifica o status, se 200 guarda o email e carrega a pagina de troca de senha
+        return res.json({
+            status: 200,
+            menssagem: 'Token aceito',
+            usuario
+        });
+    },
+
+    async updatePassword(req, res) {
+//Continuar logica
     },
 
 
