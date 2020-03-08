@@ -12,9 +12,11 @@ routes.get("/retrieveUser/:id",UserController.show);
 routes.post("/createUser",UserController.createUser);
 routes.post("/authenticateUser",UserController.authenticate);
 routes.put("/atualizaUsuarios/:id",UserController.update);
-routes.delete("/deletaUsuarios/:id",UserController.destroy);
+routes.delete("/deleteUser/:id",UserController.destroy);
 routes.post("/sendPassReset",UserController.sendEmailToken);
-routes.get("/resetPassword/:token/:id",UserController.resetPassword);
+routes.get("/verifyToken/:token/:id",UserController.verifyToken);
+routes.post("/updatePassword",UserController.updatePassword);
+
 
 //Rotas: Servicos
 

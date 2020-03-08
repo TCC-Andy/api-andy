@@ -12,8 +12,17 @@ module.exports = {
     },
 
     async show(req, res) {
+        try{
         const usuario = await Usuario.findById(req.params.id);
         return res.json(usuario);
+        }catch(err){
+            console.log(err)
+            return res.json({
+
+                status: 400,
+                menssagem: 'Erro em buscar usuario',
+            });
+        }
     },
 
     async createUser(req, res) {
@@ -44,7 +53,7 @@ module.exports = {
 
 
             const usuario = await Usuario.create(req.body);
-            emailService.send(1,req.body.email, req.body.nome);
+            emailService.send(1, req.body.email, req.body.nome);
 
             //Não voltar senha
             usuario.senha = undefined;
@@ -92,7 +101,7 @@ module.exports = {
     },
 
     async sendEmailToken(req, res) {
-        const { email,nome } = req.body;
+        const { email, nome } = req.body;
 
         try {
             const user = await Usuario.findOne({ email });
@@ -102,57 +111,57 @@ module.exports = {
                     menssagem: 'Usuario não encontrado',
                 });
             }
-                const token = crypto.randomBytes(20).toString('hex');
-                const now = new Date();
-                now.setHours(now.getHours()+1);
+            const token = crypto.randomBytes(20).toString('hex');
+            const now = new Date();
+            now.setHours(now.getHours() + 1);
 
-                await Usuario.findByIdAndUpdate(user.id,{
-                    '$set':{
-                        pwdToken:token,
-                        pwdExpires:now,
-                    }
-                });
-                
-/*
-                 mailer.sendMail({
-                to:email,
-                from: "andy.services.it@gmail.com",
-                template:"recoverPassword",
-                context: {token},
-            },(err)=>{
-                if(err)
-                return res.status(400).send({error : "Não pode enviar email"});
+            await Usuario.findByIdAndUpdate(user.id, {
+                '$set': {
+                    pwdToken: token,
+                    pwdExpires: now,
+                }
+            });
+
+            /*
+                             mailer.sendMail({
+                            to:email,
+                            from: "andy.services.it@gmail.com",
+                            template:"recoverPassword",
+                            context: {token},
+                        },(err)=>{
+                            if(err)
+                            return res.status(400).send({error : "Não pode enviar email"});
+                        
+                            return res.send();
+                        })
             
-                return res.send();
-            })
-
-*/
+            */
 
 
 
 
-emailService.send(2,req.body.email, req.body.nome,token,user.get("_id").toString());
+            emailService.send(2, req.body.email, req.body.nome, token, user.get("_id").toString());
 
-return res.json({
-                
-    status: 200,
-    menssagem: 'Email enviado',
-});
+            return res.json({
+
+                status: 200,
+                menssagem: 'Email enviado',
+            });
 
         } catch (err) {
             console.log(err)
             return res.json({
-                
+
                 status: 400,
                 menssagem: 'Erro em recuperar o email',
             });
         }
     },
 
-    async resetPassword(req, res) {
-        const actualToken = req.params.token;
-        const usuario = await Usuario.findById(req.params.id).select('+pwdToken pwdExpires');
-        
+    async verifyToken(req, res) {
+        const currentToken = req.params.token;
+        const usuario = await Usuario.findById(req.params.id).select('+ email pwdToken nome pwdExpires');
+
         if (!usuario) {
             return res.json({
                 status: 400,
@@ -160,23 +169,69 @@ return res.json({
             });
         }
         const now = new Date();
-        if((actualToken!==usuario.pwdToken)||(now>usuario.pwdExpires)){
+        if ((currentToken !== usuario.pwdToken) || (now > usuario.pwdExpires)) {
             return res.json({
                 status: 400,
                 menssagem: 'Token invalido',
             });
         }
-        //Verificar como avançar, envio o usuario para que chamem a nova tela para digitar senha, etc...
-        //Alex ja carrega a pagina e verifica o status, se 200 guarda o email e carrega a pagina de troca de senha
+
+        usuario.pwdExpires = undefined
+        usuario.pwdToken = undefined
         return res.json({
             status: 200,
             menssagem: 'Token aceito',
-            usuario
+            usuario,
         });
     },
 
     async updatePassword(req, res) {
-//Continuar logica
+        //Verificar novamente o token e o tempo
+        //Obs: Codigo duplicado, refatorar depois
+
+        try {
+            const { email, token: currentToken, senha } = req.body;
+            const usuario = await Usuario.findOne({ email }).select('+ pwdToken  pwdExpires');
+
+            if (!usuario) {
+                return res.json({
+                    status: 400,
+                    menssagem: 'Usuario não encontrado',
+                });
+            }
+            const now = new Date();
+            if ((currentToken !== usuario.pwdToken) || (now > usuario.pwdExpires)) {
+                return res.json({
+                    status: 400,
+                    menssagem: 'Token invalido',
+                    
+                });
+            }
+
+            await Usuario.findByIdAndUpdate(usuario.id, {
+                '$set': {
+                    senha,
+                    pwdToken: null,
+                    pwdExpires: null,
+                }
+            });
+            return res.json({
+                status: 200,
+                menssagem: 'Senha atualizada',
+                usuario,
+            });
+
+
+        } catch (err) {
+            console.log(err)
+            return res.json({
+
+                status: 400,
+                menssagem: 'Erro em atualizar a senha',
+            });
+        }
+
+
     },
 
 
