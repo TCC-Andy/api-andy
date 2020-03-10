@@ -11,5 +11,6 @@ client.geocodeForward('rua rio tiete 250 weissopolis Pinhais')
   })
   .catch(function(err) {
       console.log(err)
+      
   });
 
