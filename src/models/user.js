@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+var dateFormat = require('dateformat');
 
 const UsuarioSchema = new mongoose.Schema({
     nome: {
@@ -35,10 +36,10 @@ const UsuarioSchema = new mongoose.Schema({
     },
     criadoEm: {
         type: Date,
-        default: Date.now,
+        default: Date.now
     },
     perfil: {
-        type: String,
+        type: String
     }
 
 });

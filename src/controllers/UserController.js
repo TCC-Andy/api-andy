@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const Usuario = mongoose.model("Usuario");
 const emailService = require('../services/emailService');
+var dateFormat = require('dateformat');
 
 module.exports = {
     async showUsers(req, res) {
@@ -12,10 +13,10 @@ module.exports = {
     },
 
     async show(req, res) {
-        try{
-        const usuario = await Usuario.findById(req.params.id);
-        return res.json(usuario);
-        }catch(err){
+        try {
+            const usuario = await Usuario.findById(req.params.id);
+            return res.json(usuario);
+        } catch (err) {
             console.log(err)
             return res.json({
 
@@ -51,8 +52,12 @@ module.exports = {
                 })
             }
 
+            usr = req.body;
+            // mydate = new Date();
+            /*  usr.Date= dateFormat(now,"dd/mm/yyyy HH:MM:ss UTC").split(' ');*/
+            /*  usr.criadoEm = mydate;*/
 
-            const usuario = await Usuario.create(req.body);
+            const usuario = await Usuario.create(usr);
             emailService.send(1, req.body.email, req.body.nome);
 
             //Não voltar senha
@@ -65,8 +70,9 @@ module.exports = {
         } catch (err) {
             return res.json({
                 status: 500,
-                menssagem: 'Erro no registro do usuario'
-               
+                menssagem: 'Erro no registro do usuario',
+                error: err
+
             });
         }
 
@@ -126,24 +132,6 @@ module.exports = {
                 }
             });
 
-            /*
-                             mailer.sendMail({
-                            to:email,
-                            from: "andy.services.it@gmail.com",
-                            template:"recoverPassword",
-                            context: {token},
-                        },(err)=>{
-                            if(err)
-                            return res.status(400).send({error : "Não pode enviar email"});
-                        
-                            return res.send();
-                        })
-            
-            */
-
-
-
-
             emailService.send(2, req.body.email, req.body.nome, token, user.get("_id").toString());
 
             return res.json({
@@ -162,6 +150,7 @@ module.exports = {
         }
     },
 
+    /*
     async verifyToken(req, res) {
         const currentToken = req.params.token;
         const usuario = await Usuario.findById(req.params.id).select('+ email pwdToken nome pwdExpires');
@@ -188,7 +177,7 @@ module.exports = {
             usuario,
         });
     },
-
+*/
     async updatePassword(req, res) {
         //Verificar novamente o token e o tempo
         //Obs: Codigo duplicado, refatorar depois
@@ -208,10 +197,12 @@ module.exports = {
                 return res.json({
                     status: 400,
                     menssagem: 'Token invalido',
-                    
+
                 });
             }
 
+
+            //Senha indo sem criptografar
             await Usuario.findByIdAndUpdate(usuario.id, {
                 '$set': {
                     senha,
@@ -232,6 +223,7 @@ module.exports = {
 
                 status: 400,
                 menssagem: 'Erro em atualizar a senha',
+                error: err
             });
         }
 

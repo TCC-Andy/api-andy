@@ -15,32 +15,35 @@ const CompanySchema = new mongoose.Schema({
         required: true,
     },
     categoria: {
-        type:String,
+        type: String,
         required: true,
     },
-    //Pesquisar a sintaxe correta para endereco
-    endereco: {
-        rua: {
-            type: String
-        },
-        bairro: {
-            type:String
-        },
-        cep:{
-            type:String
-        },
-        latitude:{
-            type:Number
-        },
-        longitude:{
-            type:Number
-        }
+    descricao: {
+        type: String
     },
+    rua: {
+        type: String
+    },
+    bairro: {
+        type: String
+    },
+    cidade: {
+        type: String
+    },
+    cep: {
+        type: String
+    },
+    complemento:{
+        type:String
+    },
+    coordenadas: [{
+        type: String
+    }],
     status: {
         type: Number,
         default: 1
-    }, 
+    },
 
 });
 
-mongoose.model('Empresas',CompanySchema);
+mongoose.model('Empresas', CompanySchema);

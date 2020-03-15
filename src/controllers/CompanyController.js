@@ -1,22 +1,33 @@
 const mongoose = require("mongoose");
 const Empresa = mongoose.model("Empresas");
+const geoService = require('../services/geoService');
 
 
 module.exports = {
     async createCompany(req, res) {
 
         try {
-           // const { nome, descricao, preco, tempo, idEmpresa, status } = req.body;
 
-            const empresa = await Empresa.create(req.body);
+            const { numero, rua, bairro, cidade } = req.body;
+          
+           company = req.body
+           company.coordenadas = await geoService.send(numero, rua, bairro, cidade)
+           
+           //console.log(numero+" "+rua+" "+bairro+" "+cidade)
+          // console.log( await geoService.send(numero, rua, bairro, cidade))
+            const empresa = await Empresa.create(company);
 
             return res.json({
                 status: 200,
-                menssagem: 'Servico cadastrado',
+                menssagem: 'Empresa cadastrada',
             })
 
         } catch (err) {
-            return res.status(500).send({ error: " Erro no registro do servico", prova: req.body });
+            return res.json({
+                status: 500,
+                menssagem: 'Erro no registro da empresa',
+                erro: err
+            })
         }
 
     },

@@ -15,10 +15,9 @@ const ServicoSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    palavraChave: {
-        type:Array,
-        required: false,
-    },
+    palavraChave: [{
+        type:String
+         }],
     tempo: {
         type: Number,
         required: true,
