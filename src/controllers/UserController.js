@@ -63,7 +63,11 @@ module.exports = {
                 usuario
             });
         } catch (err) {
-            return res.status(500).send({ error: " Erro no registro do usuario" });
+            return res.json({
+                status: 500,
+                menssagem: 'Erro no registro do usuario'
+               
+            });
         }
 
     },
