@@ -201,19 +201,24 @@ module.exports = {
                 });
             }
 
+            await Usuario.findOne({ email }, function (err, usr) {
+                usr.senha = senha;
+                usr.pwdToken = undefined;
+                usr.pwdExpires = undefined;
 
-            //Senha indo sem criptografar
-            await Usuario.findByIdAndUpdate(usuario.id, {
-                '$set': {
-                    senha,
-                    pwdToken: null,
-                    pwdExpires: null,
-                }
+                usr.save(function (err) {
+                    if (err) {
+                        return res.json({
+                            status: 500,
+                            menssagem: 'Erro ao salvar senha',
+                            usuario,
+                        });
+                    }
+                });
             });
             return res.json({
                 status: 200,
                 menssagem: 'Senha atualizada',
-                usuario,
             });
 
 
@@ -230,12 +235,13 @@ module.exports = {
 
     },
 
-
+    /*Implementar */
     async update(req, res) {
         const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false });
         return res.json(usuario);
     },
 
+    /*Implementar */
     async destroy(req, res) {
         await Usuario.findByIdAndRemove(req.params.id);
         return res.send();
