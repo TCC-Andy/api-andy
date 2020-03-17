@@ -5,6 +5,14 @@ const crypto = require("crypto");
 const Usuario = mongoose.model("Usuario");
 const emailService = require('../services/emailService');
 var dateFormat = require('dateformat');
+const authConfig = require('../config/auth');
+const jwt = require('jsonwebtoken');
+
+function generateToken(params = {}) {
+    return jwt.sign(params, authConfig.secret, {
+        expiresIn: '1m',
+    });
+}
 
 module.exports = {
     async showUsers(req, res) {
@@ -105,7 +113,10 @@ module.exports = {
         return res.json({
             status: 200,
             menssagem: 'Usuario encontrado',
-            usuario
+            usuario,
+            token: generateToken({
+                id: usuario.id
+            })
         });
 
     },
@@ -150,7 +161,7 @@ module.exports = {
         }
     },
 
-    /*
+    
     async verifyToken(req, res) {
         const currentToken = req.params.token;
         const usuario = await Usuario.findById(req.params.id).select('+ email pwdToken nome pwdExpires');
@@ -177,7 +188,7 @@ module.exports = {
             usuario,
         });
     },
-*/
+
     async updatePassword(req, res) {
         //Verificar novamente o token e o tempo
         //Obs: Codigo duplicado, refatorar depois
