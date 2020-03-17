@@ -33,6 +33,13 @@ module.exports = {
     },
 
     async showCompanies(req, res) {
+        var date = new Date();  // dateStr you get from mongodb
+
+        var d = date.getMinutes();
+        var m = date.getMonth();
+
+        console.log(d)
+
         const servicos = await Empresa.find();
         return res.json(servicos);
     },

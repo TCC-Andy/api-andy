@@ -18,6 +18,9 @@ const CompanySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    numero:{
+        type: Number
+    },
     descricao: {
         type: String
     },

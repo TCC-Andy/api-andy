@@ -16,7 +16,10 @@ module.exports = {
             })
 
         } catch (err) {
-            return res.status(500).send({ error: " Erro no registro do servico", prova: req.body });
+            return res.json({
+                status: 400,
+                menssagem: 'Erro no serviço do registro',
+            })
         }
 
     },

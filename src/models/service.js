@@ -8,16 +8,16 @@ const ServicoSchema = new mongoose.Schema({
     },
     descricao: {
         type: String,
-        required: true, 
+        required: true,
     },
-    //Preco e tempo por enquanto como Number, mudar depois
+    palavraChave: [{
+        type: String
+    }],
+    //Preco e tempo por enquanto como Number, mudar depois, assim como INICIO, CLIENTE e FIM
     preco: {
         type: Number,
         required: true,
     },
-    palavraChave: [{
-        type:String
-         }],
     tempo: {
         type: Number,
         required: true,
@@ -26,10 +26,18 @@ const ServicoSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    Agenda: [{
+        nomeFuncionario: { type: String },
+        horariosOcupados: [{
+            inicio: { type: Date },
+            cliente: { type: String },
+            fim: { type: Date }
+        }]
+    }],
     status: {
         type: Number,
         default: 1
-    }, 
+    },
 
 });
 
