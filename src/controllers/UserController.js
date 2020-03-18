@@ -23,7 +23,19 @@ module.exports = {
     async show(req, res) {
         try {
             const usuario = await Usuario.findById(req.params.id);
-            return res.json(usuario);
+
+
+            // usuario.criadoEm = dateFormat(new Date(), "dd/mm/yyyy HH:MM:ss UTC").toString()
+
+            console.log(usuario.criadoEm)
+
+            return res.json({
+
+                status: 200,
+
+                usuario
+            });
+
         } catch (err) {
             console.log(err)
             return res.json({
@@ -61,10 +73,9 @@ module.exports = {
             }
 
             usr = req.body;
-            // mydate = new Date();
-            /*  usr.Date= dateFormat(now,"dd/mm/yyyy HH:MM:ss UTC").split(' ');*/
-            /*  usr.criadoEm = mydate;*/
 
+            usr.criadoEm = new Date().toString()
+            //usr.criadoEm = dateFormat(new Date(), " HH:MM:ss ")
             const usuario = await Usuario.create(usr);
             emailService.send(1, req.body.email, req.body.nome);
 
