@@ -14,7 +14,7 @@ routes.post("/authenticateUser",UserController.authenticate);
 routes.put("/atualizaUsuarios/:id",UserController.update);
 routes.delete("/deleteUser/:id",UserController.destroy);
 routes.post("/sendPassReset",UserController.sendEmailToken);
-/*routes.get("/forgotPassword/:token/:id",UserController.verifyToken);*/
+routes.get("/verifyToken/:id",UserController.verifyToken);
 routes.post("/updatePassword",UserController.updatePassword);
 
 

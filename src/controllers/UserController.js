@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 
 function generateToken(params = {}) {
     return jwt.sign(params, authConfig.secret, {
-        expiresIn: '1m',
+        expiresIn: 15,
     });
 }
 
@@ -161,31 +161,45 @@ module.exports = {
         }
     },
 
-    
+
     async verifyToken(req, res) {
-        const currentToken = req.params.token;
-        const usuario = await Usuario.findById(req.params.id).select('+ email pwdToken nome pwdExpires');
+        const authHeader = req.headers.authorization;
+        const id = req.params.id;
+        const user = await Usuario.findById({ _id: id });
 
-        if (!usuario) {
+        if (!authHeader) {
             return res.json({
-                status: 400,
-                menssagem: 'Usuario não encontrado',
+                status: 403,
+                error: 'Token não fornecido.'
             });
         }
-        const now = new Date();
-        if ((currentToken !== usuario.pwdToken) || (now > usuario.pwdExpires)) {
+        const parts = authHeader.split(' ');
+        if (parts.length < 2) {
             return res.json({
-                status: 400,
-                menssagem: 'Token invalido',
+                status: 403,
+                error: 'Token com erro.'
             });
         }
-
-        usuario.pwdExpires = undefined
-        usuario.pwdToken = undefined
-        return res.json({
-            status: 200,
-            menssagem: 'Token aceito',
-            usuario,
+        const [scheme, token] = parts;
+        if (!/^Bearer$/i.test(scheme)) {
+            return res.json({
+                status: 403,
+                error: 'Token malformado.'
+            });
+        }
+        await jwt.verify(token, authConfig.secret, (err, decoded) => {
+            if (!err) {
+                return res.json({
+                    status: 200,
+                    user,
+                    menssagem: 'Token valido',
+                });
+            } else {
+                return res.json({
+                    status: 401,
+                    error: err
+                });
+            }
         });
     },
 
