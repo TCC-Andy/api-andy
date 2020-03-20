@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 
 function generateToken(params = {}) {
     return jwt.sign(params, authConfig.secret, {
-        expiresIn: 15,
+        expiresIn: 60,
     });
 }
 
@@ -112,6 +112,7 @@ module.exports = {
 
         return res.json({
             status: 200,
+            success: true,
             menssagem: 'Usuario encontrado',
             usuario,
             token: generateToken({
@@ -188,15 +189,18 @@ module.exports = {
             });
         }
         await jwt.verify(token, authConfig.secret, (err, decoded) => {
+            //req.userId = decoded.id;
             if (!err) {
                 return res.json({
                     status: 200,
+                    success:true,
                     user,
                     menssagem: 'Token valido',
                 });
             } else {
                 return res.json({
                     status: 401,
+                    success:false,
                     error: err
                 });
             }
