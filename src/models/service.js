@@ -19,7 +19,7 @@ const ServicoSchema = new mongoose.Schema({
         required: true,
     },
     tempo: {
-        type: Number,
+        type: String,
         required: true,
     },
     idEmpresa: {

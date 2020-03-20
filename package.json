@@ -23,6 +23,7 @@
     "jwt": "^0.2.0",
     "mapbox": "^1.0.0-beta10",
     "mongoose": "^5.9.2",
+    "nexmo": "^2.6.0",
     "node-open-geocoder": "^4.0.1",
     "nodemailer": "^6.4.3",
     "nodemailer-express-handlebars": "^3.1.0",

@@ -35,8 +35,8 @@ const UsuarioSchema = new mongoose.Schema({
         select: false,
     },
     criadoEm: {
-        type: Date,
-        default: Date.now
+        type: String
+        //default: Date.now
     },
     perfil: {
         type: String
