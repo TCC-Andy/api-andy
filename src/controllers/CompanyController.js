@@ -35,13 +35,35 @@ module.exports = {
     },
 
     async showCompanies(req, res) {
-      //  var date = new Date();  // dateStr you get from mongodb
-       // console.log(dateFormat(date, "dd/mm/yyyy HH:MM:ss UTC"))
+        //  var date = new Date();  // dateStr you get from mongodb
+        // console.log(dateFormat(date, "dd/mm/yyyy HH:MM:ss UTC"))
 
 
         const empresas = await empresa.find();
         return res.json(empresas);
     },
+
+    async showCompany(req, res) {
+        try {
+            const emp = await empresa.findById(req.params.id);
+       
+            return res.json({
+
+                status: 200,
+                emp
+            });
+
+        } catch (err) {
+            console.log(err)
+            return res.json({
+
+                status: 400,
+                menssagem: 'Erro em buscar empresa',
+                
+            });
+        }
+    },
+
 
     async showCategories(req, res) {
         try {

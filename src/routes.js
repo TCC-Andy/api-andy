@@ -27,6 +27,7 @@ routes.get("/showServices",ServiceController.showServices);
 
 routes.post("/createCompany",CompanyController.createCompany);
 routes.get("/showCompanies",CompanyController.showCompanies);
+routes.get("/showCompany/:id",CompanyController.showCompany);
 routes.get("/showCategories/:categoria",CompanyController.showCategories);
 
 
