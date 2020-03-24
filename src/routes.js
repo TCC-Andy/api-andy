@@ -22,6 +22,7 @@ routes.post("/updatePassword",UserController.updatePassword);
 
 routes.post("/createService",ServiceController.createService);
 routes.get("/showServices",ServiceController.showServices);
+routes.post("/addAgenda",ServiceController.addAgenda);
 
 //Rotas: Empresas
 

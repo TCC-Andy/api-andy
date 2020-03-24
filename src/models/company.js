@@ -14,11 +14,14 @@ const CompanySchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    idEmpresario: {
+        type: Number
+    },
     categoria: {
         type: String,
         required: true,
     },
-    numero:{
+    numero: {
         type: Number
     },
     descricao: {
@@ -36,8 +39,8 @@ const CompanySchema = new mongoose.Schema({
     cep: {
         type: String
     },
-    complemento:{
-        type:String
+    complemento: {
+        type: String
     },
     coordenadas: [{
         type: String

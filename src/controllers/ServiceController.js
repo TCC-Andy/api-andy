@@ -21,8 +21,20 @@ module.exports = {
                 menssagem: 'Erro no serviço do registro',
             })
         }
-
     },
+
+    async addAgenda(req, res) {
+        const {idServico} = req.body;
+        //Criar a logica de  push para agendamente e sort
+        console.log(idServico)
+        const serv = await Servico.findById(idServico);
+        return res.json({
+            status: 200,
+            menssagem: "Ainda para implementar",
+            serv
+        })
+    },
+
 
     async showServices(req, res) {
         const servicos = await Servico.find();
