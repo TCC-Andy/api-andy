@@ -23,6 +23,7 @@ module.exports = {
         }
     },
 
+
     async addAgenda(req, res) {
         const {idServico} = req.body;
         //Criar a logica de  push para agendamente e sort
@@ -40,6 +41,24 @@ module.exports = {
         const servicos = await Servico.find();
         return res.json(servicos);
     },
+
+ 
+     async updateService(req, res) {
+        const serv = await Servico.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false });
+        return res.json({
+            status: 200,
+            serv
+        })
+    },
+
+    
+    async destroyService(req, res) {
+        await Servico.findByIdAndRemove(req.params.id);
+        return res.json({
+            status: 200,
+            mensagem: "Servico deletado"
+        })
+    }
 
 
 
