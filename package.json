@@ -28,7 +28,6 @@
     "mongoose": "^5.9.2",
     "nexmo": "^2.6.0",
     "node-open-geocoder": "^4.0.1",
-    "node-waf": "^1.0.0",
     "nodemailer": "^6.4.3",
     "nodemailer-express-handlebars": "^3.1.0",
     "path": "^0.12.7",
