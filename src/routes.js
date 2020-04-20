@@ -3,6 +3,7 @@ const routes = express.Router();
 const UserController = require("./controllers/UserController");
 const ServiceController = require("./controllers/ServiceController");
 const CompanyController = require("./controllers/CompanyController");
+const EmployeeController = require("./controllers/EmployeeControler");
 
 
 //Rotas: Usuarios
@@ -33,5 +34,8 @@ routes.get("/showCompanies",CompanyController.showCompanies);
 routes.get("/showCompany/:id",CompanyController.showCompany);
 routes.get("/showCategories/:categoria",CompanyController.showCategories);
 
+//Rotas: Empregados
+routes.get("/showEmps",EmployeeController.showEmployees);
+routes.post("/createEmp",EmployeeController.createEmployee);
 
-    module.exports = routes;
+module.exports = routes;
