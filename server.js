@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
+//WA para o erro: (node:10668) DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
+mongoose.set('useCreateIndex', true);
 const requireDir = require("require-dir");
 const cors = require("cors");
 
