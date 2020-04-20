@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 
 function generateToken(params = {}) {
     return jwt.sign(params, authConfig.secret, {
-        expiresIn: 60,
+        expiresIn: "24h",
     });
 }
 
