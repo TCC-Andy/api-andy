@@ -23,7 +23,7 @@ const ServicoSchema = new mongoose.Schema({
         required: true,
     },
     idEmpresa: {
-        type: Number,
+        type: String,
         required: true,
     },
     Agenda: [{

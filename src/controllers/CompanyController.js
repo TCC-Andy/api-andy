@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const empresa = mongoose.model("Empresas");
+const servico = mongoose.model("Servicos");
 const geoService = require('../services/geoService');
 const dateFormat = require('dateformat');
 
@@ -46,7 +47,7 @@ module.exports = {
     async showCompany(req, res) {
         try {
             const emp = await empresa.findById(req.params.id);
-       
+
             return res.json({
 
                 status: 200,
@@ -59,12 +60,30 @@ module.exports = {
 
                 status: 400,
                 menssagem: 'Erro em buscar empresa',
-                
+
             });
         }
     },
 
+    async showCompanyServices(req, res) {
+        try {
+           
+           const servicos = await servico.find({ 'idEmpresa': req.params.idEmpresa });
+           return res.json({
+             servicos,
+            menssagem: 'entrei',
+        });
 
+        } catch (err) {
+            return res.json({
+                status: 500,
+                menssagem: 'Erro em buscar os serviços da empresa',
+            });
+
+        }
+    },
+
+//A string categoria que existe na model empresa recebe o parametro chamado categoria
     async showCategories(req, res) {
         try {
             const empresas = await empresa.find({ 'categoria': req.params.categoria });
