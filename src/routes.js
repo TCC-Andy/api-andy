@@ -39,5 +39,6 @@ routes.get("/showCategories/:categoria",CompanyController.showCategories);
 routes.get("/showEmps",EmployeeController.showEmployees);
 routes.post("/createEmp",EmployeeController.createEmployee);
 routes.put("/updateEmp/:id",EmployeeController.updateEmp);
+routes.get("/showEmp/:id",EmployeeController.showEmp);
 
 module.exports = routes;

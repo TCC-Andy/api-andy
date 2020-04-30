@@ -57,6 +57,26 @@ module.exports = {
 
     },
 
+    async showEmp(req, res) {
+        try {
+            const func = await Funcionario.findById(req.params.id);
+
+            return res.json({
+
+                status: 200,
+                func
+            });
+
+        } catch (err) {
+            console.log(err)
+            return res.json({
+
+                status: 500,
+                menssagem: 'Erro em buscar funcionario',
+            });
+        }
+    },
+
 
     async updateEmp(req, res) {
         const { nome, sobrenome, email, telefone, idServicos } = req.body;

@@ -40,7 +40,7 @@ module.exports = {
             console.log(err)
             return res.json({
 
-                status: 400,
+                status: 500,
                 menssagem: 'Erro em buscar usuario',
             });
         }
