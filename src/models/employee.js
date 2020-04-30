@@ -18,6 +18,9 @@ const FuncionarioSchema = new mongoose.Schema({
    telefone:{
        type:Number
    },
+   idServicos: [{
+        type: String
+    }],
     status: {
         type: Number,
         default: 1

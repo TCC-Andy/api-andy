@@ -70,8 +70,7 @@ module.exports = {
            
            const servicos = await servico.find({ 'idEmpresa': req.params.idEmpresa });
            return res.json({
-             servicos,
-            menssagem: 'entrei',
+             servicos
         });
 
         } catch (err) {

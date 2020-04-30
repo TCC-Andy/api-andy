@@ -10,8 +10,15 @@ module.exports = {
     async createEmployee(req, res) {
         try {
 
-            const { nome, sobrenome, email, telefone } = req.body;
-            console.log(nome,sobrenome,email,telefone)
+            const { nome, sobrenome, email, telefone,idServicos } = req.body;
+           // console.log(nome,sobrenome,email,telefone,idServicos)
+            if (Object.keys(idServicos).length < 1){
+                return res.json({
+                    status: 400,
+                    menssagem: 'Ao menos um servico deve ser marcado',
+                })
+           }
+         
             if ((!nome) || (!sobrenome) || (!email) || (!telefone)) {
                 return res.json({
                     status: 406,
@@ -28,8 +35,6 @@ module.exports = {
             }
 
             func = req.body;
-            console.log("passou body")
-
            
             func = await Funcionario.create(func);
             
