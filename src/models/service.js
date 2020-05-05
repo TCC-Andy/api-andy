@@ -26,14 +26,6 @@ const ServicoSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    Agenda: [{
-        nomeFuncionario: { type: String },
-        horariosOcupados: [{
-            inicio: { type: Date },
-            cliente: { type: String },
-            fim: { type: Date }
-        }]
-    }],
     status: {
         type: Number,
         default: 1
