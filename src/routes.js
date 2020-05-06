@@ -4,6 +4,7 @@ const UserController = require("./controllers/UserController");
 const ServiceController = require("./controllers/ServiceController");
 const CompanyController = require("./controllers/CompanyController");
 const EmployeeController = require("./controllers/EmployeeControler");
+const ScheduleController = require("./controllers/ScheduleController");
 
 
 //Rotas: Usuarios
@@ -40,5 +41,9 @@ routes.get("/showEmps",EmployeeController.showEmployees);
 routes.post("/createEmp",EmployeeController.createEmployee);
 routes.put("/updateEmp/:id",EmployeeController.updateEmp);
 routes.get("/showEmp/:id",EmployeeController.showEmp);
+
+
+//Rotas: Agendas
+routes.post("/createSchedule",ScheduleController.createSchedule);
 
 module.exports = routes;
