@@ -41,7 +41,7 @@ module.exports = {
             return res.json({
 
                 status: 500,
-                menssagem: 'Erro em buscar usuario',
+                mensagem: 'Erro em buscar usuario',
             });
         }
     },
@@ -54,21 +54,21 @@ module.exports = {
             if ((!nome) || (!sobrenome) || (!email) || (!senha)) {
                 return res.json({
                     status: 406,
-                    menssagem: 'Todos os campos precisam ser preenchidos',
+                    mensagem: 'Todos os campos precisam ser preenchidos',
                 })
             }
             //@ e . depois somente
             if (!validator.validate(email)) {
                 return res.json({
                     status: 406,
-                    menssagem: 'Formato do email não é valido',
+                    mensagem: 'Formato do email não é valido',
                 })
 
             }
             if (await Usuario.findOne({ email })) {
                 return res.json({
                     status: 412,
-                    menssagem: 'Usuario ja existe',
+                    mensagem: 'Usuario ja existe',
                 })
             }
 
@@ -83,13 +83,13 @@ module.exports = {
             usuario.senha = undefined;
             return res.json({
                 status: 200,
-                menssagem: 'Cadastrado com sucesso',
+                mensagem: 'Cadastrado com sucesso',
                 usuario
             });
         } catch (err) {
             return res.json({
                 status: 500,
-                menssagem: 'Erro no registro do usuario',
+                mensagem: 'Erro no registro do usuario',
                 error: err
 
             });
@@ -107,7 +107,7 @@ module.exports = {
                 if (!usuario) {
                     return res.json({
                         status: 400,
-                        menssagem: 'Usuario não encontrado',
+                        mensagem: 'Usuario não encontrado',
         
                     });
                 }
@@ -116,7 +116,7 @@ module.exports = {
         if ((!usuario) || (!bcrypt.compareSync(senha, usuario.senha))) {
             return res.json({
                 status: 400,
-                menssagem: 'Email e/ou senha incorreto(s)',
+                mensagem: 'Email e/ou senha incorreto(s)',
 
             });
         };
@@ -124,7 +124,7 @@ module.exports = {
         return res.json({
             status: 200,
             success: true,
-            menssagem: 'Usuario encontrado',
+            mensagem: 'Usuario encontrado',
             usuario,
             token: generateToken({
                 id: usuario.id
@@ -141,7 +141,7 @@ module.exports = {
             if (!user) {
                 return res.json({
                     status: 400,
-                    menssagem: 'Usuario não encontrado',
+                    mensagem: 'Usuario não encontrado',
                 });
             }
             const token = crypto.randomBytes(20).toString('hex');
@@ -160,7 +160,7 @@ module.exports = {
             return res.json({
 
                 status: 200,
-                menssagem: 'Email enviado',
+                mensagem: 'Email enviado',
             });
 
         } catch (err) {
@@ -168,7 +168,7 @@ module.exports = {
             return res.json({
 
                 status: 400,
-                menssagem: 'Erro em recuperar o email',
+                mensagem: 'Erro em recuperar o email',
             });
         }
     },
@@ -206,7 +206,7 @@ module.exports = {
                     status: 200,
                     success:true,
                     user,
-                    menssagem: 'Token valido',
+                    mensagem: 'Token valido',
                 });
             } else {
                 return res.json({
@@ -229,14 +229,14 @@ module.exports = {
             if (!usuario) {
                 return res.json({
                     status: 400,
-                    menssagem: 'Usuario não encontrado',
+                    mensagem: 'Usuario não encontrado',
                 });
             }
             const now = new Date();
             if ((currentToken !== usuario.pwdToken) || (now > usuario.pwdExpires)) {
                 return res.json({
                     status: 400,
-                    menssagem: 'Token invalido',
+                    mensagem: 'Token invalido',
 
                 });
             }
@@ -250,7 +250,7 @@ module.exports = {
                     if (err) {
                         return res.json({
                             status: 500,
-                            menssagem: 'Erro ao salvar senha',
+                            mensagem: 'Erro ao salvar senha',
                             usuario,
                         });
                     }
@@ -258,7 +258,7 @@ module.exports = {
             });
             return res.json({
                 status: 200,
-                menssagem: 'Senha atualizada',
+                mensagem: 'Senha atualizada',
             });
 
 
@@ -267,7 +267,7 @@ module.exports = {
             return res.json({
 
                 status: 400,
-                menssagem: 'Erro em atualizar a senha',
+                mensagem: 'Erro em atualizar a senha',
                 error: err
             });
         }

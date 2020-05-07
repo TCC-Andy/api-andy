@@ -21,14 +21,14 @@ module.exports = {
 
             return res.json({
                 status: 200,
-                menssagem: 'Empresa cadastrada',
+                mensagem: 'Empresa cadastrada',
                 emp
             })
 
         } catch (err) {
             return res.json({
                 status: 500,
-                menssagem: 'Erro no registro da empresa',
+                mensagem: 'Erro no registro da empresa',
                 erro: err
             })
         }
@@ -59,7 +59,7 @@ module.exports = {
             return res.json({
 
                 status: 400,
-                menssagem: 'Erro em buscar empresa',
+                mensagem: 'Erro em buscar empresa',
 
             });
         }
@@ -76,7 +76,7 @@ module.exports = {
         } catch (err) {
             return res.json({
                 status: 500,
-                menssagem: 'Erro em buscar os serviços da empresa',
+                mensagem: 'Erro em buscar os serviços da empresa',
             });
 
         }
@@ -92,7 +92,7 @@ module.exports = {
             return res.json({
 
                 status: 500,
-                menssagem: 'Erro em buscar categorias de empresas',
+                mensagem: 'Erro em buscar categorias de empresas',
             });
         }
     },

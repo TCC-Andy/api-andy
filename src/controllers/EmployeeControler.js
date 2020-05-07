@@ -15,14 +15,14 @@ module.exports = {
             if (Object.keys(idServicos).length < 1) {
                 return res.json({
                     status: 400,
-                    menssagem: 'Ao menos um servico deve ser marcado',
+                    mensagem: 'Ao menos um servico deve ser marcado',
                 })
             }
 
             if ((!nome) || (!sobrenome) || (!email) || (!telefone)) {
                 return res.json({
                     status: 400,
-                    menssagem: 'Todos os campos precisam ser preenchidos',
+                    mensagem: 'Todos os campos precisam ser preenchidos',
                 })
             }
 
@@ -30,7 +30,7 @@ module.exports = {
             if (await Funcionario.findOne({ email })) {
                 return res.json({
                     status: 400,
-                    menssagem: 'Empregado ja existe',
+                    mensagem: 'Empregado ja existe',
                 })
             }
 
@@ -41,14 +41,14 @@ module.exports = {
 
             return res.json({
                 status: 200,
-                menssagem: 'Cadastrado com sucesso',
+                mensagem: 'Cadastrado com sucesso',
                 func
 
             });
         } catch (err) {
             return res.json({
                 status: 500,
-                menssagem: 'Erro no registro do funcionario',
+                mensagem: 'Erro no registro do funcionario',
                 error: err
 
             });
@@ -68,11 +68,11 @@ module.exports = {
             });
 
         } catch (err) {
-            console.log(err)
+
             return res.json({
 
                 status: 500,
-                menssagem: 'Erro em buscar funcionario',
+                mensagem: 'Erro em buscar funcionario',
             });
         }
     },
@@ -83,13 +83,13 @@ module.exports = {
         if (Object.keys(idServicos).length < 1) {
             return res.json({
                 status: 400,
-                menssagem: 'Ao menos um servico deve ser marcado',
+                mensagem: 'Ao menos um servico deve ser marcado',
             })
         }
-        if ((!nome) || (!sobrenome) || (!email) ) {
+        if ((!nome) || (!sobrenome) || (!email)) {
             return res.json({
                 status: 400,
-                menssagem: 'É necessario preencher os campos ',
+                mensagem: 'É necessario preencher os campos ',
             })
         }
         //console.log(req.params.id)
@@ -105,7 +105,7 @@ module.exports = {
                 if (err) {
                     return res.json({
                         status: 500,
-                        menssagem: 'Erro ao salvar '
+                        mensagem: 'Erro ao salvar '
 
                     });
                 }
@@ -114,11 +114,11 @@ module.exports = {
 
         return res.json({
             status: 200,
-            menssagem: 'Funcionario atualizado ',
+            mensagem: 'Funcionario atualizado ',
             fnc
 
         });
-       
+
     },
 
 

@@ -12,13 +12,13 @@ module.exports = {
 
             return res.json({
                 status: 200,
-                menssagem: 'Servico cadastrado',
+                mensagem: 'Servico cadastrado',
             })
 
         } catch (err) {
             return res.json({
                 status: 400,
-                menssagem: 'Erro no serviço do registro',
+                mensagem: 'Erro no serviço do registro',
             })
         }
     },
@@ -31,7 +31,7 @@ module.exports = {
         const serv = await Servico.findById(idServico);
         return res.json({
             status: 200,
-            menssagem: "Ainda para implementar",
+            mensagem: "Ainda para implementar",
             serv
         })
     },
