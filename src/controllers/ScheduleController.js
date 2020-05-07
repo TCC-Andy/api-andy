@@ -19,6 +19,7 @@ module.exports = {
             })
 
         } catch (err) {
+            
             return res.json({
                 status: 500,
                 mensagem: 'Erro no registro da agenda',
