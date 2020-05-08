@@ -15,6 +15,8 @@ function generateToken(params = {}) {
 }
 
 module.exports = {
+
+
     async showUsers(req, res) {
         const usuarios = await Usuario.find();
         return res.json(usuarios);
@@ -24,7 +26,6 @@ module.exports = {
         try {
             const usuario = await Usuario.findById(req.params.id);
 
-
             // usuario.criadoEm = dateFormat(new Date(), "dd/mm/yyyy HH:MM:ss UTC").toString()
 
             console.log(usuario.criadoEm)
@@ -32,7 +33,6 @@ module.exports = {
             return res.json({
 
                 status: 200,
-
                 usuario
             });
 
@@ -204,14 +204,14 @@ module.exports = {
             if (!err) {
                 return res.json({
                     status: 200,
-                    success:true,
+                    success: true,
                     user,
                     mensagem: 'Token valido',
                 });
             } else {
                 return res.json({
                     status: 401,
-                    success:false,
+                    success: false,
                     error: err
                 });
             }
