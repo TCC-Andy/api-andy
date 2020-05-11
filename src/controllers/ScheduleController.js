@@ -48,22 +48,30 @@ module.exports = {
             //const sched = await Agenda.find({ dataAgenda, idServico });
             //Logica que verifica se cada um dos funcionarios possui pelo menos um horario agendado no dia, se nao, eh criado um horario de almoco 
             // para posteriormente seguir com a logica de envio das agendas.
-            func.map(async funcionario => {
+            const promise = func.map(async funcionario => {
 
-                agenda = await Agenda.find({ dataAgenda, idServico, idFuncionario: funcionario.id });
+                agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id });
 
                 if (Object.keys(agenda).length < 1) {
                     Agenda.create({ idServico, idFuncionario: funcionario.id, nomeFuncionario: funcionario.nome, dataAgenda, inicioServico: funcionario.horaAlmocoInicio, fimServico: funcionario.horaAlmocoFim });
                 }
             })
+            await Promise.all(promise).then(async () => {
+                agnd = await Agenda.find({ dataAgenda, idServico });
+            }
+            );
 
+            func.map(async employee => {
+                // Eu tenho que mandar o nome do empregado ,etc... depois buscar a agenda desse empregado (ordenada com o sort) e colocar no empregado.. depois continuo o loop para o proximo empregado
+
+
+            });
 
             // console.log(dataAgenda)
             return res.json({
 
                 status: 200,
-                mensagem: "Testando Agenda"
-
+                agnd
             });
 
         } catch (err) {
