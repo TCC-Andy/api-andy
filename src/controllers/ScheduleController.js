@@ -60,6 +60,7 @@ module.exports = {
             }
             );
             //Construção do objeto
+            
             agendamento = [];
             const promise2 = await Promise.all(func.map(async funcionario => {
                 agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id }).sort({ inicioServico: 1 })
