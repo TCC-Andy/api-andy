@@ -45,7 +45,6 @@ module.exports = {
             }
 
 
-            //const sched = await Agenda.find({ dataAgenda, idServico });
             //Logica que verifica se cada um dos funcionarios possui pelo menos um horario agendado no dia, se nao, eh criado um horario de almoco 
             // para posteriormente seguir com a logica de envio das agendas.
             const promise = func.map(async funcionario => {
@@ -60,18 +59,27 @@ module.exports = {
                 agnd = await Agenda.find({ dataAgenda, idServico });
             }
             );
+            //Construção do objeto
+            
+            agendamento = [];
+            const promise2 = await Promise.all(func.map(async funcionario => {
+                agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id }).sort({ inicioServico: 1 })
 
-            func.map(async employee => {
-                // Eu tenho que mandar o nome do empregado ,etc... depois buscar a agenda desse empregado (ordenada com o sort) e colocar no empregado.. depois continuo o loop para o proximo empregado
+                return {
+                    nome: funcionario.nome,
+                    id: funcionario._id,
+                    horaInicioTrabalho: funcionario.horaInicioTrabalho,
+                    horaFimTrabalho: funcionario.horaFimTrabalho,
+                    agenda
+                };
+            })
+            )
+            agendamentos = [promise2]
 
-
-            });
-
-            // console.log(dataAgenda)
             return res.json({
 
                 status: 200,
-                agnd
+                agendamentos
             });
 
         } catch (err) {
