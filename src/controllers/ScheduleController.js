@@ -55,11 +55,12 @@ module.exports = {
                     Agenda.create({ idServico, idFuncionario: funcionario.id, nomeFuncionario: funcionario.nome, dataAgenda, inicioServico: funcionario.horaAlmocoInicio, fimServico: funcionario.horaAlmocoFim });
                 }
             })
+            //Deletar promise acima depois de refatorar
             await Promise.all(promise).then(async () => {
                 agnd = await Agenda.find({ dataAgenda, idServico });
             }
             );
-            //Construção do objeto
+            //Construção do objeto 1
             
             agendamento = [];
             const promise2 = await Promise.all(func.map(async funcionario => {
@@ -75,6 +76,18 @@ module.exports = {
             })
             )
             agendamentos = [promise2]
+
+            //console.log(promise2.length)
+            agendaDiaria = []
+            promise2.forEach( registro =>{
+                registro.agenda.forEach((valor,indice) =>{
+                    console.log(indice)
+                    //console.log(valor)
+                })
+               // console.log(registro.agenda.length)
+            })
+
+
 
             return res.json({
 
