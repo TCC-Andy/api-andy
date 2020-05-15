@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Agenda = mongoose.model("Agendas");
 const Funcionario = mongoose.model("Funcionario");
+const moment = require('moment');
+const tz = require("moment-timezone")
 
 
 module.exports = {
@@ -76,12 +78,25 @@ module.exports = {
             })
             )
             agendamentos = [promise2]
+            //Testando moment.js
+
+            inicio = moment.tz("14:00","HH:mm","UTC");
+            console.log(inicio)
+            final = moment.tz("15:10","HH:mm","UTC");
+            console.log(final)
+            console.log(final.diff(inicio, 'minutes'))
+           
 
             //console.log(promise2.length)
             agendaDiaria = []
             promise2.forEach( registro =>{
                 registro.agenda.forEach((valor,indice) =>{
-                    console.log(indice)
+                    if (indice == 0){
+                     
+                       // console.log("Indice zero")
+                        console.log(registro.nome)
+                    }
+                  //  console.log(indice,valor)
                     //console.log(valor)
                 })
                // console.log(registro.agenda.length)
@@ -91,8 +106,8 @@ module.exports = {
 
             return res.json({
 
-                status: 200,
-                agendamentos
+                status: 200
+               // agendamentos
             });
 
         } catch (err) {
