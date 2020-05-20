@@ -35,7 +35,7 @@ module.exports = {
 
     async showDataSchedule(req, res) {
         try {
-            const { dataAgenda, idEmpresa, idServico } = req.body;
+            const { dataAgenda, idEmpresa, idServico,tempoServico } = req.body;
             //Encontra os funcionarios que tem o idServico em algum dos servicos que praticam
             const func = await Funcionario.find({ idEmpresa, idServicos: { $in: [idServico] } });
             //console.log(func[1].nome)
@@ -95,6 +95,21 @@ module.exports = {
                      
                        // console.log("Indice zero")
                         console.log(registro.nome)
+                        console.log(registro.horaInicioTrabalho)
+                        console.log(valor.inicioServico)
+                        horaAnterior = moment.tz(registro.horaInicioTrabalho,"HH:mm","UTC")
+                        horaPosterior = moment.tz(valor.inicioServico,"HH:mm","UTC")
+                        intervalo = (horaPosterior.diff(horaAnterior,'minutes'))
+                      //  console.log(intervalo)
+                       // console.log(tempoServico)
+                        contador = parseInt(tempoServico)
+                       // console.log(horaAnterior)
+                       // console.log(horaAnterior.add(intervalo,'minutes'))
+                        console.log(typeof contador)
+                        for(var i = contador;i<intervalo;i+=contador){
+                            console.log(horaAnterior.add(i,'minutes'))
+                            horaAnterior.add(-i,'minutes')
+                        }
                     }
                   //  console.log(indice,valor)
                     //console.log(valor)
@@ -106,8 +121,8 @@ module.exports = {
 
             return res.json({
 
-                status: 200
-               // agendamentos
+                status: 200,
+               agendamentos
             });
 
         } catch (err) {
