@@ -77,40 +77,83 @@ module.exports = {
                 };
             })
             )
+            //Recebo os horarios ja agendados
             agendamentos = [promise2]
-            //Testando moment.js
-
-            inicio = moment.tz("14:00","HH:mm","UTC");
-            console.log(inicio)
-            final = moment.tz("15:10","HH:mm","UTC");
-            console.log(final)
-            console.log(final.diff(inicio, 'minutes'))
+         
            
-
-            //console.log(promise2.length)
             agendaDiaria = []
+            
+            contador = tempoServico
+            contador = 40
             promise2.forEach( registro =>{
-                registro.agenda.forEach((valor,indice) =>{
+                registro.agenda.forEach((valor,indice,array) =>{
+                   
                     if (indice == 0){
-                     
-                       // console.log("Indice zero")
-                        console.log(registro.nome)
-                        console.log(registro.horaInicioTrabalho)
-                        console.log(valor.inicioServico)
+                       
+                      
                         horaAnterior = moment.tz(registro.horaInicioTrabalho,"HH:mm","UTC")
                         horaPosterior = moment.tz(valor.inicioServico,"HH:mm","UTC")
                         intervalo = (horaPosterior.diff(horaAnterior,'minutes'))
-                      //  console.log(intervalo)
-                       // console.log(tempoServico)
-                        contador = parseInt(tempoServico)
-                       // console.log(horaAnterior)
-                       // console.log(horaAnterior.add(intervalo,'minutes'))
-                        console.log(typeof contador)
-                        for(var i = contador;i<intervalo;i+=contador){
-                            console.log(horaAnterior.add(i,'minutes'))
+                        
+                       
+                        for(var i = 0;i<intervalo;i+=contador){
+                           
+                            horaAnterior.add(i,'minutes')
+                         
+                          //  console.log(horaAnterior.format('HH:mm'))
                             horaAnterior.add(-i,'minutes')
+                            horaAnterior.add((i+contador),'minutes')
+                         
+                          //  console.log(horaAnterior.format('HH:mm'))
+                           
+                            horaAnterior.add((-i-contador),'minutes')
+
+                            //console.log()
+                         
+                            
                         }
+                    }else{
+                        //O nome e id irao ficar no começo do for maior
+                        //validar se o contador eh menor que o intervalo e se se eu consigo eu consigo encaixar . ex 20  eh menor que 30 mas se
+                        // eu tiver um tempo de 10:10 a 10:30 eu nao posso encaixar um trabalho de 20(o tempo iniciou com intervalo de 30 depois foi diminuindo)
+                        // ou seja, fazer um if dentro do for para validar ate quando eu posso fazer essa contagem
+                        //Dentro deste else fazer uma verificacao se for a ultima iteracao, para entao usar o horario do fim do servico da pessoa
+                        console.log(indice)
+                        console.log(registro.nome)
+                        console.log(registro.id)
+                  
+                     
+                      
+                     horaAnterior = moment.tz(array[indice-1].fimServico,"HH:mm","UTC")
+                     horaPosterior = moment.tz(valor.inicioServico,"HH:mm","UTC")
+                     intervalo = (horaPosterior.diff(horaAnterior,'minutes'))
+                
+                     for(var i = 0;i<intervalo;i+=contador){
+                       //O if a mais vai aquir pra saber ate quando eu posso contar
+                        horaAnterior.add(i,'minutes')
+                     
+                        console.log(horaAnterior.format('HH:mm'))
+                        horaAnterior.add(-i,'minutes')
+                        horaAnterior.add((i+contador),'minutes')
+                     
+                       console.log(horaAnterior.format('HH:mm'))
+                       
+                        horaAnterior.add((-i-contador),'minutes')
+
+                        console.log()
+                     
+                        
                     }
+
+                       //console.log(horaAnterior)
+                      // console.log(horaPosterior)
+                     //  console.log(intervalo)
+
+                      
+                      //  intervalo = (horaPosterior.diff(horaAnterior,'minutes'))
+
+                    }
+
                   //  console.log(indice,valor)
                     //console.log(valor)
                 })
