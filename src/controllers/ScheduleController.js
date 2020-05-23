@@ -85,13 +85,17 @@ module.exports = {
 
             contador = tempoServico
             contador = 40
-            promise2.forEach(registro => {
-                registro.agenda.forEach((valor, indice, array) => {
+            agenda = []
+            promise2.forEach((registro, casa) => {
 
+                horariosDisponiveis = []
+
+                registro.agenda.forEach((valor, indice, array) => {
+                   
+
+
+                    console.log(registro.nome)
                     if (indice == 0) {
-                        console.log(indice)
-                        console.log(registro.nome)
-                        console.log(registro.id)
 
 
                         horaAnterior = moment.tz(registro.horaInicioTrabalho, "HH:mm", "UTC")
@@ -107,19 +111,64 @@ module.exports = {
                                 break;
                             }
 
-                         //   console.log(horaAnterior.format('HH:mm'))
+                            console.log(horaAnterior.format('HH:mm'))
+                            inicioServico = horaAnterior.format('HH:mm')
                             horaAnterior.add(-i, 'minutes')
                             horaAnterior.add((i + contador), 'minutes')
 
-                         //   console.log(horaAnterior.format('HH:mm'))
-
+                            console.log(horaAnterior.format('HH:mm'))
+                            fimServico = horaAnterior.format('HH:mm')
                             horaAnterior.add((-i - contador), 'minutes')
 
-                           // console.log()
+                            console.log()
+                            horariosDisponiveis.push(
+                                {
+                                    inicioServico: inicioServico,
+                                    fimServico: fimServico
+                                }
+                            )
+
+                        }
+                        if (array.length == 1) {
+
+                            horaAnterior = moment.tz(valor.fimServico, "HH:mm", "UTC")
+                            horaPosterior = moment.tz(registro.horaFimTrabalho, "HH:mm", "UTC")
+                            intervalo = (horaPosterior.diff(horaAnterior, 'minutes'))
+
+
+                            for (var i = 0; i < intervalo; i += contador) {
+
+                                horaAnterior.add(i, 'minutes')
+                                if (horaPosterior.diff(horaAnterior, 'minutes') < contador) {
+                                    break;
+                                }
+
+                                console.log(horaAnterior.format('HH:mm'))
+                                inicioServico = horaAnterior.format('HH:mm')
+                                horaAnterior.add(-i, 'minutes')
+                                horaAnterior.add((i + contador), 'minutes')
+
+                                console.log(horaAnterior.format('HH:mm'))
+                                fimServico = horaAnterior.format('HH:mm')
+                                horaAnterior.add((-i - contador), 'minutes')
+                                console.log()
+                                horariosDisponiveis.push(
+                                    {
+                                        inicioServico: inicioServico,
+                                        fimServico: fimServico
+                                    }
+                                )
+
+
+                            }
 
 
                         }
-                    } else {
+                    }
+
+
+
+                    else {
                         if ((array.length - 1) == indice) {
 
                             horaAnterior = moment.tz(valor.fimServico, "HH:mm", "UTC")
@@ -128,20 +177,27 @@ module.exports = {
 
 
                             for (var i = 0; i < intervalo; i += contador) {
-                                //O if a mais vai aquir pra saber ate quando eu posso contar
+
                                 horaAnterior.add(i, 'minutes')
                                 if (horaPosterior.diff(horaAnterior, 'minutes') < contador) {
-                                 break;
+                                    break;
                                 }
 
-                               console.log(horaAnterior.format('HH:mm'))
+                                console.log(horaAnterior.format('HH:mm'))
+                                inicioServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add(-i, 'minutes')
                                 horaAnterior.add((i + contador), 'minutes')
 
-                               console.log(horaAnterior.format('HH:mm'))
-
+                                console.log(horaAnterior.format('HH:mm'))
+                                fimServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add((-i - contador), 'minutes')
-                               console.log()
+                                console.log()
+                                horariosDisponiveis.push(
+                                    {
+                                        inicioServico: inicioServico,
+                                        fimServico: fimServico
+                                    }
+                                )
 
 
                             }
@@ -170,17 +226,24 @@ module.exports = {
                                 horaAnterior.add(i, 'minutes')
 
                                 if (horaPosterior.diff(horaAnterior, 'minutes') < contador) {
-                                   continue;
-                                 }
-                                 // console.log(horaAnterior.format('HH:mm'))
+                                    continue;
+                                }
+                                console.log(horaAnterior.format('HH:mm'))
+                                inicioServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add(-i, 'minutes')
                                 horaAnterior.add((i + contador), 'minutes')
 
-                                 // console.log(horaAnterior.format('HH:mm'))
-
+                                console.log(horaAnterior.format('HH:mm'))
+                                fimServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add((-i - contador), 'minutes')
-                               // console.log()
-
+                                console.log()
+                                
+                                horariosDisponiveis.push(
+                                    {
+                                        inicioServico: inicioServico,
+                                        fimServico: fimServico
+                                    }
+                                )
 
                             }
                             // console.log()
@@ -196,10 +259,28 @@ module.exports = {
                         }
                     }
 
-                    //  console.log(indice,valor)
-                    //console.log(valor)
+
+
+
                 })
+                agenda.push(
+                    {
+                        nome:registro.nome,
+                         _id:registro.id,
+                         idEmpresa:idEmpresa,
+                         idServico:idServico,
+                         dataServico:dataAgenda,
+                        horariosDisponiveis:horariosDisponiveis
+                    }
+                )
+                // console.log(registro.nome)
+                // console.log(registro.id)
+                // console.log(idEmpresa)
+                // console.log(idServico)
+                // console.log(dataAgenda)
+
                 // console.log(registro.agenda.length)
+
             })
 
 
@@ -207,7 +288,7 @@ module.exports = {
             return res.json({
 
                 status: 200,
-                agendamentos
+                agenda
             });
 
         } catch (err) {
