@@ -19,9 +19,6 @@ const FuncionarioSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-   telefone:{
-       type:Number
-   },
 	horaInicioTrabalho:{
        type: String
    },
@@ -35,7 +32,7 @@ const FuncionarioSchema = new mongoose.Schema({
        type: String
    },
    telefone:{
-       type:Number
+       type:String
    },
    idServicos: [{
         type: String

@@ -8,7 +8,7 @@ exports.send = async (numero, rua, bairro, cidade) => {
       const data = res.entity;
       //console.log(data.features[0].center[0])
       //console.log(data.features[0].center[1])
-      //console.log(data)
+     // console.log(data)
       //console.log(data.features[0].geometry.coordinates)
       return data.features[0].geometry.coordinates
     })

@@ -11,7 +11,7 @@ const CompanySchema = new mongoose.Schema({
         required: true,
     },
     CNPJ: {
-        type: Number,
+        type: String,
         required: true,
     },
     idEmpresario: {
@@ -25,6 +25,9 @@ const CompanySchema = new mongoose.Schema({
         type: Number
     },
     descricao: {
+        type: String
+    },
+    telefone: {
         type: String
     },
     rua: {

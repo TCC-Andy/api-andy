@@ -33,6 +33,28 @@ module.exports = {
 
     },
 
+    async showClientScheduledServices(req, res) {
+
+        try {
+
+         
+            return res.json({
+                status: 200,
+                mensagem: 'Teste',
+              
+            })
+
+        } catch (err) {
+
+            return res.json({
+                status: 500,
+                mensagem: 'Erro na verificacao de servicos'
+                
+            })
+        }
+
+    },
+
     async showDataSchedule(req, res) {
         try {
             const { dataAgenda, idEmpresa, idServico, tempoServico } = req.body;
@@ -84,7 +106,6 @@ module.exports = {
             agendaDiaria = []
 
             contador = tempoServico
-            contador = 40
             agenda = []
             promise2.forEach((registro, casa) => {
 
