@@ -33,14 +33,18 @@ module.exports = {
 
     },
 
-    async showClientScheduledServices(req, res) {
+    async showClientHistSchedule(req, res) {
 
         try {
+
+             schedule = await Agenda.find({ idCliente: req.params.idClient }).sort({ dataAgenda: 1 });
+              //  agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id }).sort({ inicioServico: 1 })
+
 
          
             return res.json({
                 status: 200,
-                mensagem: 'Teste',
+                schedule
               
             })
 

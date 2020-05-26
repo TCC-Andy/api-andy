@@ -46,5 +46,6 @@ routes.get("/showEmp/:id",EmployeeController.showEmp);
 //Rotas: Agendas
 routes.post("/createSchedule",ScheduleController.createSchedule);
 routes.post("/showDataSchedule",ScheduleController.showDataSchedule);
+routes.get("/showClientHistSchedule/:idClient",ScheduleController.showClientHistSchedule)
 
 module.exports = routes;
