@@ -33,15 +33,40 @@ module.exports = {
 
     },
 
+    async showClientCurrentSchedule(req, res) {
+
+        try {
+            const { idCliente, dataAgenda} = req.body;
+            console.log(idCliente,dataAgenda)
+            //mandar o id e a data no find one com data agenda igual ou maior que a data
+            //const usuario = await Usuario.findOne({ email }).select('+senha');
+
+            // schedule = await Agenda.find({ idCliente: req.params.idClient,dataAgenda: {$gte:5} }).sort({ dataAgenda: 1,inicioServico: 1 });
+             
+
+            return res.json({
+                status: 200
+                
+            })
+
+        } catch (err) {
+
+            return res.json({
+                status: 500,
+                mensagem: 'Erro na verificacao de servicos do cliente'
+                
+            })
+        }
+
+    },
+
     async showClientHistSchedule(req, res) {
 
         try {
 
-             schedule = await Agenda.find({ idCliente: req.params.idClient }).sort({ dataAgenda: 1 });
-              //  agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id }).sort({ inicioServico: 1 })
+             schedule = await Agenda.find({ idCliente: req.params.idClient }).sort({ dataAgenda: 1,inicioServico: 1 });
+             
 
-
-         
             return res.json({
                 status: 200,
                 schedule
@@ -52,7 +77,7 @@ module.exports = {
 
             return res.json({
                 status: 500,
-                mensagem: 'Erro na verificacao de servicos'
+                mensagem: 'Erro na verificacao de servicos do cliente'
                 
             })
         }
