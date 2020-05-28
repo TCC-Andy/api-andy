@@ -36,17 +36,18 @@ module.exports = {
     async showClientCurrentSchedule(req, res) {
 
         try {
-            const { idCliente, dataAgenda} = req.body;
-            console.log(idCliente,dataAgenda)
+            const { idCliente, dataAgenda } = req.body;
+            console.log(idCliente, dataAgenda)
             //mandar o id e a data no find one com data agenda igual ou maior que a data
             //const usuario = await Usuario.findOne({ email }).select('+senha');
-
             // schedule = await Agenda.find({ idCliente: req.params.idClient,dataAgenda: {$gte:5} }).sort({ dataAgenda: 1,inicioServico: 1 });
-             
+            //schedule = await Agenda.find({idCliente,dataAgenda})
 
+            schedule = await Agenda.find({ idCliente, dataAgenda: { $gte: dataAgenda } }).sort({ dataAgenda: 1, inicioServico: 1 });
             return res.json({
-                status: 200
-                
+                status: 200,
+                schedule
+
             })
 
         } catch (err) {
@@ -54,7 +55,7 @@ module.exports = {
             return res.json({
                 status: 500,
                 mensagem: 'Erro na verificacao de servicos do cliente'
-                
+
             })
         }
 
@@ -64,13 +65,13 @@ module.exports = {
 
         try {
 
-             schedule = await Agenda.find({ idCliente: req.params.idClient }).sort({ dataAgenda: 1,inicioServico: 1 });
-             
+            schedule = await Agenda.find({ idCliente: req.params.idClient }).sort({ dataAgenda: 1, inicioServico: 1 });
+
 
             return res.json({
                 status: 200,
                 schedule
-              
+
             })
 
         } catch (err) {
@@ -78,7 +79,7 @@ module.exports = {
             return res.json({
                 status: 500,
                 mensagem: 'Erro na verificacao de servicos do cliente'
-                
+
             })
         }
 
@@ -141,7 +142,7 @@ module.exports = {
                 horariosDisponiveis = []
 
                 registro.agenda.forEach((valor, indice, array) => {
-                   
+
 
 
                     console.log(registro.nome)
@@ -287,7 +288,7 @@ module.exports = {
                                 fimServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add((-i - contador), 'minutes')
                                 console.log()
-                                
+
                                 horariosDisponiveis.push(
                                     {
                                         inicioServico: inicioServico,
@@ -315,12 +316,12 @@ module.exports = {
                 })
                 agenda.push(
                     {
-                        nome:registro.nome,
-                         _id:registro.id,
-                         idEmpresa:idEmpresa,
-                         idServico:idServico,
-                         dataServico:dataAgenda,
-                        horariosDisponiveis:horariosDisponiveis
+                        nome: registro.nome,
+                        _id: registro.id,
+                        idEmpresa: idEmpresa,
+                        idServico: idServico,
+                        dataServico: dataAgenda,
+                        horariosDisponiveis: horariosDisponiveis
                     }
                 )
                 // console.log(registro.nome)
