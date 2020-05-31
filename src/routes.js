@@ -23,7 +23,8 @@ routes.post("/updatePassword",UserController.updatePassword);
 //Rotas: Servicos
 
 routes.post("/createService",ServiceController.createService);
-routes.get("/showServices",ServiceController.showServices);
+routes.get("/showServices/:idEmpresa",ServiceController.showServices);
+routes.get("/showService/:id",ServiceController.editServices);
 routes.put("/updateService/:id",ServiceController.updateService);
 routes.post("/addAgenda",ServiceController.addAgenda);
 routes.delete("/deleteService/:id",ServiceController.destroyService);

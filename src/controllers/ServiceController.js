@@ -4,17 +4,31 @@ const Servico = mongoose.model("Servicos");
 
 module.exports = {
     async createService(req, res) {
-
         try {
-            //const { nome, descricao, preco, tempo, idEmpresa, status } = req.body;
-
-            const service = await Servico.create(req.body);
-
-            return res.json({
-                status: 200,
-                mensagem: 'Servico cadastrado',
-            })
-
+            const { nome, descricao, preco, tempo, idEmpresa } = req.body;
+            const service = await Servico.findOne({ nome: nome, idEmpresa: idEmpresa });
+            if (service) {
+                return res.json({
+                    status: 400,
+                    mensagem: 'Serviço já cadastrado.'
+                })
+            } else {
+                const teste = preco.replace(',', '.');
+                const valor = parseFloat(teste);
+                const servicos = await Servico.create({
+                    nome,
+                    descricao,
+                    valor,
+                    tempo,
+                    idEmpresa
+                });
+                console.log(servicos);
+                return res.json({
+                    status: 200,
+                    servicos,
+                    mensagem: 'Servico cadastrado',
+                })
+            }
         } catch (err) {
             return res.json({
                 status: 400,
@@ -23,11 +37,18 @@ module.exports = {
         }
     },
 
+    async editServices(req, res) {
+        const service = await Servico.findOne({ _id: req.params.id });
+        return res.json({
+            status: 200,
+            service
+        })
+    },
+
 
     async addAgenda(req, res) {
-        const {idServico} = req.body;
+        const { idServico } = req.body;
         //Criar a logica de  push para agendamente e sort
-        console.log(idServico)
         const serv = await Servico.findById(idServico);
         return res.json({
             status: 200,
@@ -38,20 +59,22 @@ module.exports = {
 
 
     async showServices(req, res) {
-        const servicos = await Servico.find();
-        return res.json(servicos);
-    },
-
- 
-     async updateService(req, res) {
-        const serv = await Servico.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false });
+        const servicos = await Servico.find({ idEmpresa: req.params.idEmpresa });
         return res.json({
             status: 200,
-            serv
-        })
+            servicos
+        });
+
     },
 
-    
+
+    async updateService(req, res) {
+        const { nome, descricao, preco, tempo } = req.body;
+        const servico = await Servico.findByIdAndUpdate(req.params.id, { nome, descricao, preco, tempo }, { new: true, useFindAndModify: false });
+        await servico.save();
+    },
+
+
     async destroyService(req, res) {
         await Servico.findByIdAndRemove(req.params.id);
         return res.json({
@@ -59,10 +82,4 @@ module.exports = {
             mensagem: "Servico deletado"
         })
     }
-
-
-
-
-
-
 }
