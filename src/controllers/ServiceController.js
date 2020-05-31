@@ -5,7 +5,7 @@ const Servico = mongoose.model("Servicos");
 module.exports = {
     async createService(req, res) {
         try {
-            const { nome, descricao, preco, tempo, idEmpresa } = req.body;
+            const { nome, descricao, valor, tempo, idEmpresa } = req.body;
             const service = await Servico.findOne({ nome: nome, idEmpresa: idEmpresa });
             if (service) {
                 return res.json({
@@ -13,16 +13,14 @@ module.exports = {
                     mensagem: 'Serviço já cadastrado.'
                 })
             } else {
-                const teste = preco.replace(',', '.');
-                const valor = parseFloat(teste);
+                const preco = valor.replace(',', '.');
                 const servicos = await Servico.create({
                     nome,
                     descricao,
-                    valor,
+                    preco,
                     tempo,
                     idEmpresa
                 });
-                console.log(servicos);
                 return res.json({
                     status: 200,
                     servicos,
@@ -69,8 +67,8 @@ module.exports = {
 
 
     async updateService(req, res) {
-        const { nome, descricao, preco, tempo } = req.body;
-        const servico = await Servico.findByIdAndUpdate(req.params.id, { nome, descricao, preco, tempo }, { new: true, useFindAndModify: false });
+        const { nome, descricao, valor, tempo } = req.body;
+        const servico = await Servico.findByIdAndUpdate(req.params.id, { nome, descricao, preco: valor, tempo }, { new: true, useFindAndModify: false });
         await servico.save();
     },
 
