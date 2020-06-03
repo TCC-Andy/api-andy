@@ -5,7 +5,6 @@ const ServiceController = require("./controllers/ServiceController");
 const CompanyController = require("./controllers/CompanyController");
 const EmployeeController = require("./controllers/EmployeeControler");
 const ScheduleController = require("./controllers/ScheduleController");
-const testeController = require("./controllers/TesteControler");
 
 
 //Rotas: Usuarios
@@ -50,7 +49,5 @@ routes.post("/createSchedule",ScheduleController.createSchedule);
 routes.post("/showDataSchedule",ScheduleController.showDataSchedule);
 routes.post("/showClientCurrentSchedule",ScheduleController.showClientCurrentSchedule);
 routes.get("/showClientHistSchedule/:idClient",ScheduleController.showClientHistSchedule);
-routes.post("/createTeste",testeController.createTeste);
-routes.get("/listagemTeste/:id",testeController.showTeste);
 
 module.exports = routes;
