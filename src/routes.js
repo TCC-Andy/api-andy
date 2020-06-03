@@ -50,7 +50,7 @@ routes.post("/createSchedule",ScheduleController.createSchedule);
 routes.post("/showDataSchedule",ScheduleController.showDataSchedule);
 routes.post("/showClientCurrentSchedule",ScheduleController.showClientCurrentSchedule);
 routes.get("/showClientHistSchedule/:idClient",ScheduleController.showClientHistSchedule);
-routes.get("/createTeste",testeController.createTeste);
+routes.post("/createTeste",testeController.createTeste);
 routes.get("/listagemTeste/:id",testeController.showTeste);
 
 module.exports = routes;
