@@ -57,7 +57,8 @@ module.exports = {
 
 
     async showServices(req, res) {
-        const servicos = await Servico.find({ idEmpresa: req.params.idEmpresa });
+     
+        const servicos = await Servico.find();
         return res.json({
             status: 200,
             servicos
