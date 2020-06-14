@@ -23,7 +23,7 @@ routes.post("/updatePassword",UserController.updatePassword);
 //Rotas: Servicos
 
 routes.post("/createService",ServiceController.createService);
-routes.get("/showServices/",ServiceController.showServices);
+routes.get("/showServices/:idEmpresa",ServiceController.showServices);
 routes.get("/showService/:id",ServiceController.editServices);
 routes.put("/updateService/:id",ServiceController.updateService);
 routes.post("/addAgenda",ServiceController.addAgenda);
@@ -38,10 +38,11 @@ routes.get("/showCompanyServices/:idEmpresa",CompanyController.showCompanyServic
 routes.get("/showCategories/:categoria",CompanyController.showCategories);
 
 //Rotas: Empregados
-routes.get("/showEmps",EmployeeController.showEmployees);
+routes.get("/showEmps/:idEmpresa",EmployeeController.showEmployees);
 routes.post("/createEmp",EmployeeController.createEmployee);
 routes.put("/updateEmp/:id",EmployeeController.updateEmp);
 routes.get("/showEmp/:id",EmployeeController.showEmp);
+routes.delete("/deleteEmp/:id", EmployeeController.deleteEmp);
 
 
 //Rotas: Agendas

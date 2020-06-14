@@ -57,21 +57,21 @@ module.exports = {
 
 
     async showServices(req, res) {
-     
-        const servicos = await Servico.find();
+        const servicos = await Servico.find({ idEmpresa: req.params.idEmpresa });        
         return res.json({
             status: 200,
             servicos
         });
-
     },
-
 
     async updateService(req, res) {
         const { nome, descricao, valor, tempo } = req.body;
-        const preco = valor;
+        const preco = valor.replace(',', '.');
         const servico = await Servico.findByIdAndUpdate(req.params.id, { nome, descricao, preco, tempo }, { new: true, useFindAndModify: false });
         await servico.save();
+        return res.json({
+            status: 200
+        })
     },
 
 
