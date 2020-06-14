@@ -135,8 +135,10 @@ module.exports = {
 
             agendaDiaria = []
 
-            contador = tempoServico
+            //contador = tempoServico
+            contador = moment.duration(tempoServico).asMinutes();
             agenda = []
+            
             promise2.forEach((registro, casa) => {
 
                 horariosDisponiveis = []
@@ -145,7 +147,7 @@ module.exports = {
 
 
 
-                    console.log(registro.nome)
+                   // console.log(registro.nome)
                     if (indice == 0) {
 
 
@@ -162,16 +164,16 @@ module.exports = {
                                 break;
                             }
 
-                            console.log(horaAnterior.format('HH:mm'))
+                           // console.log(horaAnterior.format('HH:mm'))
                             inicioServico = horaAnterior.format('HH:mm')
                             horaAnterior.add(-i, 'minutes')
                             horaAnterior.add((i + contador), 'minutes')
 
-                            console.log(horaAnterior.format('HH:mm'))
+                           // console.log(horaAnterior.format('HH:mm'))
                             fimServico = horaAnterior.format('HH:mm')
                             horaAnterior.add((-i - contador), 'minutes')
 
-                            console.log()
+                          //  console.log()
                             horariosDisponiveis.push(
                                 {
                                     inicioServico: inicioServico,
@@ -194,15 +196,15 @@ module.exports = {
                                     break;
                                 }
 
-                                console.log(horaAnterior.format('HH:mm'))
+                               // console.log(horaAnterior.format('HH:mm'))
                                 inicioServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add(-i, 'minutes')
                                 horaAnterior.add((i + contador), 'minutes')
 
-                                console.log(horaAnterior.format('HH:mm'))
+                               // console.log(horaAnterior.format('HH:mm'))
                                 fimServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add((-i - contador), 'minutes')
-                                console.log()
+                               // console.log()
                                 horariosDisponiveis.push(
                                     {
                                         inicioServico: inicioServico,
@@ -234,15 +236,15 @@ module.exports = {
                                     break;
                                 }
 
-                                console.log(horaAnterior.format('HH:mm'))
+                              //  console.log(horaAnterior.format('HH:mm'))
                                 inicioServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add(-i, 'minutes')
                                 horaAnterior.add((i + contador), 'minutes')
 
-                                console.log(horaAnterior.format('HH:mm'))
+                              //  console.log(horaAnterior.format('HH:mm'))
                                 fimServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add((-i - contador), 'minutes')
-                                console.log()
+                              //  console.log()
                                 horariosDisponiveis.push(
                                     {
                                         inicioServico: inicioServico,
