@@ -15,34 +15,36 @@ const FuncionarioSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
     },
-	 idEmpresa: {
+    idEmpresa: {
         type: String,
         required: true,
     },
-	horaInicioTrabalho:{
-       type: String
-   },
-   horaFimTrabalho:{
-       type: String
-   },
-   horaAlmocoInicio:{
-       type: String
-   },
-   horaAlmocoFim:{
-       type: String
-   },
-   telefone:{
-       type:String
-   },
-   idServicos: [{
+    horaInicioTrabalho: {
         type: String
+    },
+    horaFimTrabalho: {
+        type: String
+    },
+    horaAlmocoInicio: {
+        type: String
+    },
+    horaAlmocoFim: {
+        type: String
+    },
+    telefone: {
+        type: String
+    },
+    idServicos: [{
+        type: String
+    }],
+    servicosSelection: [{
+        value: String,
+        label: String
     }],
     status: {
         type: Number,
         default: 1
     },
-    
-
 });
 
 

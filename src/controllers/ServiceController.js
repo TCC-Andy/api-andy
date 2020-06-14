@@ -57,15 +57,12 @@ module.exports = {
 
 
     async showServices(req, res) {
-     
-        const servicos = await Servico.find();
+        const servicos = await Servico.find({ idEmpresa: req.params.idEmpresa });        
         return res.json({
             status: 200,
             servicos
         });
-
     },
-
 
     async updateService(req, res) {
         const { nome, descricao, valor, tempo } = req.body;

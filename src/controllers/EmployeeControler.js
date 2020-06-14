@@ -3,14 +3,13 @@ const Funcionario = mongoose.model("Funcionario");
 
 module.exports = {
     async showEmployees(req, res) {
-        const funcionarios = await Funcionario.find();
-        return res.json(funcionarios);
+        const funcionarios = await Funcionario.find({ idEmpresa: req.params.idEmpresa });
+        return res.json({funcionarios});
     },
 
     async createEmployee(req, res) {
         try {
-
-            const { nome, sobrenome, email, telefone, idServicos } = req.body;
+            const { nome, sobrenome, email, telefone, idServicos  } = req.body;
             // console.log(nome,sobrenome,email,telefone,idServicos)
             if (Object.keys(idServicos).length < 1) {
                 return res.json({
@@ -35,7 +34,6 @@ module.exports = {
             }
 
             func = req.body;
-
             func = await Funcionario.create(func);
 
 
@@ -59,7 +57,7 @@ module.exports = {
 
     async showEmp(req, res) {
         try {
-            const func = await Funcionario.findById(req.params.id);
+            const func = await Funcionario.findById(req.params.id, '-_id nome sobrenome email telefone horaInicioTrabalho horaAlmocoInicio horaAlmocoFim horaFimTrabalho servicosSelection.value servicosSelection.label');
 
             return res.json({
 
@@ -121,7 +119,13 @@ module.exports = {
 
     },
 
-
+    async deleteEmp(req, res){
+        await Funcionario.findByIdAndRemove(req.params.id);
+        return res.json({
+            status: 200,
+            mensagem: "Funcionario deletado"
+        })
+    }
 
 
 
