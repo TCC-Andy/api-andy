@@ -24,6 +24,7 @@ routes.post("/updatePassword",UserController.updatePassword);
 
 routes.post("/createService",ServiceController.createService);
 routes.get("/showServices/:idEmpresa",ServiceController.showServices);
+routes.get("/showGlobalServices",ServiceController.showGlobalServices);
 routes.get("/showService/:id",ServiceController.editServices);
 routes.put("/updateService/:id",ServiceController.updateService);
 routes.post("/addAgenda",ServiceController.addAgenda);

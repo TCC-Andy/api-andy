@@ -64,6 +64,14 @@ module.exports = {
         });
     },
 
+    async showGlobalServices(req, res) {
+        const servicos = await Servico.find();        
+        return res.json({
+            status: 200,
+            servicos
+        });
+    },
+
     async updateService(req, res) {
         const { nome, descricao, valor, tempo } = req.body;
         const preco = valor.replace(',', '.');
