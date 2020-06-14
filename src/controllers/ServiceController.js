@@ -66,9 +66,12 @@ module.exports = {
 
     async updateService(req, res) {
         const { nome, descricao, valor, tempo } = req.body;
-        const preco = valor;
+        const preco = valor.replace(',', '.');
         const servico = await Servico.findByIdAndUpdate(req.params.id, { nome, descricao, preco, tempo }, { new: true, useFindAndModify: false });
         await servico.save();
+        return res.json({
+            status: 200
+        })
     },
 
 

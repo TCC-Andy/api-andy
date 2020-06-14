@@ -57,7 +57,7 @@ module.exports = {
 
     async showEmp(req, res) {
         try {
-            const func = await Funcionario.findById(req.params.id, '-_id nome sobrenome email telefone horaInicioTrabalho horaAlmocoInicio horaAlmocoFim horaFimTrabalho servicosSelection.value servicosSelection.label');
+            const func = await Funcionario.findById(req.params.id, 'nome sobrenome email telefone horaInicioTrabalho horaAlmocoInicio horaAlmocoFim horaFimTrabalho servicosSelection.value servicosSelection.label');
 
             return res.json({
 
@@ -75,8 +75,15 @@ module.exports = {
         }
     },
 
-
     async updateEmp(req, res) {
+        //const { nome, descricao, valor, tempo } = req.body;
+        const servico = await Funcionario.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false });
+        await servico.save();
+        return res.json({
+            status: 200
+        })
+    },
+    /*async updateEmp(req, res) {
         const { nome, sobrenome, email, telefone, idServicos } = req.body;
         if (Object.keys(idServicos).length < 1) {
             return res.json({
@@ -117,7 +124,7 @@ module.exports = {
 
         });
 
-    },
+    },*/
 
     async deleteEmp(req, res){
         await Funcionario.findByIdAndRemove(req.params.id);
