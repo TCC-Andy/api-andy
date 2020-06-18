@@ -43,7 +43,74 @@ module.exports = {
             // schedule = await Agenda.find({ idCliente: req.params.idClient,dataAgenda: {$gte:5} }).sort({ dataAgenda: 1,inicioServico: 1 });
             //schedule = await Agenda.find({idCliente,dataAgenda})
 
-            schedule = await Agenda.find({ idCliente, dataAgenda: { $gte: dataAgenda } }).sort({ dataAgenda: 1, inicioServico: 1 });
+            yschedule = await Agenda.find({ idCliente, dataAgenda: { $gte: dataAgenda } }).sort({ dataAgenda: 1, inicioServico: 1 });
+
+            /* schedule = await  Agenda.aggregate([
+                  {$match : {inicioServico:"10:00"} }
+              ])*/
+
+            schedule = await Agenda.aggregate([
+
+                { $match: { $and: [{ dataAgenda: { $gte: dataAgenda } }, { idCliente: idCliente }] } },
+                { $sort: { dataAgenda: 1, inicioServico: 1 } },
+
+                {
+                    "$project": {
+                        "idServico": {
+                            "$toObjectId": "$idServico"
+                        },
+                        "inicioServico": 1,
+                        "fimServico": 1,
+                        "dataAgenda": 1,
+                        "nomeCliente": 1
+
+                    }
+                },
+                {
+                    $lookup:
+                    {
+                        from: "servicos",
+                        localField: "idServico",
+                        foreignField: "_id",
+                        as: "Servico"
+
+                    }
+                },
+                {
+                    "$unwind": "$Servico"
+                },
+                {
+                    "$project": {
+                        "inicioServico": 1,
+                        "fimServico": 1,
+                        "dataAgenda": 1,
+                        "nomeCliente": 1,
+                        "Servico.nome": 1,
+                        "Servico.status": 1,
+                        "Servico.descricao": 1,
+                        "Servico.tempo": 1,
+                        "Servico.preco": 1,
+                        "Servico.idEmpresa": {
+                            "$toObjectId": "$Servico.idEmpresa"
+                        }
+
+                    }
+                },
+                {
+                    $lookup:
+                    {
+                        from: "empresas",
+                        localField: "Servico.idEmpresa",
+                        foreignField: "_id",
+                        as: "Empresa"
+
+                    }
+                },
+                {
+                    "$unwind": "$Empresa"
+                }
+            ])
+
             return res.json({
                 status: 200,
                 schedule
@@ -108,10 +175,10 @@ module.exports = {
             })
 
             //Deletar promise acima depois de refatorar
-           /* await Promise.all(promise).then(async () => {
-                agnd = await Agenda.find({ dataAgenda, idServico });
-            }
-            );*/
+            /* await Promise.all(promise).then(async () => {
+                 agnd = await Agenda.find({ dataAgenda, idServico });
+             }
+             );*/
             //Construção do objeto 1
 
             console.log("-------------------------------------------------")
@@ -120,7 +187,7 @@ module.exports = {
 
             const promise2 = await Promise.all(func.map(async funcionario => {
                 agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id }).sort({ inicioServico: 1 })
-                   // console.log(agenda)
+                // console.log(agenda)
                 return {
                     nome: funcionario.nome,
                     id: funcionario._id,
@@ -143,7 +210,7 @@ module.exports = {
             //contador = tempoServico
             contador = moment.duration(tempoServico).asMinutes();
             agenda = []
-            
+
             promise2.forEach((registro, casa) => {
 
                 horariosDisponiveis = []
@@ -152,14 +219,14 @@ module.exports = {
 
 
 
-                   // console.log(registro.nome)
+                    // console.log(registro.nome)
                     if (indice == 0) {
 
 
                         horaAnterior = moment.tz(registro.horaInicioTrabalho, "HH:mm", "UTC")
                         horaPosterior = moment.tz(valor.inicioServico, "HH:mm", "UTC")
                         intervalo = (horaPosterior.diff(horaAnterior, 'minutes'))
-                    
+
 
                         for (var i = 0; i < intervalo; i += contador) {
 
@@ -202,7 +269,7 @@ module.exports = {
                                 if (horaPosterior.diff(horaAnterior, 'minutes') < contador) {
                                     break;
                                 }
-                               
+
                                 console.log(horaAnterior.format('HH:mm'))
                                 inicioServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add(-i, 'minutes')
@@ -227,7 +294,7 @@ module.exports = {
                     }
 
 
-//Se nao for o primeiro array em que o iniciodo trabalho tem que ser contado
+                    //Se nao for o primeiro array em que o iniciodo trabalho tem que ser contado
                     else {
 
                         //O nome e id irao ficar no começo do for maior
@@ -280,7 +347,7 @@ module.exports = {
 
 
                         //  intervalo = (horaPosterior.diff(horaAnterior,'minutes'))
-                    
+
 
                         if ((array.length - 1) == indice) {
                             horaAnterior = moment.tz(valor.fimServico, "HH:mm", "UTC")
@@ -316,7 +383,7 @@ module.exports = {
 
                         }
 
-                            
+
                     }
 
 
