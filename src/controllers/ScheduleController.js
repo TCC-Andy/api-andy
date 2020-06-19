@@ -51,9 +51,8 @@ module.exports = {
 
             schedule = await Agenda.aggregate([
 
-                { $match: { $and: [{ dataAgenda: { $gte: dataAgenda } }, { idCliente: idCliente }] } },
+                { $match: { $and: [{ dataAgenda: { $gte: dataAgenda } }, { status: 1 }, { idCliente: idCliente }] } },
                 { $sort: { dataAgenda: 1, inicioServico: 1 } },
-
                 {
                     "$project": {
                         "idServico": {
@@ -62,10 +61,11 @@ module.exports = {
                         "inicioServico": 1,
                         "fimServico": 1,
                         "dataAgenda": 1,
+                        "nomeFuncionario": 1,
                         "nomeCliente": 1
-
                     }
                 },
+
                 {
                     $lookup:
                     {
@@ -73,14 +73,23 @@ module.exports = {
                         localField: "idServico",
                         foreignField: "_id",
                         as: "Servico"
-
                     }
                 },
                 {
                     "$unwind": "$Servico"
                 },
                 {
+                    $addFields: {
+                        "nomeServico": "$Servico.nome",
+                        "descricaoServico": "$Servico.descricao",
+                        "precoServico": "$Servico.preco",
+                        "idServico": "$Servico._id"
+                    }
+                },
+
+                {
                     "$project": {
+
                         "inicioServico": 1,
                         "fimServico": 1,
                         "dataAgenda": 1,
@@ -90,10 +99,14 @@ module.exports = {
                         "Servico.descricao": 1,
                         "Servico.tempo": 1,
                         "Servico.preco": 1,
+                        "nomeServico": 1,
+                        "descricaoServico": 1,
+                        "nomeFuncionario": 1,
+                        "idServico": 1,
+                        "precoServico": 1,
                         "Servico.idEmpresa": {
                             "$toObjectId": "$Servico.idEmpresa"
-                        }
-
+                        },
                     }
                 },
                 {
@@ -103,12 +116,60 @@ module.exports = {
                         localField: "Servico.idEmpresa",
                         foreignField: "_id",
                         as: "Empresa"
-
                     }
                 },
                 {
                     "$unwind": "$Empresa"
-                }
+                },
+                { $unset: ["Servico"] },
+                {
+                    $addFields: {
+                        "idEmpresa": "$Empresa._id",
+                        "nomeEmpresa": "$Empresa.nome",
+                        "categoriaEmpresa": "$Empresa.categoria",
+                        "descricaoEmpresa": "$Empresa.descricao",
+                        "telefoneEmpresa": "$Empresa.telefone",
+                        "nomeFantasiaEmpresa": "$Empresa.nomeFantasia",
+                        "ruaEmpresa": "$Empresa.rua",
+                        "bairroEmpresa": "$Empresa.bairro",
+                        "cidadeEmpresa": "$Empresa.cidade",
+                        "cepEmpresa": "$Empresa.cep",
+                        "numeroEmpresa": "$Empresa.numero",
+                        "coordenadaEmpresa": "$Empresa.coordenadas"
+                    }
+                },
+
+                {
+                    "$project": {
+                        "inicioServico": 1,
+                        "fimServico": 1,
+                        "dataAgenda": 1,
+                        "nomeCliente": 1,
+                        "nomeFuncionario": 1,
+                        "Servico.nome": 1,
+                        "Servico.status": 1,
+                        "Servico.descricao": 1,
+                        "Servico.tempo": 1,
+                        "Servico.preco": 1,
+                        "nomeServico": 1,
+                        "descricaoServico": 1,
+                        "precoServico": 1,
+                        "idServico": 1,
+                        "nomeEmpresa": 1,
+                        "nomeFantasiaEmpresa": 1,
+                        "categoriaEmpresa": 1,
+                        "descricaoEmpreesa": 1,
+                        "telefoneEempresa": 1,
+                        "ruaEmpresa": 1,
+                        "bairroEmpresa": 1,
+                        "cidadeEmpresa": 1,
+                        "cepEmpresa": 1,
+                        "numeroEmpresa": 1,
+                        "idEmpresa": 1,
+                        "coordenadaEmpresa": 1,
+
+                    }
+                },
             ])
 
             return res.json({
