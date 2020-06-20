@@ -228,12 +228,15 @@ module.exports = {
             
 
             const promise = func.map(async funcionario => {
-
+                console.log(funcionario.id+''+dataAgenda)
                 agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id });
                 
-                if (Object.keys(agenda).length == 0) {
-                   await Agenda.create({ idServico, idFuncionario: funcionario.id, nomeFuncionario: funcionario.nome, dataAgenda, inicioServico: funcionario.horaAlmocoInicio, fimServico: funcionario.horaAlmocoFim });
-                }
+                //if (Object.keys(agenda).length == 0) {
+                
+                    Agenda.create({ idServico, idFuncionario: funcionario.id, nomeFuncionario: funcionario.nome, dataAgenda, inicioServico: funcionario.horaAlmocoInicio, fimServico: funcionario.horaAlmocoFim });
+                 
+              
+                  //  }
             })
 
             //Deletar promise acima depois de refatorar

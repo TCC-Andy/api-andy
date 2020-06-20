@@ -30,12 +30,15 @@ const AgendaSchema = new mongoose.Schema({
     status: {
         type: Number,
         default: 1
+    },
+    hash: {
+        type: String
     }
     
 
 });
 
-AgendaSchema.index({ dataAgenda: 1, idFuncionario: 1 }, { unique: true });
+AgendaSchema.index({hash: 1 }, { unique: true });
 
 
 mongoose.model('Agendas', AgendaSchema);
