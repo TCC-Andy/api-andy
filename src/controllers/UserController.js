@@ -7,6 +7,8 @@ const emailService = require('../services/emailService');
 var dateFormat = require('dateformat');
 const authConfig = require('../config/auth');
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
+const tz = require("moment-timezone")
 
 function generateToken(params = {}) {
     return jwt.sign(params, authConfig.secret, {
@@ -74,7 +76,8 @@ module.exports = {
 
             usr = req.body;
 
-            usr.criadoEm = new Date().toString()
+           // usr.criadoEm = new Date().toString()
+            usr.criadoEm = moment.tz(new Date(), "YYYY-MM-DD HH:mm", "America/Sao_Paulo").toString();
             //usr.criadoEm = dateFormat(new Date(), " HH:MM:ss ")
             const usuario = await Usuario.create(usr);
             emailService.send(1, req.body.email, req.body.nome);
@@ -242,6 +245,7 @@ module.exports = {
             }
 
             await Usuario.findOne({ email }, function (err, usr) {
+                
                 usr.senha = senha;
                 usr.pwdToken = undefined;
                 usr.pwdExpires = undefined;
@@ -277,8 +281,22 @@ module.exports = {
 
     /*Implementar */
     async update(req, res) {
-        const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false });
+        try{
+            usr = req.body;
+            const hash = await bcrypt.hash(usr.senha, 10);
+            usr.senha = hash
+        const usuario = await Usuario.findByIdAndUpdate(req.params.id, usr, { new: true, useFindAndModify: false });
+        
         return res.json(usuario);
+        }catch(err){
+            console.log(err)
+            return res.json({
+
+                status: 500,
+                mensagem: 'Erro em atualizar o usuario',
+                error: err
+            });
+        }
     },
 
     /*Implementar */

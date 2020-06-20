@@ -193,6 +193,7 @@ module.exports = {
     },
 
     async showClientHistSchedule(req, res) {
+        
 
         try {
 
