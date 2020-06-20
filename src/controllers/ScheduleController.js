@@ -3,6 +3,7 @@ const Agenda = mongoose.model("Agendas");
 const Funcionario = mongoose.model("Funcionario");
 const moment = require('moment');
 const tz = require("moment-timezone")
+const crypto = require("crypto");
 
 
 module.exports = {
@@ -13,8 +14,10 @@ module.exports = {
         try {
 
             //Criar os bloqueios aqui
+            agenda = req.body
+            agenda.hash = crypto.randomBytes(20).toString('hex');
 
-            const sched = await Agenda.create(req.body);
+            const sched = await Agenda.create(agenda);
 
             return res.json({
                 status: 200,
@@ -225,19 +228,21 @@ module.exports = {
                     mensagem: 'Nenhum funcionario cadastrado para este servico'
                 });
             }
-            
 
-            const promise = func.map(async funcionario => {
-                console.log(funcionario.id+''+dataAgenda)
+
+            const promise = await Promise.all(func.map(async funcionario => {
+
                 agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id });
-                
-                //if (Object.keys(agenda).length == 0) {
-                
-                    Agenda.create({ idServico, idFuncionario: funcionario.id, nomeFuncionario: funcionario.nome, dataAgenda, inicioServico: funcionario.horaAlmocoInicio, fimServico: funcionario.horaAlmocoFim });
-                 
-              
-                  //  }
-            })
+
+                if (Object.keys(agenda).length == 0) {
+                try {
+                   await Agenda.create({ idServico, idFuncionario: funcionario.id, nomeFuncionario: funcionario.nome, dataAgenda, inicioServico: funcionario.horaAlmocoInicio, fimServico: funcionario.horaAlmocoFim, hash: funcionario.id + '' + dataAgenda });
+                } catch{
+                    console.log("Tentativa de violacao de constraint UNIQUE")
+                }
+
+                 }
+            }))
 
             //Deletar promise acima depois de refatorar
             /* await Promise.all(promise).then(async () => {
@@ -252,7 +257,7 @@ module.exports = {
 
             const promise2 = await Promise.all(func.map(async funcionario => {
                 agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id }).sort({ inicioServico: 1 })
-                // console.log(agenda)
+               
                 return {
                     nome: funcionario.nome,
                     id: funcionario._id,
