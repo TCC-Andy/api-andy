@@ -13,7 +13,7 @@ module.exports = {
 
         try {
 
-            //Criar os bloqueios aqui
+            //Criar os bloqueios aqui. Tem que verificar se a agenda ainda esta disponivel
             agenda = req.body
             agenda.hash = crypto.randomBytes(20).toString('hex');
 
