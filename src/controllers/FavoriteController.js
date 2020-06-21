@@ -85,5 +85,23 @@ module.exports = {
             })
         }
 
+    },
+    async showFavorites(req, res) {
+        try {
+            const favoritos = await Favoritos.find({ idCliente: req.params.idCliente });
+            return res.json({
+                status: 200,
+                favoritos
+            })
+        } catch{
+            return res.json({
+                status: 400,
+                mensagem: "Erro na busca dos favoritos do cliente"
+            })
+
+        }
+
     }
+
+
 }

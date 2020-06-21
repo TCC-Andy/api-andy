@@ -55,5 +55,6 @@ routes.get("/showClientHistSchedule/:idClient",ScheduleController.showClientHist
 
 //Rotas: Favoritos
 routes.post("/checkFavorite",FavoriteController.checkFavorite);
+routes.get("/showFavorites/:idCliente",FavoriteController.showFavorites);
 
 module.exports = routes;
