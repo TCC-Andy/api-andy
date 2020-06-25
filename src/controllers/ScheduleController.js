@@ -8,6 +8,41 @@ const crypto = require("crypto");
 
 module.exports = {
 
+    async deleteClientSchedule(req, res) {
+
+        try {
+
+            const agenda = await Agenda.findById({ _id: req.params.idSchedule });
+            if (!agenda){
+                return res.json({
+                    status: 200,
+                    mensagem: 'Não foi encontrado nenhum registro'
+                    
+                })
+
+            }else{
+                return res.json({
+                    status: 200,
+                    mensagem: 'Encontrei',
+                    agenda
+                    
+                })
+
+            }
+
+          
+
+        } catch (err) {
+
+            return res.json({
+                status: 500,
+                mensagem: 'Erro ao deletar o registro da agenda',
+                erro: err
+            })
+        }
+
+    },
+
 
     async createSchedule(req, res) {
 
