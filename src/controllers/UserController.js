@@ -55,7 +55,7 @@ module.exports = {
 
             if ((!nome) || (!sobrenome) || (!email) || (!senha)) {
                 return res.json({
-                    status: 406,
+                    status: 400,
                     mensagem: 'Todos os campos precisam ser preenchidos',
                 })
             }
