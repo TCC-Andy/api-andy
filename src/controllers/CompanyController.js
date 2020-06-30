@@ -44,6 +44,27 @@ module.exports = {
         return res.json(empresas);
     },
 
+    async showCompanyUser(req, res) {
+        try {
+            const emp = await empresa.findOne({'idEmpresario' : req.params.id});
+
+            return res.json({
+
+                status: 200,
+                emp
+            });
+
+        } catch (err) {
+            console.log(err)
+            return res.json({
+
+                status: 400,
+                mensagem: 'Erro em buscar empresa',
+
+            });
+        }
+    },
+
     async showCompany(req, res) {
         try {
             const emp = await empresa.findById(req.params.id);

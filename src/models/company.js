@@ -15,7 +15,7 @@ const CompanySchema = new mongoose.Schema({
         required: true,
     },
     idEmpresario: {
-        type: Number
+        type: String
     },
     categoria: {
         type: String,

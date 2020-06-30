@@ -35,6 +35,7 @@ routes.delete("/deleteService/:id",ServiceController.destroyService);
 routes.post("/createCompany",CompanyController.createCompany);
 routes.get("/showCompanies",CompanyController.showCompanies);
 routes.get("/showCompany/:id",CompanyController.showCompany);
+routes.get("/showCompanyUser/:id",CompanyController.showCompanyUser);
 routes.get("/showCompanyServices/:idEmpresa",CompanyController.showCompanyServices);
 routes.get("/showCategories/:categoria",CompanyController.showCategories);
 
