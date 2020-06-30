@@ -8,28 +8,96 @@ const crypto = require("crypto");
 
 module.exports = {
 
-
-    async createSchedule(req, res) {
+    async deleteClientSchedule(req, res) {
+        //****Requisitos não funcionais***
+        //OBS: Deleto sem verificar o dia e horario(registro antigo, serviço ja feito ou não)
+        //O certo seria ter um status na agenda: agendado, atrasado,concluido,etc
 
         try {
 
-            //Criar os bloqueios aqui
-            agenda = req.body
-            agenda.hash = crypto.randomBytes(20).toString('hex');
+            const agenda = await Agenda.findById({ _id: req.params.idSchedule });
+            if (!agenda) {
+                return res.json({
+                    status: 200,
+                    mensagem: 'Não foi encontrado nenhum registro'
+                })
 
-            const sched = await Agenda.create(agenda);
+            } else {
+                await Agenda.findByIdAndRemove({ _id: req.params.idSchedule });
+                const remocao = await Agenda.findById({ _id: req.params.idSchedule });
+                if (!remocao) {
+                    return res.json({
+                        status: 200,
+                        mensagem: 'Registro removido'
 
-            return res.json({
-                status: 200,
-                mensagem: 'Agenda cadastrada',
-                sched
-            })
+                    })
+                } else {
+                    return res.json({
+                        status: 200,
+                        mensagem: 'Erro ao tentar remover o registro'
+
+                    })
+                }
+            }
 
         } catch (err) {
 
             return res.json({
                 status: 500,
-                mensagem: 'Erro no registro da agenda',
+                mensagem: 'Erro no processo de deletar o registro da agenda',
+                erro: err
+            })
+        }
+
+    },
+
+    async createSchedule(req, res) {
+
+        try {
+
+            //****Requisitos não funcionais***
+            //OBS: Criar agenda somente de um usuario por vez por enquanto
+            //Verificar se o horario que ira agendar continua disponivel N
+            //Verificar se conseguiu criar agenda S
+            //Verificar se o horario que ira agendar pode ser encaixado, se ninguem escolheu algum horario proximo N
+            //Verificar se id servico e id funcionario ainda existem N
+
+
+            const { idServico, idFuncionario, nomeFuncionario, idCliente, nomeCliente, dataAgenda, inicioServico, fimServico, status } = req.body;
+
+            if ((!idServico) || (!idFuncionario) || (!nomeFuncionario) || (!idCliente) || (!nomeCliente) || (!dataAgenda) || (!inicioServico) || (!fimServico) || (!fimServico)) {
+                return res.json({
+                    status: 400,
+                    mensagem: 'Faltam informacoes para criar o registro da agenda',
+                })
+            }
+
+            agenda = req.body
+            //Continuação do WA para conter multiplos acessos na base
+            agenda.hash = crypto.randomBytes(20).toString('hex');
+
+            const sched = await Agenda.create(agenda);
+
+            if (sched) {
+                return res.json({
+                    status: 200,
+                    mensagem: 'Registro na agenda efetuado',
+                    sched
+                })
+
+            } else {
+                return res.json({
+                    status: 500,
+                    mensagem: 'Erro em salvar o registro na agenda'
+
+                })
+            }
+
+        } catch (err) {
+
+            return res.json({
+                status: 500,
+                mensagem: 'Erro no processo de registro na agenda',
                 erro: err
             })
         }
@@ -38,13 +106,18 @@ module.exports = {
 
     async showClientCurrentSchedule(req, res) {
 
+        //****Requisitos não funcionais***
+        //Verificar se tem o cliente e o registro
+        //Verificar se naõ encontrou nenhum registro, eu só volto o array vazio, mas esta ok
+
         try {
             const { idCliente, dataAgenda } = req.body;
-            console.log(idCliente, dataAgenda)
-            //mandar o id e a data no find one com data agenda igual ou maior que a data
-            //const usuario = await Usuario.findOne({ email }).select('+senha');
-            // schedule = await Agenda.find({ idCliente: req.params.idClient,dataAgenda: {$gte:5} }).sort({ dataAgenda: 1,inicioServico: 1 });
-            //schedule = await Agenda.find({idCliente,dataAgenda})
+            if ((!idCliente) || (!dataAgenda)) {
+                return res.json({
+                    status: 400,
+                    mensagem: 'Faltam informacoes para acessar os agendamentos',
+                })
+            }
 
             yschedule = await Agenda.find({ idCliente, dataAgenda: { $gte: dataAgenda } }).sort({ dataAgenda: 1, inicioServico: 1 });
 
@@ -174,12 +247,20 @@ module.exports = {
                     }
                 },
             ])
+            if (schedule) {
+                return res.json({
+                    status: 200,
+                    schedule
 
-            return res.json({
-                status: 200,
-                schedule
+                })
+            } else {
+                return res.json({
+                    status: 400,
+                    mensagem: "Nenhum registro encontrado"
 
-            })
+                })
+            }
+
 
         } catch (err) {
 
@@ -193,7 +274,7 @@ module.exports = {
     },
 
     async showClientHistSchedule(req, res) {
-        
+
 
         try {
 
@@ -236,13 +317,13 @@ module.exports = {
                 agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id });
 
                 if (Object.keys(agenda).length == 0) {
-                try {
-                   await Agenda.create({ idServico, idFuncionario: funcionario.id, nomeFuncionario: funcionario.nome, dataAgenda, inicioServico: funcionario.horaAlmocoInicio, fimServico: funcionario.horaAlmocoFim, hash: funcionario.id + '' + dataAgenda });
-                } catch{
-                    console.log("Tentativa de violacao de constraint UNIQUE")
-                }
+                    try {
+                        await Agenda.create({ idServico, idFuncionario: funcionario.id, nomeFuncionario: funcionario.nome, dataAgenda, inicioServico: funcionario.horaAlmocoInicio, fimServico: funcionario.horaAlmocoFim, hash: funcionario.id + '' + dataAgenda });
+                    } catch{
+                        console.log("Tentativa de violacao de constraint UNIQUE")
+                    }
 
-                 }
+                }
             }))
 
             //Deletar promise acima depois de refatorar
@@ -258,7 +339,7 @@ module.exports = {
 
             const promise2 = await Promise.all(func.map(async funcionario => {
                 agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id }).sort({ inicioServico: 1 })
-               
+
                 return {
                     nome: funcionario.nome,
                     id: funcionario._id,
