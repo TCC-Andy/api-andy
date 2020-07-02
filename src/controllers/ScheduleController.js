@@ -16,16 +16,21 @@ module.exports = {
         try {
 
             const agenda = await Agenda.findById({ _id: req.params.idSchedule });
-            if (!agenda) {
+            if (agenda.status == 0) {
                 return res.json({
                     status: 200,
-                    mensagem: 'Não foi encontrado nenhum registro'
+                    mensagem: 'Não foi encontrado nenhum registro ativo'
                 })
 
             } else {
-                await Agenda.findByIdAndRemove({ _id: req.params.idSchedule });
+                // await Agenda.findByIdAndRemove({ _id: req.params.idSchedule });
+                await Agenda.findByIdAndUpdate(req.params.idSchedule, {
+                    '$set': {
+                        status: 0
+                    }
+                });
                 const remocao = await Agenda.findById({ _id: req.params.idSchedule });
-                if (!remocao) {
+                if (remocao.status == 0) {
                     return res.json({
                         status: 200,
                         mensagem: 'Registro removido'
@@ -119,7 +124,7 @@ module.exports = {
                 })
             }
 
-            yschedule = await Agenda.find({ idCliente, dataAgenda: { $gte: dataAgenda } }).sort({ dataAgenda: 1, inicioServico: 1 });
+           // yschedule = await Agenda.find({ idCliente, dataAgenda: { $gte: dataAgenda } }).sort({ dataAgenda: 1, inicioServico: 1 });
 
             /* schedule = await  Agenda.aggregate([
                   {$match : {inicioServico:"10:00"} }
@@ -127,7 +132,7 @@ module.exports = {
 
             schedule = await Agenda.aggregate([
 
-                { $match: { $and: [{ dataAgenda: { $gte: dataAgenda } }, { status: 1 }, { idCliente: idCliente }] } },
+                { $match: { $and: [{ dataAgenda: { $gte: dataAgenda } }, { idCliente: idCliente }] } },
                 { $sort: { dataAgenda: 1, inicioServico: 1 } },
                 {
                     "$project": {
@@ -278,7 +283,7 @@ module.exports = {
 
         try {
 
-            schedule = await Agenda.find({ idCliente: req.params.idClient }).sort({ dataAgenda: 1, inicioServico: 1 });
+            schedule = await Agenda.find({ idCliente: req.params.idClient,status:1 }).sort({ dataAgenda: 1, inicioServico: 1 });
 
 
             return res.json({
@@ -314,11 +319,11 @@ module.exports = {
 
             const promise = await Promise.all(func.map(async funcionario => {
 
-                agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id });
+                agenda = await Agenda.find({ dataAgenda,status: 1, idFuncionario: funcionario.id });
 
                 if (Object.keys(agenda).length == 0) {
                     try {
-                        await Agenda.create({ idServico, idFuncionario: funcionario.id, nomeFuncionario: funcionario.nome, dataAgenda, inicioServico: funcionario.horaAlmocoInicio, fimServico: funcionario.horaAlmocoFim, hash: funcionario.id + '' + dataAgenda });
+                        await Agenda.create({ idServico, idFuncionario: funcionario.id, nomeFuncionario: funcionario.nome, dataAgenda, inicioServico: funcionario.horaAlmocoInicio, fimServico: funcionario.horaAlmocoFim, status: 1, hash: funcionario.id + '' + dataAgenda });
                     } catch{
                         console.log("Tentativa de violacao de constraint UNIQUE")
                     }
@@ -338,7 +343,7 @@ module.exports = {
 
 
             const promise2 = await Promise.all(func.map(async funcionario => {
-                agenda = await Agenda.find({ dataAgenda, idFuncionario: funcionario.id }).sort({ inicioServico: 1 })
+                agenda = await Agenda.find({ dataAgenda,status:1, idFuncionario: funcionario.id }).sort({ inicioServico: 1 })
 
                 return {
                     nome: funcionario.nome,

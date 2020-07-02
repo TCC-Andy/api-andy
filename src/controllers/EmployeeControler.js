@@ -15,7 +15,7 @@ module.exports = {
                 return res.json({
                     status: 400,
                     mensagem: 'Ao menos um servico deve ser marcado',
-                })
+                }) 
             }
 
             if ((!nome) || (!sobrenome) || (!email) || (!telefone)) {
