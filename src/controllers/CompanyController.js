@@ -118,6 +118,28 @@ module.exports = {
         }
     },
 
+    async deleteCompany(req, res){
+
+        try {
+            await empresa.findByIdAndRemove(req.params.id);
+            return res.json({
+                status: 200,
+                mensagem: "Empresa deletado"
+            })
+
+        } catch (err) {
+            console.log(err)
+            return res.json({
+
+                status: 400,
+                mensagem: 'Erro em deletar empresa',
+
+            });
+        }
+       
+       
+    }
+
 
 
 }
