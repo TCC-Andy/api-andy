@@ -296,8 +296,23 @@ module.exports = {
             const hash = await bcrypt.hash(usr.senha, 10);
             usr.senha = hash
             const usuario = await Usuario.findByIdAndUpdate(req.params.id, usr, { new: true, useFindAndModify: false });
+            if (usuario) {
+                return res.json({
 
-            return res.json(usuario);
+                    status: 200,
+                    mensagem: 'Usuario atualizado',
+                    usuario
+                });
+            } else {
+                return res.json({
+
+                    status: 500,
+                    mensagem: 'Erro em atualizar os dados do usuario',
+
+                });
+
+            }
+
         } catch (err) {
             console.log(err)
             return res.json({

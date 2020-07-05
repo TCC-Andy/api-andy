@@ -18,16 +18,22 @@ module.exports = {
             //console.log(numero+" "+rua+" "+bairro+" "+cidade)
             // console.log( await geoService.send(numero, rua, bairro, cidade))
             const emp = await empresa.create(company);
+            if (emp) {
+                return res.json({
+                    status: 200,
+                    mensagem: 'Empresa cadastrada',
+                    emp
+                })
+            } else {
+                return res.json({
+                    status: 500,
+                    mensagem: 'Empresa não encontrada',
 
-            return res.json({
-                status: 200,
-                mensagem: 'Empresa cadastrada',
-                emp
-            })
-
+                })
+            }
         } catch (err) {
             return res.json({
-                status: 500,
+                status: 400,
                 mensagem: 'Erro no registro da empresa',
                 erro: err
             })
@@ -46,14 +52,23 @@ module.exports = {
 
     async showCompanyUser(req, res) {
         try {
-            const emp = await empresa.findOne({'idEmpresario' : req.params.id});
+            const emp = await empresa.findOne({ 'idEmpresario': req.params.id });
+            if (emp) {
+                return res.json({
 
-            return res.json({
+                    status: 200,
+                    mensagem: "Empresa encontrada",
+                    emp
+                });
+            } else {
+                return res.json({
 
-                status: 200,
-                emp
-            });
+                    status: 200,
+                    mensagem: "Empresa não encontrada",
 
+                });
+
+            }
         } catch (err) {
             console.log(err)
             return res.json({
@@ -68,22 +83,22 @@ module.exports = {
     async showCompany(req, res) {
         try {
             const emp = await empresa.findById(req.params.id);
-            if (emp){
-            return res.json({
+            if (emp) {
+                return res.json({
 
-                status: 200,
-                mensagem: "Empresa encontrada",
-                emp
-            });
-        }else{
-            return res.json({
+                    status: 200,
+                    mensagem: "Empresa encontrada",
+                    emp
+                });
+            } else {
+                return res.json({
 
-                status: 200,
-                mensagem: "Empresa não encontrada",
-               
-            });
+                    status: 200,
+                    mensagem: "Empresa não encontrada",
 
-        }
+                });
+
+            }
         } catch (err) {
             console.log(err)
             return res.json({
@@ -97,11 +112,11 @@ module.exports = {
 
     async showCompanyServices(req, res) {
         try {
-           
-           const servicos = await servico.find({ 'idEmpresa': req.params.idEmpresa });
-           return res.json({
-             servicos
-        });
+
+            const servicos = await servico.find({ 'idEmpresa': req.params.idEmpresa });
+            return res.json({
+                servicos
+            });
 
         } catch (err) {
             return res.json({
@@ -112,7 +127,7 @@ module.exports = {
         }
     },
 
-//A string categoria que existe na model empresa recebe o parametro chamado categoria
+    //A string categoria que existe na model empresa recebe o parametro chamado categoria
     async showCategories(req, res) {
         try {
             const empresas = await empresa.find({ 'categoria': req.params.categoria });
@@ -127,8 +142,8 @@ module.exports = {
         }
     },
 
-    async deleteCompany(req, res){
-      
+    async deleteCompany(req, res) {
+
         try {
             await empresa.findByIdAndRemove(req.params.id);
             return res.json({
@@ -145,22 +160,22 @@ module.exports = {
 
             });
         }
-       
+
     },
 
-    async updateCompany(req,res){
-        try{
+    async updateCompany(req, res) {
+        try {
             request = req.body;
-           
-        const company = await empresa.findByIdAndUpdate(req.params.id, request, { new: true, useFindAndModify: false });
-        
-        return res.json({
 
-            status: 200,
-            mensagem: company
+            const company = await empresa.findByIdAndUpdate(req.params.id, request, { new: true, useFindAndModify: false });
 
-        });
-        }catch(err){
+            return res.json({
+
+                status: 200,
+                mensagem: company
+
+            });
+        } catch (err) {
             return res.json({
                 status: 500,
                 mensagem: 'Erro em atualizar a empresa',
