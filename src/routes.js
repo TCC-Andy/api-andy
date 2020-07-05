@@ -40,6 +40,7 @@ routes.get("/showCompanyUser/:id",CompanyController.showCompanyUser);
 routes.get("/showCompanyServices/:idEmpresa",CompanyController.showCompanyServices);
 routes.get("/showCategories/:categoria",CompanyController.showCategories);
 routes.delete("/deleteCompany/:id",CompanyController.deleteCompany);
+routes.put("/updateCompany/:id",CompanyController.updateCompany);
 
 //Rotas: Empregados
 routes.get("/showEmps/:idEmpresa",EmployeeController.showEmployees);

@@ -26,12 +26,13 @@ module.exports = {
 
     async show(req, res) {
         try {
+            console.log("entrei")
+            console.log(req.params.id)
             const usuario = await Usuario.findById(req.params.id);
 
             // usuario.criadoEm = dateFormat(new Date(), "dd/mm/yyyy HH:MM:ss UTC").toString()
 
-            console.log(usuario.criadoEm)
-
+            
             return res.json({
 
                 status: 200,
@@ -43,7 +44,7 @@ module.exports = {
             return res.json({
 
                 status: 500,
-                mensagem: 'Erro em buscar usuario',
+                mensagem: 'Erro em buscar usuario'
             });
         }
     },

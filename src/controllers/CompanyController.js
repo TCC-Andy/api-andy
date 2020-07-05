@@ -119,12 +119,12 @@ module.exports = {
     },
 
     async deleteCompany(req, res){
-
+      
         try {
             await empresa.findByIdAndRemove(req.params.id);
             return res.json({
                 status: 200,
-                mensagem: "Empresa deletado"
+                mensagem: "Empresa deletada"
             })
 
         } catch (err) {
@@ -137,7 +137,29 @@ module.exports = {
             });
         }
        
-       
+    },
+
+    async updateCompany(req,res){
+        try{
+            request = req.body;
+           
+        const company = await empresa.findByIdAndUpdate(req.params.id, request, { new: true, useFindAndModify: false });
+        
+        return res.json({
+
+            status: 200,
+            mensagem: company
+
+        });
+        }catch(err){
+            return res.json({
+                status: 500,
+                mensagem: 'Erro em atualizar a empresa',
+                error: err
+            });
+        }
+
+
     }
 
 
