@@ -174,19 +174,14 @@ module.exports = {
 
     async updateCompany(req, res) {
         try {
-            const { numero, rua, bairro, cidade } = req.body;
+            const { numero, rua, bairro, cidade,coordenadas } = req.body;
 
             const request = req.body;
-            request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
-            
-            if (request.coordenadas.geometry===undefined) {
-                return res.json({
-                    status: 400,
-                    mensagem: 'Endereço não encontrado',
-
-
-                });
-            }
+          // console.log(request.coordenadas)
+          // console.log(request.coordenadas.features[0].geometry.coordinates)
+            //request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
+                 
+            //console.log(request.coordenadas.geometry.coordinates)
             const company = await empresa.findByIdAndUpdate(req.params.id, request, { new: true, useFindAndModify: false });
 
 
