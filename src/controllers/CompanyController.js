@@ -3,6 +3,7 @@ const empresa = mongoose.model("Empresas");
 const servico = mongoose.model("Servicos");
 const geoService = require('../services/geoService');
 const dateFormat = require('dateformat');
+const { request } = require("express");
 
 
 module.exports = {
@@ -137,15 +138,9 @@ module.exports = {
     async showCategories(req, res) {
         try {
             const empresas = await empresa.find({ 'categoria': req.params.categoria });
-            if (empresas) {
+            
                 return res.json(empresas);
-            } else {
-                return res.json({
-                    status: 500,
-                    mensagem: 'Erro na busca das categorias da empresa',
-                });
-
-            }
+           
         } catch (err) {
             console.log(err)
             return res.json({
@@ -183,7 +178,14 @@ module.exports = {
 
             request = req.body;
             request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
+            if(!request.coordenadas){
+                return res.json({
+                    status: 400,
+                    mensagem: "Endereço nao encontrado"
+            
+                });
 
+            }
             const company = await empresa.findByIdAndUpdate(req.params.id, request, { new: true, useFindAndModify: false });
             if (company) {
                 return res.json({
