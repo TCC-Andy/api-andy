@@ -68,13 +68,22 @@ module.exports = {
     async showCompany(req, res) {
         try {
             const emp = await empresa.findById(req.params.id);
-
+            if (emp){
             return res.json({
 
                 status: 200,
+                mensagem: "Empresa encontrada",
                 emp
             });
+        }else{
+            return res.json({
 
+                status: 200,
+                mensagem: "Empresa não encontrada",
+               
+            });
+
+        }
         } catch (err) {
             console.log(err)
             return res.json({

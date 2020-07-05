@@ -32,13 +32,22 @@ module.exports = {
 
             // usuario.criadoEm = dateFormat(new Date(), "dd/mm/yyyy HH:MM:ss UTC").toString()
 
-            
-            return res.json({
+            if (usuario) {
+                return res.json({
 
-                status: 200,
-                usuario
-            });
+                    status: 200,
+                    mensagem: "Usuario encontrado",
+                    usuario
+                });
+            } else {
+                return res.json({
 
+                    status: 500,
+                    mensagem: "Usuario nao encontrado",
+
+                });
+
+            }
         } catch (err) {
             console.log(err)
             return res.json({
@@ -77,7 +86,7 @@ module.exports = {
 
             usr = req.body;
 
-           // usr.criadoEm = new Date().toString()
+            // usr.criadoEm = new Date().toString()
             usr.criadoEm = moment.tz(new Date(), "YYYY-MM-DD HH:mm", "America/Sao_Paulo").toString();
             //usr.criadoEm = dateFormat(new Date(), " HH:MM:ss ")
             const usuario = await Usuario.create(usr);
@@ -246,7 +255,7 @@ module.exports = {
             }
 
             await Usuario.findOne({ email }, function (err, usr) {
-                
+
                 usr.senha = senha;
                 usr.pwdToken = undefined;
                 usr.pwdExpires = undefined;
@@ -282,14 +291,14 @@ module.exports = {
 
     /*Implementar */
     async update(req, res) {
-        try{
+        try {
             usr = req.body;
             const hash = await bcrypt.hash(usr.senha, 10);
             usr.senha = hash
-        const usuario = await Usuario.findByIdAndUpdate(req.params.id, usr, { new: true, useFindAndModify: false });
-        
-        return res.json(usuario);
-        }catch(err){
+            const usuario = await Usuario.findByIdAndUpdate(req.params.id, usr, { new: true, useFindAndModify: false });
+
+            return res.json(usuario);
+        } catch (err) {
             console.log(err)
             return res.json({
 
