@@ -137,14 +137,14 @@ module.exports = {
     async showCategories(req, res) {
         try {
             const empresas = await empresa.find({ 'categoria': req.params.categoria });
-            if(empresas){
-            return res.json(empresas);
-            }else{
+            if (empresas) {
+                return res.json(empresas);
+            } else {
                 return res.json({
                     status: 500,
                     mensagem: 'Erro na busca das categorias da empresa',
                 });
-                
+
             }
         } catch (err) {
             console.log(err)
@@ -179,20 +179,31 @@ module.exports = {
 
     async updateCompany(req, res) {
         try {
+            const { numero, rua, bairro, cidade } = req.body;
+
             request = req.body;
+            request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
 
             const company = await empresa.findByIdAndUpdate(req.params.id, request, { new: true, useFindAndModify: false });
+            if (company) {
+                return res.json({
+                    status: 200,
+                    mensagem: "Empresa atualizada",
+                    company
 
-            return res.json({
+                });
+            } else {
+                return res.json({
+                    status: 400,
+                    mensagem: "Erro em atualizar os dados da empresa"
 
-                status: 200,
-                mensagem: company
+                });
 
-            });
+            }
         } catch (err) {
             return res.json({
                 status: 500,
-                mensagem: 'Erro em atualizar a empresa',
+                mensagem: 'Erro no processo de atualizar a empresa',
                 error: err
             });
         }
