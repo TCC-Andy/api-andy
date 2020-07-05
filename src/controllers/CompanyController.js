@@ -65,7 +65,6 @@ module.exports = {
 
                     status: 200,
                     mensagem: "Empresa não encontrada",
-
                 });
 
             }
@@ -114,14 +113,21 @@ module.exports = {
         try {
 
             const servicos = await servico.find({ 'idEmpresa': req.params.idEmpresa });
-            return res.json({
-                servicos
-            });
+            if (servicos) {
+                return res.json({
+                    servicos
+                });
+            } else {
+                return res.json({
+                    status: 500,
+                    mensagem: 'Erro em buscar os serviços da empresa',
+                });
 
+            }
         } catch (err) {
             return res.json({
                 status: 500,
-                mensagem: 'Erro em buscar os serviços da empresa',
+                mensagem: 'Erro no processo de buscar os serviços da empresa',
             });
 
         }
@@ -131,13 +137,21 @@ module.exports = {
     async showCategories(req, res) {
         try {
             const empresas = await empresa.find({ 'categoria': req.params.categoria });
+            if(empresas){
             return res.json(empresas);
+            }else{
+                return res.json({
+                    status: 500,
+                    mensagem: 'Erro na busca das categorias da empresa',
+                });
+                
+            }
         } catch (err) {
             console.log(err)
             return res.json({
 
                 status: 500,
-                mensagem: 'Erro em buscar categorias de empresas',
+                mensagem: 'Erro no processo de  buscar categorias de empresas',
             });
         }
     },

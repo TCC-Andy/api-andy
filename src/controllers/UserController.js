@@ -20,14 +20,24 @@ module.exports = {
 
 
     async showUsers(req, res) {
-        const usuarios = await Usuario.find();
-        return res.json(usuarios);
+        try {
+            const usuarios = await Usuario.find();
+            return res.json(usuarios);
+
+        } catch (err) {
+            console.log(err)
+            return res.json({
+
+                status: 500,
+                mensagem: 'Erro em buscar lista de usuarios '
+            });
+        }
+
     },
 
     async show(req, res) {
         try {
-            console.log("entrei")
-            console.log(req.params.id)
+
             const usuario = await Usuario.findById(req.params.id);
 
             // usuario.criadoEm = dateFormat(new Date(), "dd/mm/yyyy HH:MM:ss UTC").toString()
@@ -94,11 +104,18 @@ module.exports = {
 
             //Não voltar senha
             usuario.senha = undefined;
-            return res.json({
-                status: 200,
-                mensagem: 'Cadastrado com sucesso',
-                usuario
-            });
+            if (usuario) {
+                return res.json({
+                    status: 200,
+                    mensagem: 'Cadastrado com sucesso',
+                    usuario
+                });
+            } else {
+                return res.json({
+                    status: 500,
+                    mensagem: 'Erro no cadastro do usuario',
+                });
+            }
         } catch (err) {
             return res.json({
                 status: 500,
