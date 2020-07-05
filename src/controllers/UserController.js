@@ -309,6 +309,15 @@ module.exports = {
     /*Implementar */
     async update(req, res) {
         try {
+            const { nome, sobrenome, email, senha } = req.body;
+
+            if ((!nome) || (!sobrenome) || (!email) || (!senha)) {
+                return res.json({
+                    status: 400,
+                    mensagem: 'Todos os campos precisam ser preenchidos',
+                })
+            }
+
             usr = req.body;
             const hash = await bcrypt.hash(usr.senha, 10);
             usr.senha = hash

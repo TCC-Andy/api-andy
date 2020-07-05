@@ -178,9 +178,12 @@ module.exports = {
 
             const request = req.body;
           // console.log(request.coordenadas)
-          // console.log(request.coordenadas.features[0].geometry.coordinates)
-            //request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
-                 
+           //console.log(request.coordenadas.geometry.coordinates)
+           
+            request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
+           // console.log(JSON.stringify(request)) 
+          // console.log(typeof request.coordenadas[0])
+           
             //console.log(request.coordenadas.geometry.coordinates)
             const company = await empresa.findByIdAndUpdate(req.params.id, request, { new: true, useFindAndModify: false });
 
