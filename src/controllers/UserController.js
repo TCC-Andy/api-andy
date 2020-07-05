@@ -343,8 +343,37 @@ module.exports = {
 
     /*Implementar */
     async destroy(req, res) {
-        await Usuario.findByIdAndRemove(req.params.id);
-        return res.send();
+
+
+        try {
+            await Usuario.findByIdAndRemove(req.params.id);
+            const usuario = await Usuario.findById(req.params.id);
+            if (usuario) {
+                return res.json({
+                    status: 500,
+                    mensagem: 'Erro em deletar o usuario',
+
+                });
+
+            } else {
+                return res.json({
+                    status: 200,
+                    mensagem: 'Usuario deletado',
+
+                });
+
+            }
+           
+        } catch (err) {
+
+            return res.json({
+                status: 500,
+                mensagem: 'Erro no processo de deletar o usuario',
+                error: err
+            });
+        }
+
+
     }
 
 };
