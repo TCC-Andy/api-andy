@@ -8,6 +8,23 @@ const crypto = require("crypto");
 
 module.exports = {
 
+    async index(req, res) {
+        const agenda = await Agenda.find();
+        
+        if(agenda){
+            return res.json({
+                status: 200,
+                mensagem: "Agendas encontrado",
+                agenda
+            })
+        } else {
+            return res.json({
+                status: 400,
+                mensagem: "Não existe agenda.",
+            })
+        }
+    },
+
     async deleteClientSchedule(req, res) {
         //****Requisitos não funcionais***
         //OBS: Deleto sem verificar o dia e horario(registro antigo, serviço ja feito ou não)
