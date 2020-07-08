@@ -18,6 +18,9 @@ const AgendaSchema = new mongoose.Schema({
     nomeFuncionario: {
         type: String
     },
+    sobrenomeFuncionario: {
+        type: String
+    },
     idCliente: {
         type: String
     },
