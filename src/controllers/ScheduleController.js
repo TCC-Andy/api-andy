@@ -12,8 +12,8 @@ module.exports = {
 
     async index(req, res) {
         const agenda = await Agenda.find();
-        
-        if(agenda){
+
+        if (agenda) {
             return res.json({
                 status: 200,
                 mensagem: "Agendas encontrado",
@@ -27,33 +27,62 @@ module.exports = {
         }
     },
 
-    async showScheduleByCompany(req, res) {
+    async showScheduleByDateEmp(req, res) {
 
-        const agenda = await Agenda.find({ idEmpresa:req.params.idEmpresa })
-        
         try {
-        if(agenda){
+            const { idFuncionario, dataAgenda } = req.body;
+
+            const agenda = await Agenda.find({$and:[{idFuncionario},{dataAgenda}]})
+
+            if (Object.keys(agenda).length >0) {
+                return res.json({
+                    status: 200,
+                    mensagem: "Agendas encontradas para o funcionario",
+                    agenda
+                })
+            } else {
+                return res.json({
+                    status: 400,
+                    mensagem: "Não existe agendamento para este funcionario",
+                })
+            }
+        } catch (err) {
+
             return res.json({
-                status: 200,
-                mensagem: "Agendas encontradas",
-                agenda
-            })
-        } else {
-            return res.json({
-                status: 400,
-                mensagem: "Não existe agendamento nesta empresa",
+                status: 500,
+                mensagem: 'Erro no processo de busca de agendamentos do funcionario',
+                erro: err
             })
         }
-    } catch (err) {
-
-        return res.json({
-            status: 500,
-            mensagem: 'Erro no processo de busca de agendamentos da empresa',
-            erro: err
-        })
-    }
     },
-    
+
+    async showScheduleByCompany(req, res) {
+
+        try {
+            const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa })
+
+            if (agenda) {
+                return res.json({
+                    status: 200,
+                    mensagem: "Agendas encontradas nesta empresa",
+                    agenda
+                })
+            } else {
+                return res.json({
+                    status: 400,
+                    mensagem: "Não existe agendas para esta empresa",
+                })
+            }
+        } catch (err) {
+
+            return res.json({
+                status: 500,
+                mensagem: 'Erro no processo de busca de agendamentos da empresa',
+                erro: err
+            })
+        }
+    },
+
 
     async deleteClientSchedule(req, res) {
         //****Requisitos não funcionais***
@@ -129,7 +158,7 @@ module.exports = {
             servico = await Servico.findById({ _id: agenda.idServico });
             agenda.nomeServico = servico.nome;
             agenda.idEmpresa = servico.idEmpresa;
-           
+
             //Continuação do WA para conter multiplos acessos na base
             agenda.hash = crypto.randomBytes(20).toString('hex');
 
@@ -184,7 +213,7 @@ module.exports = {
 
             schedule = await Agenda.aggregate([
 
-                { $match: { $and: [{ dataAgenda: { $gte: dataAgenda } },{status:1}, { idCliente: idCliente }] } },
+                { $match: { $and: [{ dataAgenda: { $gte: dataAgenda } }, { status: 1 }, { idCliente: idCliente }] } },
                 { $sort: { dataAgenda: 1, inicioServico: 1 } },
                 {
                     "$project": {
@@ -620,9 +649,9 @@ module.exports = {
             })
 
 
-            console.log( moment(new Date()).format("HH:mm"))
+            console.log(moment(new Date()).format("HH:mm"))
             hoje = moment(new Date()).format("DD/MM/YYYY")
-            
+
             console.log(hoje)
             console.log(dataAgenda)
             return res.json({

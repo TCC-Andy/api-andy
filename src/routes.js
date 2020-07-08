@@ -60,6 +60,7 @@ routes.get("/showClientHistSchedule/:idClient",ScheduleController.showClientHist
 routes.get("/deleteClientSchedule/:idSchedule",ScheduleController.deleteClientSchedule);
 routes.get("/schedule", ScheduleController.index);
 routes.get("/showScheduleByCompany/:idEmpresa", ScheduleController.showScheduleByCompany);
+routes.post("/showScheduleByDateEmp",ScheduleController.showScheduleByDateEmp);
 
 //Rotas: Favoritos
 routes.post("/checkFavorite",FavoriteController.checkFavorite);
