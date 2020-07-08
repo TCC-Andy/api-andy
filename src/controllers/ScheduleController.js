@@ -55,6 +55,7 @@ module.exports = {
             })
         }
     },
+   
 
     async showScheduleByCompany(req, res) {
 
@@ -68,7 +69,7 @@ module.exports = {
                     mensagem: "É necessario enviar uma data para filtrar",
                 })
             }
-            const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa,dataAgenda: { $gte: dataAgenda } }).sort({ dataAgenda: 1,inicioServico: 1});
+            const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa,dataAgenda: dataAgenda }).sort({ nomeFuncionario: 1});
 
             if (Object.keys(agenda).length >0) {
                 return res.json({
