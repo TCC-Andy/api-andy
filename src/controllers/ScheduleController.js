@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Agenda = mongoose.model("Agendas");
 const Funcionario = mongoose.model("Funcionario");
 const Servico = mongoose.model("Servicos");
+const Usuario = mongoose.model("Usuario");
 
 const moment = require('moment');
 const tz = require("moment-timezone")
@@ -197,9 +198,11 @@ module.exports = {
 
             const servico = await Servico.findById({ _id: agenda.idServico });
             const funcionario = await Funcionario.findById({ _id: agenda.idFuncionario });
+            const cliente = await Usuario.findById({ _id: agenda.idCliente});
             agenda.nomeServico = servico.nome;
             agenda.idEmpresa = servico.idEmpresa;
             agenda.sobrenomeFuncionario = funcionario.sobrenome;
+            agenda.sobrenomeCliente = cliente.sobrenome;
 
             //Continuação do WA para conter multiplos acessos na base
             agenda.hash = crypto.randomBytes(20).toString('hex');

@@ -27,6 +27,9 @@ const AgendaSchema = new mongoose.Schema({
     nomeCliente: {
         type: String
     },
+    sobrenomeCliente: {
+        type: String
+    },
     dataAgenda: {
         type: String
     },
