@@ -70,7 +70,6 @@ module.exports = {
                 })
             }
             const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa,dataAgenda: dataAgenda }).sort({ nomeFuncionario: 1});
-
             if (Object.keys(agenda).length >0) {
                 return res.json({
                     status: 200,
