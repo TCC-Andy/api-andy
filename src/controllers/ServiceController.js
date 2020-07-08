@@ -64,6 +64,15 @@ module.exports = {
         });
     },
 
+    async showServiceName(req, res) {
+        
+        const servico = await Servico.findById(req.params.idServico);        
+        return res.json({
+            status: 200,
+            servico
+        });
+    },
+
     async showGlobalServices(req, res) {
         const servicos = await Servico.find();        
         return res.json({

@@ -6,6 +6,12 @@ const AgendaSchema = new mongoose.Schema({
         type: String
         
     },
+    nomeServico: {
+        type: String
+    },
+    idEmpresa: {
+        type: String
+    },
     idFuncionario: {
         type: String
     },

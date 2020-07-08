@@ -30,6 +30,8 @@ routes.get("/showService/:id",ServiceController.editServices);
 routes.put("/updateService/:id",ServiceController.updateService);
 routes.post("/addAgenda",ServiceController.addAgenda);
 routes.delete("/deleteService/:id",ServiceController.destroyService);
+routes.get("/showServiceName/:idServico",ServiceController.showServiceName);
+
 
 //Rotas: Empresas
 
