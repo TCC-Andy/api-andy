@@ -28,8 +28,8 @@ module.exports = {
     },
 
     async showScheduleByCompany(req, res) {
-        
-        const agenda = await Agenda.findOne({ idEmpresa:req.params.idEmpresa })
+
+        const agenda = await Agenda.find({ idEmpresa:req.params.idEmpresa })
         
         try {
         if(agenda){
