@@ -27,6 +27,34 @@ module.exports = {
         }
     },
 
+    async showScheduleByCompany(req, res) {
+        
+        const agenda = await Agenda.findOne({ idEmpresa:req.params.idEmpresa })
+        
+        try {
+        if(agenda){
+            return res.json({
+                status: 200,
+                mensagem: "Agendas encontradas",
+                agenda
+            })
+        } else {
+            return res.json({
+                status: 400,
+                mensagem: "Não existe agendamento nesta empresa",
+            })
+        }
+    } catch (err) {
+
+        return res.json({
+            status: 500,
+            mensagem: 'Erro no processo de busca de agendamentos da empresa',
+            erro: err
+        })
+    }
+    },
+    
+
     async deleteClientSchedule(req, res) {
         //****Requisitos não funcionais***
         //OBS: Deleto sem verificar o dia e horario(registro antigo, serviço ja feito ou não)
