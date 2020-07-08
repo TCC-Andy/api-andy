@@ -57,6 +57,36 @@ module.exports = {
     },
    
 
+    async changeScheduleStatus(req, res) {
+
+        try {
+            const {  status,idAgenda } = req.body;
+
+            const agenda = await Agenda.findByIdAndUpdate(idAgenda, {status:status}, { new: true, useFindAndModify: false });
+
+            if (Object.keys(agenda).length >0) {
+                return res.json({
+                    status: 200,
+                    mensagem: "Status do agendamento alterado",
+                    agenda
+                })
+            } else {
+                return res.json({
+                    status: 400,
+                    mensagem: "Não foi possivel alterar o status do agendamento",
+                })
+            }
+        } catch (err) {
+
+            return res.json({
+                status: 500,
+                mensagem: 'Erro no processo de alteração de status do agendamento',
+                erro: err
+            })
+        }
+    },
+
+
     async showScheduleByCompany(req, res) {
 
         
@@ -164,9 +194,11 @@ module.exports = {
 
             agenda = req.body
 
-            servico = await Servico.findById({ _id: agenda.idServico });
+            const servico = await Servico.findById({ _id: agenda.idServico });
+            const funcionario = await Funcionario.findById({ _id: agenda.idFuncionario });
             agenda.nomeServico = servico.nome;
             agenda.idEmpresa = servico.idEmpresa;
+            agenda.sobrenomeFuncionario = funcionario.sobrenome;
 
             //Continuação do WA para conter multiplos acessos na base
             agenda.hash = crypto.randomBytes(20).toString('hex');
