@@ -100,14 +100,8 @@ module.exports = {
                     mensagem: "É necessario enviar uma data para filtrar",
                 })
             }
-<<<<<<< HEAD
             const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa,dataAgenda: dataAgenda }).sort({ nomeFuncionario: 1});
             if (Object.keys(agenda).length >0) {
-=======
-            const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa, dataAgenda: dataAgenda }).sort({ nomeFuncionario: 1 });
-
-            if (Object.keys(agenda).length > 0) {
->>>>>>> f365d744fd9d3280e28363de4b32ecc94ec12671
                 return res.json({
                     status: 200,
                     mensagem: "Agendas encontradas nesta empresa",
