@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Agenda = mongoose.model("Agendas");
 const Funcionario = mongoose.model("Funcionario");
 const Servico = mongoose.model("Servicos");
+const Usuario = mongoose.model("Usuario");
 
 const moment = require('moment');
 const tz = require("moment-timezone")
@@ -32,9 +33,9 @@ module.exports = {
         try {
             const { idFuncionario, dataAgenda } = req.body;
 
-            const agenda = await Agenda.find({$and:[{idFuncionario},{dataAgenda}]})
+            const agenda = await Agenda.find({ $and: [{ idFuncionario }, { dataAgenda }] })
 
-            if (Object.keys(agenda).length >0) {
+            if (Object.keys(agenda).length > 0) {
                 return res.json({
                     status: 200,
                     mensagem: "Agendas encontradas para o funcionario",
@@ -55,16 +56,16 @@ module.exports = {
             })
         }
     },
-   
+
 
     async changeScheduleStatus(req, res) {
 
         try {
-            const {  status,idAgenda } = req.body;
+            const { status, idAgenda } = req.body;
 
-            const agenda = await Agenda.findByIdAndUpdate(idAgenda, {status:status}, { new: true, useFindAndModify: false });
+            const agenda = await Agenda.findByIdAndUpdate(idAgenda, { status: status }, { new: true, useFindAndModify: false });
 
-            if (Object.keys(agenda).length >0) {
+            if (Object.keys(agenda).length > 0) {
                 return res.json({
                     status: 200,
                     mensagem: "Status do agendamento alterado",
@@ -89,18 +90,24 @@ module.exports = {
 
     async showScheduleByCompany(req, res) {
 
-        
-        try {
-            const {  dataAgenda } = req.body;
 
-            if(!dataAgenda){
+        try {
+            const { dataAgenda } = req.body;
+
+            if (!dataAgenda) {
                 return res.json({
                     status: 400,
                     mensagem: "É necessario enviar uma data para filtrar",
                 })
             }
+<<<<<<< HEAD
             const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa,dataAgenda: dataAgenda }).sort({ nomeFuncionario: 1});
             if (Object.keys(agenda).length >0) {
+=======
+            const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa, dataAgenda: dataAgenda }).sort({ nomeFuncionario: 1 });
+
+            if (Object.keys(agenda).length > 0) {
+>>>>>>> f365d744fd9d3280e28363de4b32ecc94ec12671
                 return res.json({
                     status: 200,
                     mensagem: "Agendas encontradas nesta empresa",
@@ -196,10 +203,12 @@ module.exports = {
 
             const servico = await Servico.findById({ _id: agenda.idServico });
             const funcionario = await Funcionario.findById({ _id: agenda.idFuncionario });
+            const cliente = await Usuario.findById({ _id: agenda.idCliente });
             agenda.nomeServico = servico.nome;
             agenda.valorServico = servico.preco;
             agenda.idEmpresa = servico.idEmpresa;
             agenda.sobrenomeFuncionario = funcionario.sobrenome;
+            agenda.sobrenomeCliente = cliente.sobrenome;
 
             //Continuação do WA para conter multiplos acessos na base
             agenda.hash = crypto.randomBytes(20).toString('hex');
@@ -428,7 +437,20 @@ module.exports = {
 
     async showDataSchedule(req, res) {
         try {
+            
             const { dataAgenda, idEmpresa, idServico, tempoServico } = req.body;
+
+            hoje = moment(new Date()).format("YYYY/MM/D")
+
+            if (dataAgenda < hoje){
+                return res.json({
+                    status: 400,
+                    mensagem: 'Não pode ser escolhido data inferior a hoje'
+    
+                })
+
+            }
+
             //Encontra os funcionarios que tem o idServico em algum dos servicos que praticam
             const func = await Funcionario.find({ idEmpresa, idServicos: { $in: [idServico] } });
             //console.log(func[1].nome)
@@ -490,6 +512,18 @@ module.exports = {
             //contador = tempoServico
             contador = moment.duration(tempoServico).asMinutes();
             agenda = []
+
+            console.log(moment('08:58',"HH:mm").format("HH:mm"))
+            console.log(moment(new Date()).format("HH:mm"))
+           
+
+
+            if (hoje == dataAgenda) {
+                console.log("são iguais")
+            }
+
+            console.log(hoje)
+            console.log(dataAgenda)
 
             promise2.forEach((registro, casa) => {
 
@@ -691,11 +725,7 @@ module.exports = {
             })
 
 
-            console.log(moment(new Date()).format("HH:mm"))
-            hoje = moment(new Date()).format("DD/MM/YYYY")
 
-            console.log(hoje)
-            console.log(dataAgenda)
             return res.json({
 
                 status: 200,
