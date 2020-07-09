@@ -197,6 +197,7 @@ module.exports = {
             const servico = await Servico.findById({ _id: agenda.idServico });
             const funcionario = await Funcionario.findById({ _id: agenda.idFuncionario });
             agenda.nomeServico = servico.nome;
+            agenda.valorServico = servico.preco;
             agenda.idEmpresa = servico.idEmpresa;
             agenda.sobrenomeFuncionario = funcionario.sobrenome;
 
