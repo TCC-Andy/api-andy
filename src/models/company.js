@@ -45,6 +45,9 @@ const CompanySchema = new mongoose.Schema({
     complemento: {
         type: String
     },
+    estado: {
+        type: String
+    },
     coordenadas: [{
         type: String
     }],
