@@ -100,9 +100,8 @@ module.exports = {
                     mensagem: "É necessario enviar uma data para filtrar",
                 })
             }
-            const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa, dataAgenda: dataAgenda }).sort({ nomeFuncionario: 1 });
-
-            if (Object.keys(agenda).length > 0) {
+            const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa,dataAgenda: dataAgenda }).sort({ nomeFuncionario: 1});
+            if (Object.keys(agenda).length >0) {
                 return res.json({
                     status: 200,
                     mensagem: "Agendas encontradas nesta empresa",
@@ -200,6 +199,7 @@ module.exports = {
             const funcionario = await Funcionario.findById({ _id: agenda.idFuncionario });
             const cliente = await Usuario.findById({ _id: agenda.idCliente });
             agenda.nomeServico = servico.nome;
+            agenda.valorServico = servico.preco;
             agenda.idEmpresa = servico.idEmpresa;
             agenda.sobrenomeFuncionario = funcionario.sobrenome;
             agenda.sobrenomeCliente = cliente.sobrenome;
