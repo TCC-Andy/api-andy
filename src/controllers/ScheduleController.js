@@ -100,8 +100,8 @@ module.exports = {
                     mensagem: "É necessario enviar uma data para filtrar",
                 })
             }
-            const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa,dataAgenda: dataAgenda }).sort({ nomeFuncionario: 1});
-            if (Object.keys(agenda).length >0) {
+            const agenda = await Agenda.find({ idEmpresa: req.params.idEmpresa, dataAgenda: dataAgenda }).sort({ nomeFuncionario: 1 });
+            if (Object.keys(agenda).length > 0) {
                 return res.json({
                     status: 200,
                     mensagem: "Agendas encontradas nesta empresa",
@@ -431,16 +431,16 @@ module.exports = {
 
     async showDataSchedule(req, res) {
         try {
-            
+
             const { dataAgenda, idEmpresa, idServico, tempoServico } = req.body;
 
-            hoje = moment(new Date()).format("YYYY/MM/D")
+            hoje = moment(new Date()).format("YYYY/MM/DD")
 
-            if (dataAgenda < hoje){
+            if (dataAgenda < hoje) {
                 return res.json({
                     status: 400,
                     mensagem: 'Não pode ser escolhido data inferior a hoje'
-    
+
                 })
 
             }
@@ -507,13 +507,16 @@ module.exports = {
             contador = moment.duration(tempoServico).asMinutes();
             agenda = []
 
-            console.log(moment('08:58',"HH:mm").format("HH:mm"))
-            console.log(moment(new Date()).format("HH:mm"))
-           
+            // horaAtual = moment(new Date()).format("HH:mm")
+            // horaAtual = moment('16:00', "HH:mm").format("HH:mm")
+            horaAtual = moment(new Date()).format("HH:mm")
+            console.log(horaAtual)
+            // console.log(moment(new Date()).format("HH:mm"))
+
 
 
             if (hoje == dataAgenda) {
-                console.log("são iguais")
+                //  console.log("são iguais")
             }
 
             console.log(hoje)
@@ -553,12 +556,25 @@ module.exports = {
                             horaAnterior.add((-i - contador), 'minutes')
 
                             // console.log()
-                            horariosDisponiveis.push(
-                                {
-                                    inicioServico: inicioServico,
-                                    fimServico: fimServico
+                            //Validar horario da consulta
+
+                            if (hoje == dataAgenda) {
+                                if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
+                                    horariosDisponiveis.push(
+                                        {
+                                            inicioServico: inicioServico,
+                                            fimServico: fimServico
+                                        }
+                                    )
                                 }
-                            )
+                            } else {
+                                horariosDisponiveis.push(
+                                    {
+                                        inicioServico: inicioServico,
+                                        fimServico: fimServico
+                                    }
+                                )
+                            }
 
                         }
                         //So entra se tiver somente um registro que é o registro de almoco
@@ -587,12 +603,25 @@ module.exports = {
                                 fimServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add((-i - contador), 'minutes')
                                 // console.log()
-                                horariosDisponiveis.push(
-                                    {
-                                        inicioServico: inicioServico,
-                                        fimServico: fimServico
+
+
+                                if (hoje == dataAgenda) {
+                                    if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
+                                        horariosDisponiveis.push(
+                                            {
+                                                inicioServico: inicioServico,
+                                                fimServico: fimServico
+                                            }
+                                        )
                                     }
-                                )
+                                } else {
+                                    horariosDisponiveis.push(
+                                        {
+                                            inicioServico: inicioServico,
+                                            fimServico: fimServico
+                                        }
+                                    )
+                                }
 
 
                             }
@@ -637,12 +666,23 @@ module.exports = {
                             horaAnterior.add((-i - contador), 'minutes')
                             //console.log()
 
-                            horariosDisponiveis.push(
-                                {
-                                    inicioServico: inicioServico,
-                                    fimServico: fimServico
+                            if (hoje == dataAgenda) {
+                                if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
+                                    horariosDisponiveis.push(
+                                        {
+                                            inicioServico: inicioServico,
+                                            fimServico: fimServico
+                                        }
+                                    )
                                 }
-                            )
+                            } else {
+                                horariosDisponiveis.push(
+                                    {
+                                        inicioServico: inicioServico,
+                                        fimServico: fimServico
+                                    }
+                                )
+                            }
 
                         }
                         // console.log()
@@ -678,12 +718,25 @@ module.exports = {
                                 fimServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add((-i - contador), 'minutes')
                                 // console.log()
-                                horariosDisponiveis.push(
-                                    {
-                                        inicioServico: inicioServico,
-                                        fimServico: fimServico
+
+
+                                if (hoje == dataAgenda) {
+                                    if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
+                                        horariosDisponiveis.push(
+                                            {
+                                                inicioServico: inicioServico,
+                                                fimServico: fimServico
+                                            }
+                                        )
                                     }
-                                )
+                                } else {
+                                    horariosDisponiveis.push(
+                                        {
+                                            inicioServico: inicioServico,
+                                            fimServico: fimServico
+                                        }
+                                    )
+                                }
 
 
                             }

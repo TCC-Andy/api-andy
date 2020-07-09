@@ -4,14 +4,26 @@ const servico = mongoose.model("Servicos");
 const geoService = require('../services/geoService');
 const dateFormat = require('dateformat');
 const { request } = require("express");
-
+const { cnpj } = require('cpf-cnpj-validator');
 
 module.exports = {
+
+
+    
     async createCompany(req, res) {
 
         try {
 
-            const { numero, rua, bairro, cidade } = req.body;
+            const { numero, rua, bairro, cidade,CNPJ } = req.body;
+
+            if(!cnpj.isValid(CNPJ)){
+                return res.json({
+                    status: 400,
+                    mensagem: 'O CNPJ não é valido',
+
+                })
+            }
+           
 
             company = req.body
             company.coordenadas = await geoService.send(numero, rua, bairro, cidade)
