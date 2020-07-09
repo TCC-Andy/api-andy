@@ -507,13 +507,21 @@ module.exports = {
             contador = moment.duration(tempoServico).asMinutes();
             agenda = []
 
-            console.log(moment('08:58',"HH:mm").format("HH:mm"))
+            horaAgora = moment(new Date()).format("HH:mm")
+            horaParaComparar = moment('23:22',"HH:mm").format("HH:mm")
+            console.log(horaParaComparar)
             console.log(moment(new Date()).format("HH:mm"))
-           
+            if (horaAgora == horaParaComparar){
+                console.log(" horas iguais")
+            }else if  (horaAgora > horaParaComparar){
+                console.log("hora agora é maior")
+            }else if  (horaAgora < horaParaComparar){
+                console.log("hora agora é menor")
+            }
 
 
             if (hoje == dataAgenda) {
-                console.log("são iguais")
+              //  console.log("são iguais")
             }
 
             console.log(hoje)
