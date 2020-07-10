@@ -434,9 +434,9 @@ module.exports = {
     async showDataSchedule(req, res) {
         try {
 
-            const { dataAgenda, idEmpresa, idServico, tempoServico } = req.body;
+            const { dataAgenda, idEmpresa, idServico, tempoServico,hoje } = req.body;
 
-            hoje = moment(new Date()).format("YYYY/MM/DD")
+            //hoje = moment(new Date()).format("YYYY/MM/DD")
 
             if (dataAgenda < hoje) {
                 return res.json({
