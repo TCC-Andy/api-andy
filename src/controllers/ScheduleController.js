@@ -34,7 +34,7 @@ module.exports = {
 
             const { idFuncionario, dataAgenda } = req.body;
 
-            const agenda = await Agenda.find({idFuncionario:idFuncionario,dataAgenda:dataAgenda,valorServico: { $ne: null }})
+            const agenda = await Agenda.find({ idFuncionario: idFuncionario, dataAgenda: dataAgenda, valorServico: { $ne: null } })
 
             if (Object.keys(agenda).length > 0) {
                 return res.json({
@@ -433,7 +433,7 @@ module.exports = {
     async showDataSchedule(req, res) {
         try {
 
-            const { dataAgenda, idEmpresa, idServico, tempoServico,hoje,horaAtual } = req.body;
+            const { dataAgenda, idEmpresa, idServico, tempoServico, hoje, horaAtual } = req.body;
 
             //hoje = moment(new Date()).format("YYYY/MM/DD")
 
@@ -488,6 +488,8 @@ module.exports = {
                 return {
                     nome: funcionario.nome,
                     id: funcionario._id,
+                    horaAlmocoInicio: funcionario.horaAlmocoInicio,
+                    horaAlmocoFim: funcionario.horaAlmocoFim,
                     horaInicioTrabalho: funcionario.horaInicioTrabalho,
                     horaFimTrabalho: funcionario.horaFimTrabalho,
                     agenda
@@ -510,7 +512,7 @@ module.exports = {
 
             // horaAtual = moment(new Date()).format("HH:mm")
             // horaAtual = moment('16:00', "HH:mm").format("HH:mm")
-           // horaAtual = moment(new Date()).format("HH:mm")
+            // horaAtual = moment(new Date()).format("HH:mm")
             console.log(horaAtual)
             // console.log(moment(new Date()).format("HH:mm"))
 
@@ -561,12 +563,14 @@ module.exports = {
 
                             if (hoje == dataAgenda) {
                                 if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
-                                    horariosDisponiveis.push(
-                                        {
-                                            inicioServico: inicioServico,
-                                            fimServico: fimServico
-                                        }
-                                    )
+                                  // if ((horaAtual < valor.horaAlmocoInicio) || (horaAtual > valor.horaAlmocoFim)) {
+                                        horariosDisponiveis.push(
+                                            {
+                                                inicioServico: inicioServico,
+                                                fimServico: fimServico
+                                            }
+                                        )
+                                  // }
                                 }
                             } else {
                                 horariosDisponiveis.push(
@@ -608,12 +612,17 @@ module.exports = {
 
                                 if (hoje == dataAgenda) {
                                     if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
-                                        horariosDisponiveis.push(
-                                            {
-                                                inicioServico: inicioServico,
-                                                fimServico: fimServico
-                                            }
-                                        )
+                                        console.log("Hora inicio almoco: "+valor.fimServico)
+                                        console.log("Hora fim almoco: "+valor.horaAlmocoFim)
+
+                                       // if ((horaAtual < valor.horaAlmocoInicio) || (horaAtual > valor.horaAlmocoFim)) {
+                                            horariosDisponiveis.push(
+                                                {
+                                                    inicioServico: inicioServico,
+                                                    fimServico: fimServico
+                                                }
+                                            )
+                                       // }
                                     }
                                 } else {
                                     horariosDisponiveis.push(
@@ -669,12 +678,14 @@ module.exports = {
 
                             if (hoje == dataAgenda) {
                                 if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
-                                    horariosDisponiveis.push(
-                                        {
-                                            inicioServico: inicioServico,
-                                            fimServico: fimServico
-                                        }
-                                    )
+                                    //if ((horaAtual < valor.horaAlmocoInicio) || (horaAtual > valor.horaAlmocoFim)) {
+                                        horariosDisponiveis.push(
+                                            {
+                                                inicioServico: inicioServico,
+                                                fimServico: fimServico
+                                            }
+                                        )
+                                   // }
                                 }
                             } else {
                                 horariosDisponiveis.push(
