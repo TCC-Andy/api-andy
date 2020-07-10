@@ -31,16 +31,12 @@ module.exports = {
     async showScheduleByDateEmp(req, res) {
 
         try {
-            
+
             const { idFuncionario, dataAgenda } = req.body;
 
-<<<<<<< HEAD
-            const agenda = await Agenda.find({ $and: [{ idFuncionario }, { dataAgenda }] })
-=======
-            //const agenda = await Agenda.find({ $and: [{ idFuncionario }, { dataAgenda }] })
+
             const agenda = await Agenda.find({idFuncionario:idFuncionario,dataAgenda:dataAgenda,valorServico: { $ne: null }})
 
->>>>>>> da82392d1a1ce859d58e672721405bd75187ac4f
             if (Object.keys(agenda).length > 0) {
                 return res.json({
                     status: 200,
