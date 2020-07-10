@@ -31,6 +31,7 @@ module.exports = {
     async showScheduleByDateEmp(req, res) {
 
         try {
+            
             const { idFuncionario, dataAgenda } = req.body;
 
             //const agenda = await Agenda.find({ $and: [{ idFuncionario }, { dataAgenda }] })
