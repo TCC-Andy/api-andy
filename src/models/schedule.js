@@ -6,7 +6,7 @@ const AgendaSchema = new mongoose.Schema({
         type: String
         
     },
-    precoServico: {
+    valorServico: {
         type: Number,
     },
     nomeServico: {

@@ -9,6 +9,12 @@ const authConfig = require('../config/auth');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const tz = require("moment-timezone")
+const Funcionario = mongoose.model("Funcionario");
+const Servico = mongoose.model("Servicos");
+const Agenda = mongoose.model("Agendas");
+const Favoritos = mongoose.model("Favoritos");
+const empresa = mongoose.model("Empresas");
+
 
 function generateToken(params = {}) {
     return jwt.sign(params, authConfig.secret, {
@@ -39,8 +45,6 @@ module.exports = {
         try {
 
             const usuario = await Usuario.findById(req.params.id);
-
-            // usuario.criadoEm = dateFormat(new Date(), "dd/mm/yyyy HH:MM:ss UTC").toString()
 
             if (usuario) {
                 return res.json({
@@ -355,6 +359,18 @@ module.exports = {
 
 
         try {
+            const user = await Usuario.findById(req.params.id);
+
+            if (user.perfil === "empresa") {
+
+                const company = await empresa.find({ idEmpresario: req.params.id });
+                await empresa.findByIdAndDelete(company._id);
+                await Funcionario.deleteMany({ idEmpresa: company._id });
+                await Servico.deleteMany({ idEmpresa: company._id });
+                await Agenda.deleteMany({ idEmpresa: company._id });
+                await Favoritos.deleteMany({ idEmpresa: company._id });
+            }
+            
             await Usuario.findByIdAndRemove(req.params.id);
             const usuario = await Usuario.findById(req.params.id);
             if (usuario) {
@@ -372,7 +388,7 @@ module.exports = {
                 });
 
             }
-           
+
         } catch (err) {
 
             return res.json({
