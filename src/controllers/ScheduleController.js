@@ -433,7 +433,7 @@ module.exports = {
     async showDataSchedule(req, res) {
         try {
 
-            const { dataAgenda, idEmpresa, idServico, tempoServico,hoje } = req.body;
+            const { dataAgenda, idEmpresa, idServico, tempoServico,hoje,horaAtual } = req.body;
 
             //hoje = moment(new Date()).format("YYYY/MM/DD")
 
@@ -510,7 +510,7 @@ module.exports = {
 
             // horaAtual = moment(new Date()).format("HH:mm")
             // horaAtual = moment('16:00', "HH:mm").format("HH:mm")
-            horaAtual = moment(new Date()).format("HH:mm")
+           // horaAtual = moment(new Date()).format("HH:mm")
             console.log(horaAtual)
             // console.log(moment(new Date()).format("HH:mm"))
 
