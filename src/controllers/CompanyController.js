@@ -5,6 +5,11 @@ const geoService = require('../services/geoService');
 const dateFormat = require('dateformat');
 const { request } = require("express");
 const { cnpj } = require('cpf-cnpj-validator');
+const Usuario = mongoose.model("Usuario");
+const Funcionario = mongoose.model("Funcionario");
+const Servico = mongoose.model("Servicos");
+const Agenda = mongoose.model("Agendas");
+const Favoritos = mongoose.model("Favoritos");
 
 module.exports = {
 
@@ -166,6 +171,19 @@ module.exports = {
     async deleteCompany(req, res) {
 
         try {
+            const company = await empresa.findById({_id:req.params.id});
+            if (!company){
+                return res.json({
+                    status: 400,
+                    mensagem: "Empresa não existe ou ja foi deletada"
+                })
+            }
+            await Usuario.findByIdAndRemove(company.idEmpresario);
+            await Funcionario.deleteMany({idEmpresa:req.params.id});
+            await Servico.deleteMany({idEmpresa:req.params.id});
+            await Agenda.deleteMany({idEmpresa:req.params.id});
+            await Favoritos.deleteMany({idEmpresa:req.params.id});
+            
             await empresa.findByIdAndRemove(req.params.id);
             return res.json({
                 status: 200,
@@ -186,13 +204,13 @@ module.exports = {
 
     async updateCompany(req, res) {
         try {
-            const { numero, rua, bairro, cidade,coordenadas } = req.body;
+            const { numero, rua, bairro, cidade } = req.body;
 
             const request = req.body;
           // console.log(request.coordenadas)
            //console.log(request.coordenadas.geometry.coordinates)
-           console.log(request);
-            request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
+           //console.log(request);
+            //request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
            // console.log(JSON.stringify(request)) 
           // console.log(typeof request.coordenadas[0])
            
