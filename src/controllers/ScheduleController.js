@@ -34,7 +34,6 @@ module.exports = {
             const { idFuncionario, dataAgenda } = req.body;
 
             const agenda = await Agenda.find({ $and: [{ idFuncionario }, { dataAgenda }] })
-
             if (Object.keys(agenda).length > 0) {
                 return res.json({
                     status: 200,
