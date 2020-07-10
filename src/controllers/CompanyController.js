@@ -211,6 +211,7 @@ module.exports = {
            //console.log(request.coordenadas.geometry.coordinates)
            //console.log(request);
             request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
+            console.log(request)
            // console.log(JSON.stringify(request)) 
           // console.log(typeof request.coordenadas[0])
            
