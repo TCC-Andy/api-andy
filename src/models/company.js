@@ -6,6 +6,9 @@ const CompanySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    nomeUsuario: {
+        type: String
+    },
     nomeFantasia: {
         type: String,
         required: true,
