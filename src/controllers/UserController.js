@@ -46,8 +46,6 @@ module.exports = {
 
             const usuario = await Usuario.findById(req.params.id);
 
-            // usuario.criadoEm = dateFormat(new Date(), "dd/mm/yyyy HH:MM:ss UTC").toString()
-
             if (usuario) {
                 return res.json({
 

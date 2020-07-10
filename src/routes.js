@@ -45,6 +45,7 @@ routes.delete("/deleteCompany/:id",CompanyController.deleteCompany);
 routes.put("/updateCompany/:id",CompanyController.updateCompany);
 
 //Rotas: Empregados
+
 routes.get("/showEmps/:idEmpresa",EmployeeController.showEmployees);
 routes.post("/createEmp",EmployeeController.createEmployee);
 routes.put("/updateEmp/:id",EmployeeController.updateEmp);
@@ -53,6 +54,7 @@ routes.delete("/deleteEmp/:id", EmployeeController.deleteEmp);
 
 
 //Rotas: Agendas
+
 routes.post("/createSchedule",ScheduleController.createSchedule);
 routes.post("/showDataSchedule",ScheduleController.showDataSchedule);
 routes.post("/showClientCurrentSchedule",ScheduleController.showClientCurrentSchedule);
@@ -64,6 +66,7 @@ routes.post("/showScheduleByDateEmp",ScheduleController.showScheduleByDateEmp);
 routes.post("/changeScheduleStatus",ScheduleController.changeScheduleStatus);
 
 //Rotas: Favoritos
+
 routes.post("/checkFavorite",FavoriteController.checkFavorite);
 routes.get("/showFavorites/:idCliente",FavoriteController.showFavorites);
 
