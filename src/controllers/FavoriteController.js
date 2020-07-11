@@ -13,11 +13,7 @@ module.exports = {
 
             if (flag == 1) {
                 const registro = await Favoritos.find({ idCliente, idEmpresa })
-                //console.log(registro[0]._id)
-                // const reg = Object.assign({}, registro);
-                // console.log(registro)
-                //console.log( registro.get("_id").toString())
-                //console.log(reg)
+               
                 if (Object.keys(registro).length == 0) {
                     const empresa = await Empresa.findById(idEmpresa);
 
@@ -27,7 +23,6 @@ module.exports = {
                     objeto.nomeEmpresa = empresa.nome
                     objeto.nomeFantasia = empresa.nomeFantasia
                     objeto.CNPJ = empresa.CNPJ
-                   // objeto.idEmpresario = empresa.idEmpresario
                     objeto.categoria = empresa.categoria
                     objeto.numero = empresa.numero
                     objeto.descricao = empresa.descricao
