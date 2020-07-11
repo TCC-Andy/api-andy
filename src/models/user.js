@@ -50,9 +50,4 @@ UsuarioSchema.pre('save', async function (next) {
 });
 
 
-
-
-
-
-//Registrar um model na aplicacao , agora o model Usuario vai estar disponivel com os atributos.
 mongoose.model('Usuario', UsuarioSchema);

@@ -27,7 +27,6 @@ exports.send = async (flag, to, nome, token, id) => {
             from: "Andy Services <andy.services.it@gmail.com>",
             to,
             subject,
-            //text: "Testando o corpo do email",
             html,
         }).then(message => {
             console.log(message);

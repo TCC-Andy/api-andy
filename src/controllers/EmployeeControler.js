@@ -42,15 +42,14 @@ module.exports = {
             if (func) {
                 return res.json({
                     status: 200,
-                    mensagem: 'Cadastrado com sucesso',
+                    mensagem: 'Funcionario cadastrado com sucesso',
                     func
 
                 });
             } else {
                 return res.json({
                     status: 500,
-                    mensagem: 'Erro ao cadastrar funcionario',
-                    func
+                    mensagem: 'Erro ao cadastrar funcionario'
 
                 });
             }

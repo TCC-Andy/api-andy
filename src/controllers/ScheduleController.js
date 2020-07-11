@@ -73,7 +73,7 @@ module.exports = {
                 })
             } else {
                 return res.json({
-                    status: 400,
+                    status: 500,
                     mensagem: "Não foi possivel alterar o status do agendamento",
                 })
             }
@@ -388,7 +388,7 @@ module.exports = {
 
             return res.json({
                 status: 500,
-                mensagem: 'Erro na verificacao de servicos do cliente'
+                mensagem: 'Erro no processo de verificacao de servicos do cliente'
 
             })
         }
@@ -413,7 +413,7 @@ module.exports = {
 
             return res.json({
                 status: 500,
-                mensagem: 'Erro na verificacao de servicos do cliente'
+                mensagem: 'Erro no processo de verificacao de servicos do cliente'
 
             })
         }
@@ -703,7 +703,7 @@ module.exports = {
             return res.json({
 
                 status: 500,
-                mensagem: 'Erro em buscar data agendada',
+                mensagem: 'Erro no processo de buscar data agendada',
                 err
             });
         }

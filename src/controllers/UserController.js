@@ -35,7 +35,7 @@ module.exports = {
             return res.json({
 
                 status: 500,
-                mensagem: 'Erro em buscar lista de usuarios '
+                mensagem: 'Erro no processo de buscar a lista de usuarios '
             });
         }
 
@@ -67,7 +67,7 @@ module.exports = {
             return res.json({
 
                 status: 500,
-                mensagem: 'Erro em buscar usuario'
+                mensagem: 'Erro no processo de buscar o usuario'
             });
         }
     },
@@ -86,14 +86,14 @@ module.exports = {
 
             if (!validator.validate(email)) {
                 return res.json({
-                    status: 406,
+                    status: 400,
                     mensagem: 'Formato do email não é valido',
                 })
 
             }
             if (await Usuario.findOne({ email })) {
                 return res.json({
-                    status: 412,
+                    status: 400,
                     mensagem: 'Usuario ja existe',
                 })
             }
@@ -120,7 +120,7 @@ module.exports = {
         } catch (err) {
             return res.json({
                 status: 500,
-                mensagem: 'Erro no registro do usuario',
+                mensagem: 'Erro no processo de cadastro do usuario',
                 error: err
 
             });
@@ -180,15 +180,15 @@ module.exports = {
             return res.json({
 
                 status: 200,
-                mensagem: 'Email enviado',
+                mensagem: 'Email enviado com sucesso',
             });
 
         } catch (err) {
             console.log(err)
             return res.json({
 
-                status: 400,
-                mensagem: 'Erro em recuperar o email',
+                status: 500,
+                mensagem: 'Erro no processo de envio do email',
             });
         }
     },
@@ -239,7 +239,7 @@ module.exports = {
     },
 
     async updatePassword(req, res) {
-      
+
         try {
             const { email, token: currentToken, senha } = req.body;
             const usuario = await Usuario.findOne({ email }).select('+ pwdToken  pwdExpires');
@@ -269,7 +269,7 @@ module.exports = {
                     if (err) {
                         return res.json({
                             status: 500,
-                            mensagem: 'Erro ao salvar senha',
+                            mensagem: 'Erro ao salvar a senha',
                             usuario,
                         });
                     }
@@ -277,7 +277,7 @@ module.exports = {
             });
             return res.json({
                 status: 200,
-                mensagem: 'Senha atualizada',
+                mensagem: 'Senha atualizada com sucesso',
             });
 
 
@@ -285,8 +285,8 @@ module.exports = {
             console.log(err)
             return res.json({
 
-                status: 402,
-                mensagem: 'Erro em atualizar a senha',
+                status: 500,
+                mensagem: 'Erro no processo de atualizar a senha',
                 error: err
             });
         }
@@ -331,7 +331,7 @@ module.exports = {
             return res.json({
 
                 status: 500,
-                mensagem: 'Erro em atualizar o usuario',
+                mensagem: 'Erro no processo de atualizar o usuario',
                 error: err
             });
         }
@@ -352,7 +352,7 @@ module.exports = {
                 await Agenda.deleteMany({ idEmpresa: company._id });
                 await Favoritos.deleteMany({ idEmpresa: company._id });
             }
-            
+
             await Usuario.findByIdAndRemove(req.params.id);
             const usuario = await Usuario.findById(req.params.id);
             if (usuario) {

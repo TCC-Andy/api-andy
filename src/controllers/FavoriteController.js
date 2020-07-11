@@ -13,7 +13,7 @@ module.exports = {
 
             if (flag == 1) {
                 const registro = await Favoritos.find({ idCliente, idEmpresa })
-               
+
                 if (Object.keys(registro).length == 0) {
                     const empresa = await Empresa.findById(idEmpresa);
 
@@ -35,12 +35,20 @@ module.exports = {
                     objeto.coordenadas = empresa.coordenadas
 
                     const favorito = await Favoritos.create(objeto);
+                    if (favorito) {
+                        return res.json({
+                            status: 200,
+                            mensagem: 'Empresa adicionada no Favoritos',
+                            favorito
+                        })
+                    } else {
+                        return res.json({
+                            status: 500,
+                            mensagem: 'Erro no cadastro da empresa ao favoritos'
 
-                    return res.json({
-                        status: 200,
-                        mensagem: 'Empresa adicionada no Favoritos',
-                        favorito
-                    })
+                        })
+
+                    }
 
                 } else {
 
@@ -75,7 +83,7 @@ module.exports = {
 
             return res.json({
                 status: 500,
-                mensagem: 'Erro no registro do favorito',
+                mensagem: 'Erro no processo do cadastro ou exclusão no favoritos',
                 erro: err
             })
         }
@@ -91,7 +99,7 @@ module.exports = {
         } catch{
             return res.json({
                 status: 400,
-                mensagem: "Erro na busca dos favoritos do cliente"
+                mensagem: "Erro no processo de busca dos favoritos do cliente"
             })
 
         }

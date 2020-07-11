@@ -24,13 +24,13 @@ module.exports = {
                 return res.json({
                     status: 200,
                     servicos,
-                    mensagem: 'Servico cadastrado',
+                    mensagem: 'Servico cadastrado com sucesso',
                 })
             }
         } catch (err) {
             return res.json({
-                status: 400,
-                mensagem: 'Erro no serviço do registro',
+                status: 500,
+                mensagem: 'Erro no processo de cadastro do serviço',
             })
         }
     },
@@ -56,7 +56,7 @@ module.exports = {
 
 
     async showServices(req, res) {
-        const servicos = await Servico.find({ idEmpresa: req.params.idEmpresa });        
+        const servicos = await Servico.find({ idEmpresa: req.params.idEmpresa });
         return res.json({
             status: 200,
             servicos
@@ -64,8 +64,8 @@ module.exports = {
     },
 
     async showServiceName(req, res) {
-        
-        const servico = await Servico.findById(req.params.idServico);        
+
+        const servico = await Servico.findById(req.params.idServico);
         return res.json({
             status: 200,
             servico
@@ -73,7 +73,7 @@ module.exports = {
     },
 
     async showGlobalServices(req, res) {
-        const servicos = await Servico.find();        
+        const servicos = await Servico.find();
         return res.json({
             status: 200,
             servicos
@@ -81,22 +81,36 @@ module.exports = {
     },
 
     async updateService(req, res) {
-        const { nome, descricao, valor, tempo } = req.body;
-        const preco = valor.replace(',', '.');
-        const servico = await Servico.findByIdAndUpdate(req.params.id, { nome, descricao, preco, tempo }, { new: true, useFindAndModify: false });
-        await servico.save();
-        return res.json({
-            status: 200,
-            mensagem: "Serviço atualizado com sucesso"
-        })
+        try {
+            const { nome, descricao, valor, tempo } = req.body;
+            const preco = valor.replace(',', '.');
+            const servico = await Servico.findByIdAndUpdate(req.params.id, { nome, descricao, preco, tempo }, { new: true, useFindAndModify: false });
+            await servico.save();
+            return res.json({
+                status: 200,
+                mensagem: "Serviço atualizado com sucesso"
+            })
+        } catch (err) {
+            return res.json({
+                status: 500,
+                mensagem: 'Erro no processo de atualizar o serviço',
+            })
+        }
     },
 
 
     async destroyService(req, res) {
+        try{
         await Servico.findByIdAndRemove(req.params.id);
         return res.json({
             status: 200,
             mensagem: "Serviço deletado"
         })
+    } catch (err) {
+        return res.json({
+            status: 500,
+            mensagem: 'Erro no processo de exclusão do serviço',
+        })
+    }
     }
 }
