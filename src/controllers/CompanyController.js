@@ -14,27 +14,25 @@ const Favoritos = mongoose.model("Favoritos");
 module.exports = {
 
 
-    
     async createCompany(req, res) {
 
         try {
 
-            const { numero, rua, bairro, cidade,CNPJ } = req.body;
+            const { numero, rua, bairro, cidade, CNPJ } = req.body;
 
-            if(!cnpj.isValid(CNPJ)){
+            if (!cnpj.isValid(CNPJ)) {
                 return res.json({
                     status: 400,
                     mensagem: 'O CNPJ não é valido',
 
                 })
             }
-           
+
 
             company = req.body
             company.coordenadas = await geoService.send(numero, rua, bairro, cidade)
 
-            //console.log(numero+" "+rua+" "+bairro+" "+cidade)
-            // console.log( await geoService.send(numero, rua, bairro, cidade))
+
             const emp = await empresa.create(company);
             if (emp) {
                 return res.json({
@@ -60,8 +58,6 @@ module.exports = {
     },
 
     async showCompanies(req, res) {
-        //  var date = new Date();  // dateStr you get from mongodb
-        // console.log(dateFormat(date, "dd/mm/yyyy HH:MM:ss UTC"))
 
 
         const empresas = await empresa.find();
@@ -151,7 +147,6 @@ module.exports = {
         }
     },
 
-    //A string categoria que existe na model empresa recebe o parametro chamado categoria
     async showCategories(req, res) {
         try {
             const empresas = await empresa.find({ 'categoria': req.params.categoria });
@@ -171,19 +166,19 @@ module.exports = {
     async deleteCompany(req, res) {
 
         try {
-            const company = await empresa.findById({_id:req.params.id});
-            if (!company){
+            const company = await empresa.findById({ _id: req.params.id });
+            if (!company) {
                 return res.json({
                     status: 400,
                     mensagem: "Empresa não existe ou ja foi deletada"
                 })
             }
             await Usuario.findByIdAndRemove(company.idEmpresario);
-            await Funcionario.deleteMany({idEmpresa:req.params.id});
-            await Servico.deleteMany({idEmpresa:req.params.id});
-            await Agenda.deleteMany({idEmpresa:req.params.id});
-            await Favoritos.deleteMany({idEmpresa:req.params.id});
-            
+            await Funcionario.deleteMany({ idEmpresa: req.params.id });
+            await Servico.deleteMany({ idEmpresa: req.params.id });
+            await Agenda.deleteMany({ idEmpresa: req.params.id });
+            await Favoritos.deleteMany({ idEmpresa: req.params.id });
+
             await empresa.findByIdAndRemove(req.params.id);
             return res.json({
                 status: 200,
@@ -207,15 +202,9 @@ module.exports = {
             const { numero, rua, bairro, cidade } = req.body;
 
             const request = req.body;
-          // console.log(request.coordenadas)
-           //console.log(request.coordenadas.geometry.coordinates)
-           //console.log(request);
+
             request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
-            console.log(request)
-           // console.log(JSON.stringify(request)) 
-          // console.log(typeof request.coordenadas[0])
-           
-            //console.log(request.coordenadas.geometry.coordinates)
+
             const company = await empresa.findByIdAndUpdate(req.params.id, request, { new: true, useFindAndModify: false });
 
 

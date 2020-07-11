@@ -29,7 +29,6 @@ transporter.sendMail({
     from: "Andy Services <andy.services.it@gmail.com>",
     to,
     subject,
-    //text: "Testando o corpo do email",
     html,
 }).then(message => {
     console.log(message);
