@@ -126,10 +126,7 @@ module.exports = {
 
 
     async deleteClientSchedule(req, res) {
-        //****Requisitos não funcionais***
-        //OBS: Deleto sem verificar o dia e horario(registro antigo, serviço ja feito ou não)
-        //O certo seria ter um status na agenda: agendado, atrasado,concluido,etc
-
+    
         try {
 
             const agenda = await Agenda.findById({ _id: req.params.idSchedule });
@@ -140,7 +137,7 @@ module.exports = {
                 })
 
             } else {
-                // await Agenda.findByIdAndRemove({ _id: req.params.idSchedule });
+
                 await Agenda.findByIdAndUpdate(req.params.idSchedule, {
                     '$set': {
                         status: 0
@@ -178,14 +175,6 @@ module.exports = {
         try {
 
 
-            //****Requisitos não funcionais***
-            //OBS: Criar agenda somente de um usuario por vez por enquanto
-            //Verificar se o horario que ira agendar continua disponivel N
-            //Verificar se conseguiu criar agenda S
-            //Verificar se o horario que ira agendar pode ser encaixado, se ninguem escolheu algum horario proximo N
-            //Verificar se id servico e id funcionario ainda existem N
-
-
             const { idServico, idFuncionario, nomeFuncionario, idCliente, nomeCliente, dataAgenda, inicioServico, fimServico, status } = req.body;
 
             if ((!idServico) || (!idFuncionario) || (!nomeFuncionario) || (!idCliente) || (!nomeCliente) || (!dataAgenda) || (!inicioServico) || (!fimServico) || (!fimServico)) {
@@ -196,19 +185,12 @@ module.exports = {
             }
 
             agenda = req.body
-           // console.log(agenda)
+
             const servico = await Servico.findById({ _id: agenda.idServico });
 
             const funcionario = await Funcionario.findById({ _id: agenda.idFuncionario });
             const cliente = await Usuario.findById({ _id: agenda.idCliente });
-            // console.log(req.body)
-            // console.log("......................")
-            // console.log("idServico: "+idServico)
-            // console.log("idFuncionario: "+idFuncionario)
-            // console.log("Agenda idServico: "+agenda.idServico)
-            // console.log("Agenda idFuncionario: "+agenda.idFuncionario)
-            // console.log("Servico"+servico)
-            // console.log("Funcionario"+funcionario)
+            
             if ((!servico) && (!funcionario)) {
                 return res.json({
                     status: 500,
@@ -225,7 +207,6 @@ module.exports = {
             
 
 
-            //Continuação do WA para conter multiplos acessos na base
             agenda.hash = crypto.randomBytes(20).toString('hex');
 
             const sched = await Agenda.create(agenda);
@@ -258,10 +239,6 @@ module.exports = {
 
     async showClientCurrentSchedule(req, res) {
 
-        //****Requisitos não funcionais***
-        //Verificar se tem o cliente e o registro
-        //Verificar se naõ encontrou nenhum registro, eu só volto o array vazio, mas esta ok
-
         try {
             const { idCliente, dataAgenda } = req.body;
             if ((!idCliente) || (!dataAgenda)) {
@@ -271,12 +248,7 @@ module.exports = {
                 })
             }
 
-            // yschedule = await Agenda.find({ idCliente, dataAgenda: { $gte: dataAgenda } }).sort({ dataAgenda: 1, inicioServico: 1 });
-
-            /* schedule = await  Agenda.aggregate([
-                  {$match : {inicioServico:"10:00"} }
-              ])*/
-
+            
             schedule = await Agenda.aggregate([
 
                 { $match: { $and: [{ dataAgenda: { $gte: dataAgenda } }, { status: 1 }, { idCliente: idCliente }] } },
@@ -455,8 +427,6 @@ module.exports = {
 
             const { dataAgenda, idEmpresa, idServico, tempoServico, hoje, horaAtual } = req.body;
 
-            //hoje = moment(new Date()).format("YYYY/MM/DD")
-
             if (dataAgenda < hoje) {
                 return res.json({
                     status: 400,
@@ -466,9 +436,8 @@ module.exports = {
 
             }
 
-            //Encontra os funcionarios que tem o idServico em algum dos servicos que praticam
             const func = await Funcionario.find({ idEmpresa, idServicos: { $in: [idServico] } });
-            //console.log(func[1].nome)
+
             if (Object.keys(func).length < 1) {
                 return res.json({
                     status: 500,
@@ -491,14 +460,7 @@ module.exports = {
                 }
             }))
 
-            //Deletar promise acima depois de refatorar
-            /* await Promise.all(promise).then(async () => {
-                 agnd = await Agenda.find({ dataAgenda, idServico });
-             }
-             );*/
-            //Construção do objeto 1
-
-            console.log("-------------------------------------------------")
+    
             agendamento = [];
 
 
@@ -518,32 +480,16 @@ module.exports = {
             )
 
 
-
-            //console.log(promise2)
-            //Recebo os horarios ja agendados
             agendamentos = [promise2]
 
 
             agendaDiaria = []
 
-            //contador = tempoServico
             contador = moment.duration(tempoServico).asMinutes();
             agenda = []
 
-            // horaAtual = moment(new Date()).format("HH:mm")
-            // horaAtual = moment('16:00', "HH:mm").format("HH:mm")
-            // horaAtual = moment(new Date()).format("HH:mm")
-            console.log(horaAtual)
-            // console.log(moment(new Date()).format("HH:mm"))
 
-
-
-            if (hoje == dataAgenda) {
-                //  console.log("são iguais")
-            }
-
-            console.log(hoje)
-            console.log(dataAgenda)
+    
 
             promise2.forEach((registro, casa) => {
 
@@ -552,8 +498,6 @@ module.exports = {
                 registro.agenda.forEach((valor, indice, array) => {
 
 
-
-                    // console.log(registro.nome)
                     if (indice == 0) {
 
 

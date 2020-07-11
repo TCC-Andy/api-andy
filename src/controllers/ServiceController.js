@@ -86,7 +86,8 @@ module.exports = {
         const servico = await Servico.findByIdAndUpdate(req.params.id, { nome, descricao, preco, tempo }, { new: true, useFindAndModify: false });
         await servico.save();
         return res.json({
-            status: 200
+            status: 200,
+            mensagem: "Serviço atualizado com sucesso"
         })
     },
 
@@ -95,7 +96,7 @@ module.exports = {
         await Servico.findByIdAndRemove(req.params.id);
         return res.json({
             status: 200,
-            mensagem: "Servico deletado"
+            mensagem: "Serviço deletado"
         })
     }
 }
