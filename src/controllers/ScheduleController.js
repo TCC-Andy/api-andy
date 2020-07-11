@@ -3,7 +3,6 @@ const Agenda = mongoose.model("Agendas");
 const Funcionario = mongoose.model("Funcionario");
 const Servico = mongoose.model("Servicos");
 const Usuario = mongoose.model("Usuario");
-
 const moment = require('moment');
 const tz = require("moment-timezone")
 const crypto = require("crypto");
@@ -126,7 +125,7 @@ module.exports = {
 
 
     async deleteClientSchedule(req, res) {
-    
+
         try {
 
             const agenda = await Agenda.findById({ _id: req.params.idSchedule });
@@ -190,21 +189,20 @@ module.exports = {
 
             const funcionario = await Funcionario.findById({ _id: agenda.idFuncionario });
             const cliente = await Usuario.findById({ _id: agenda.idCliente });
-            
+
             if ((!servico) && (!funcionario)) {
                 return res.json({
                     status: 500,
                     mensagem: 'É necessario ter servicos e funcionarios para este processo'
-                    
+
                 })
             }
-           
+
             agenda.nomeServico = servico.nome;
             agenda.valorServico = servico.preco;
             agenda.idEmpresa = servico.idEmpresa;
             agenda.sobrenomeFuncionario = funcionario.sobrenome;
             agenda.sobrenomeCliente = cliente.sobrenome;
-            
 
 
             agenda.hash = crypto.randomBytes(20).toString('hex');
@@ -248,7 +246,7 @@ module.exports = {
                 })
             }
 
-            
+
             schedule = await Agenda.aggregate([
 
                 { $match: { $and: [{ dataAgenda: { $gte: dataAgenda } }, { status: 1 }, { idCliente: idCliente }] } },
@@ -460,7 +458,7 @@ module.exports = {
                 }
             }))
 
-    
+
             agendamento = [];
 
 
@@ -489,7 +487,7 @@ module.exports = {
             agenda = []
 
 
-    
+
 
             promise2.forEach((registro, casa) => {
 
@@ -513,28 +511,23 @@ module.exports = {
                             if (horaPosterior.diff(horaAnterior, 'minutes') < contador) {
                                 break;
                             }
-                            // console.log(horaAnterior.format('HH:mm'))
                             inicioServico = horaAnterior.format('HH:mm')
                             horaAnterior.add(-i, 'minutes')
                             horaAnterior.add((i + contador), 'minutes')
 
-                            //console.log(horaAnterior.format('HH:mm'))
                             fimServico = horaAnterior.format('HH:mm')
                             horaAnterior.add((-i - contador), 'minutes')
 
-                            // console.log()
-                            //Validar horario da consulta
 
                             if (hoje == dataAgenda) {
                                 if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
-                                    // if ((horaAtual < valor.horaAlmocoInicio) || (horaAtual > valor.horaAlmocoFim)) {
                                     horariosDisponiveis.push(
                                         {
                                             inicioServico: inicioServico,
                                             fimServico: fimServico
                                         }
                                     )
-                                    // }
+
                                 }
                             } else {
                                 horariosDisponiveis.push(
@@ -546,11 +539,8 @@ module.exports = {
                             }
 
                         }
-                        //So entra se tiver somente um registro que é o registro de almoco
                         if (array.length == 1) {
-                            // console.log(horaAnterior)
-                            // console.log(horaPosterior)
-                            // console.log(intervalo)
+
                             horaAnterior = moment.tz(valor.fimServico, "HH:mm", "UTC")
                             horaPosterior = moment.tz(registro.horaFimTrabalho, "HH:mm", "UTC")
                             intervalo = (horaPosterior.diff(horaAnterior, 'minutes'))
@@ -563,30 +553,25 @@ module.exports = {
                                     break;
                                 }
 
-                                // console.log(horaAnterior.format('HH:mm'))
                                 inicioServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add(-i, 'minutes')
                                 horaAnterior.add((i + contador), 'minutes')
 
-                                //console.log(horaAnterior.format('HH:mm'))
                                 fimServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add((-i - contador), 'minutes')
-                                // console.log()
-
 
                                 if (hoje == dataAgenda) {
                                     if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
                                         console.log("Hora inicio almoco: " + registro.horaAlmocoInicio)
                                         console.log("Hora fim almoco: " + registro.horaAlmocoFim)
 
-                                        // if ((horaAtual < valor.horaAlmocoInicio) || (horaAtual > valor.horaAlmocoFim)) {
                                         horariosDisponiveis.push(
                                             {
                                                 inicioServico: inicioServico,
                                                 fimServico: fimServico
                                             }
                                         )
-                                        // }
+
                                     }
                                 } else {
                                     horariosDisponiveis.push(
@@ -604,19 +589,7 @@ module.exports = {
                         }
                     }
 
-
-                    //Se nao for o primeiro array em que o iniciodo trabalho tem que ser contado
                     else {
-
-                        //O nome e id irao ficar no começo do for maior
-                        //validar se o contador eh menor que o intervalo e se se eu consigo eu consigo encaixar . ex 20  eh menor que 30 mas se
-                        // eu tiver um tempo de 10:10 a 10:30 eu nao posso encaixar um trabalho de 20(o tempo iniciou com intervalo de 30 depois foi diminuindo)
-                        // ou seja, fazer um if dentro do for para validar ate quando eu posso fazer essa contagem
-                        //Dentro deste else fazer uma verificacao se for a ultima iteracao, para entao usar o horario do fim do servico da pessoa
-                        //  console.log(indice)
-                        //  console.log(registro.nome)
-                        //  console.log(registro.id)
-
 
 
                         horaAnterior = moment.tz(array[indice - 1].fimServico, "HH:mm", "UTC")
@@ -624,32 +597,26 @@ module.exports = {
                         intervalo = (horaPosterior.diff(horaAnterior, 'minutes'))
 
                         for (var i = 0; i < intervalo; i += contador) {
-                            //O if a mais vai aquir pra saber ate quando eu posso contar
                             horaAnterior.add(i, 'minutes')
 
                             if (horaPosterior.diff(horaAnterior, 'minutes') < contador) {
                                 continue;
                             }
-                            //console.log(horaAnterior.format('HH:mm'))
                             inicioServico = horaAnterior.format('HH:mm')
                             horaAnterior.add(-i, 'minutes')
                             horaAnterior.add((i + contador), 'minutes')
 
-                            // console.log(horaAnterior.format('HH:mm'))
                             fimServico = horaAnterior.format('HH:mm')
                             horaAnterior.add((-i - contador), 'minutes')
-                            //console.log()
 
                             if (hoje == dataAgenda) {
                                 if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
-                                    //if ((horaAtual < valor.horaAlmocoInicio) || (horaAtual > valor.horaAlmocoFim)) {
                                     horariosDisponiveis.push(
                                         {
                                             inicioServico: inicioServico,
                                             fimServico: fimServico
                                         }
                                     )
-                                    // }
                                 }
                             } else {
                                 horariosDisponiveis.push(
@@ -661,17 +628,6 @@ module.exports = {
                             }
 
                         }
-                        // console.log()
-                        // console.log(array.length-1)
-
-
-                        //console.log(horaAnterior)
-                        // console.log(horaPosterior)
-                        //  console.log(intervalo)
-
-
-                        //  intervalo = (horaPosterior.diff(horaAnterior,'minutes'))
-
 
                         if ((array.length - 1) == indice) {
                             horaAnterior = moment.tz(valor.fimServico, "HH:mm", "UTC")
@@ -685,16 +641,12 @@ module.exports = {
                                 if (horaPosterior.diff(horaAnterior, 'minutes') < contador) {
                                     break;
                                 }
-                                //console.log(horaAnterior.format('HH:mm'))
                                 inicioServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add(-i, 'minutes')
                                 horaAnterior.add((i + contador), 'minutes')
 
-                                // console.log(horaAnterior.format('HH:mm'))
                                 fimServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add((-i - contador), 'minutes')
-                                // console.log()
-
 
                                 if (hoje == dataAgenda) {
                                     if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
@@ -723,9 +675,6 @@ module.exports = {
 
                     }
 
-
-
-
                 })
                 agenda.push(
                     {
@@ -737,13 +686,7 @@ module.exports = {
                         horariosDisponiveis: horariosDisponiveis
                     }
                 )
-                // console.log(registro.nome)
-                // console.log(registro.id)
-                // console.log(idEmpresa)
-                // console.log(idServico)
-                // console.log(dataAgenda)
 
-                // console.log(registro.agenda.length)
 
             })
 
@@ -765,4 +708,4 @@ module.exports = {
             });
         }
     }
-};//EndCode
+};

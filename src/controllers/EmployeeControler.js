@@ -32,24 +32,32 @@ module.exports = {
             if (await Funcionario.findOne({ email })) {
                 return res.json({
                     status: 400,
-                    mensagem: 'Empregado ja existe',
+                    mensagem: 'Funcionario ja existe',
                 })
             }
 
             func = req.body;
             func = await Funcionario.create(func);
 
+            if (func) {
+                return res.json({
+                    status: 200,
+                    mensagem: 'Cadastrado com sucesso',
+                    func
 
-            return res.json({
-                status: 200,
-                mensagem: 'Cadastrado com sucesso',
-                func
+                });
+            } else {
+                return res.json({
+                    status: 500,
+                    mensagem: 'Erro ao cadastrar funcionario',
+                    func
 
-            });
+                });
+            }
         } catch (err) {
             return res.json({
                 status: 500,
-                mensagem: 'Erro no registro do funcionario',
+                mensagem: 'Erro no processo de cadastro do funcionario',
                 error: err
 
             });
@@ -73,27 +81,45 @@ module.exports = {
             return res.json({
 
                 status: 500,
-                mensagem: 'Erro em buscar funcionario',
+                mensagem: 'Erro no processo de buscar funcionario',
             });
         }
     },
 
     async updateEmp(req, res) {
+        try {
+            const servico = await Funcionario.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false });
+            await servico.save();
+            return res.json({
+                status: 200,
+                mensagem: "Funcionario atualizado com sucesso"
 
-        const servico = await Funcionario.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false });
-        await servico.save();
-        return res.json({
-            status: 200
-        })
+            })
+        } catch (err) {
+
+            return res.json({
+                status: 500,
+                mensagem: 'Erro no processo de atualizar o funcionario',
+            });
+        }
     },
 
 
     async deleteEmp(req, res) {
-        await Funcionario.findByIdAndRemove(req.params.id);
-        return res.json({
-            status: 200,
-            mensagem: "Funcionario deletado"
-        })
+        try {
+            await Funcionario.findByIdAndRemove(req.params.id);
+            return res.json({
+                status: 200,
+                mensagem: "Funcionario deletado"
+            })
+        } catch (err) {
+
+            return res.json({
+
+                status: 500,
+                mensagem: 'Erro no processo de deletar o funcionario',
+            });
+        }
     }
 
 };

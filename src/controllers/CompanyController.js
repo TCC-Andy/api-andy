@@ -37,7 +37,7 @@ module.exports = {
             if (emp) {
                 return res.json({
                     status: 200,
-                    mensagem: 'Empresa cadastrada',
+                    mensagem: 'Empresa cadastrada com sucesso',
                     emp
                 })
             } else {
@@ -50,7 +50,7 @@ module.exports = {
         } catch (err) {
             return res.json({
                 status: 400,
-                mensagem: 'Erro no registro da empresa',
+                mensagem: 'Erro no processo de registro da empresa',
                 erro: err
             })
         }
@@ -117,7 +117,7 @@ module.exports = {
             return res.json({
 
                 status: 400,
-                mensagem: 'Erro em buscar empresa',
+                mensagem: 'Erro no processo de buscar a empresa',
 
             });
         }
@@ -182,15 +182,14 @@ module.exports = {
             await empresa.findByIdAndRemove(req.params.id);
             return res.json({
                 status: 200,
-                mensagem: "Empresa deletada"
+                mensagem: "A empresa foi deletada"
             })
 
         } catch (err) {
             console.log(err)
             return res.json({
-
                 status: 400,
-                mensagem: 'Erro em deletar empresa',
+                mensagem: 'Erro no processo de deletar empresa',
 
             });
         }
@@ -211,7 +210,7 @@ module.exports = {
             if (company) {
                 return res.json({
                     status: 200,
-                    mensagem: 'Empresa atualizada',
+                    mensagem: 'Empresa atualizada com sucesso',
                     company
 
                 });
