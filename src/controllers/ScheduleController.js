@@ -201,7 +201,14 @@ module.exports = {
 
             const funcionario = await Funcionario.findById({ _id: agenda.idFuncionario });
             const cliente = await Usuario.findById({ _id: agenda.idCliente });
-            
+            // console.log(req.body)
+            // console.log("......................")
+            // console.log("idServico: "+idServico)
+            // console.log("idFuncionario: "+idFuncionario)
+            // console.log("Agenda idServico: "+agenda.idServico)
+            // console.log("Agenda idFuncionario: "+agenda.idFuncionario)
+            // console.log("Servico"+servico)
+            // console.log("Funcionario"+funcionario)
             if ((!servico) && (!funcionario)) {
                 return res.json({
                     status: 500,
