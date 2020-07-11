@@ -46,11 +46,10 @@ module.exports = {
 
     async addAgenda(req, res) {
         const { idServico } = req.body;
-        //Criar a logica de  push para agendamente e sort
         const serv = await Servico.findById(idServico);
         return res.json({
             status: 200,
-            mensagem: "Ainda para implementar",
+            mensagem: "Servicos disponiveis",
             serv
         })
     },

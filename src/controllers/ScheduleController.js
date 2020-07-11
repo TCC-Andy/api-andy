@@ -196,13 +196,19 @@ module.exports = {
             }
 
             agenda = req.body
-
+           // console.log(agenda)
             const servico = await Servico.findById({ _id: agenda.idServico });
 
             const funcionario = await Funcionario.findById({ _id: agenda.idFuncionario });
             const cliente = await Usuario.findById({ _id: agenda.idCliente });
-            console.log(servico)
-            console.log(funcionario)
+            // console.log(req.body)
+            // console.log("......................")
+            // console.log("idServico: "+idServico)
+            // console.log("idFuncionario: "+idFuncionario)
+            // console.log("Agenda idServico: "+agenda.idServico)
+            // console.log("Agenda idFuncionario: "+agenda.idFuncionario)
+            // console.log("Servico"+servico)
+            // console.log("Funcionario"+funcionario)
             if ((!servico) && (!funcionario)) {
                 return res.json({
                     status: 500,
@@ -210,12 +216,14 @@ module.exports = {
                     
                 })
             }
+           
             agenda.nomeServico = servico.nome;
             agenda.valorServico = servico.preco;
             agenda.idEmpresa = servico.idEmpresa;
             agenda.sobrenomeFuncionario = funcionario.sobrenome;
             agenda.sobrenomeCliente = cliente.sobrenome;
             
+
 
             //Continuação do WA para conter multiplos acessos na base
             agenda.hash = crypto.randomBytes(20).toString('hex');

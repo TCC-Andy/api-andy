@@ -83,7 +83,7 @@ module.exports = {
                     mensagem: 'Todos os campos precisam ser preenchidos',
                 })
             }
-            //@ e . depois somente
+
             if (!validator.validate(email)) {
                 return res.json({
                     status: 406,
@@ -100,13 +100,10 @@ module.exports = {
 
             usr = req.body;
 
-            // usr.criadoEm = new Date().toString()
             usr.criadoEm = moment.tz(new Date(), "YYYY-MM-DD HH:mm", "America/Sao_Paulo").toString();
-            //usr.criadoEm = dateFormat(new Date(), " HH:MM:ss ")
             const usuario = await Usuario.create(usr);
             emailService.send(1, req.body.email, req.body.nome);
 
-            //Não voltar senha
             usuario.senha = undefined;
             if (usuario) {
                 return res.json({
@@ -135,17 +132,6 @@ module.exports = {
         const { email, senha } = req.body;
 
         const usuario = await Usuario.findOne({ email }).select('+senha');
-
-        //Verificar se caso não encontrar o email retornar ou não a mensagem abaixo
-        /*
-                if (!usuario) {
-                    return res.json({
-                        status: 400,
-                        mensagem: 'Usuario não encontrado',
-        
-                    });
-                }
-        */
 
         if ((!usuario) || (!bcrypt.compareSync(senha, usuario.senha))) {
             return res.json({
@@ -253,9 +239,7 @@ module.exports = {
     },
 
     async updatePassword(req, res) {
-        //Verificar novamente o token e o tempo
-        //Obs: Codigo duplicado, refatorar depois
-
+      
         try {
             const { email, token: currentToken, senha } = req.body;
             const usuario = await Usuario.findOne({ email }).select('+ pwdToken  pwdExpires');
@@ -310,7 +294,6 @@ module.exports = {
 
     },
 
-    /*Implementar */
     async update(req, res) {
         try {
             const { nome, sobrenome, email, senha } = req.body;
@@ -354,7 +337,6 @@ module.exports = {
         }
     },
 
-    /*Implementar */
     async destroy(req, res) {
 
 
