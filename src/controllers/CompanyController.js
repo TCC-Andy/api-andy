@@ -12,27 +12,17 @@ const Agenda = mongoose.model("Agendas");
 const Favoritos = mongoose.model("Favoritos");
 
 module.exports = {
-
-
     async createCompany(req, res) {
-
         try {
-
             const { numero, rua, bairro, cidade, CNPJ } = req.body;
-
             if (!cnpj.isValid(CNPJ)) {
                 return res.json({
                     status: 400,
                     mensagem: 'O CNPJ não é valido',
-
                 })
             }
-
-
             company = req.body
             company.coordenadas = await geoService.send(numero, rua, bairro, cidade)
-
-
             const emp = await empresa.create(company);
             if (emp) {
                 return res.json({
@@ -44,7 +34,6 @@ module.exports = {
                 return res.json({
                     status: 500,
                     mensagem: 'Empresa não encontrada',
-
                 })
             }
         } catch (err) {
@@ -54,12 +43,9 @@ module.exports = {
                 erro: err
             })
         }
-
     },
 
     async showCompanies(req, res) {
-
-
         const empresas = await empresa.find();
         return res.json(empresas);
     },
@@ -69,26 +55,20 @@ module.exports = {
             const emp = await empresa.findOne({ 'idEmpresario': req.params.id });
             if (emp) {
                 return res.json({
-
                     status: 200,
                     mensagem: "Empresa encontrada",
                     emp
                 });
             } else {
                 return res.json({
-
-                    status: 200,
+                    status: 400,
                     mensagem: "Empresa não encontrada",
                 });
-
             }
         } catch (err) {
-            console.log(err)
             return res.json({
-
-                status: 400,
+                status: 500,
                 mensagem: 'Erro em buscar empresa',
-
             });
         }
     },
@@ -98,34 +78,27 @@ module.exports = {
             const emp = await empresa.findById(req.params.id);
             if (emp) {
                 return res.json({
-
                     status: 200,
                     mensagem: "Empresa encontrada",
                     emp
                 });
             } else {
                 return res.json({
-
                     status: 200,
                     mensagem: "Empresa não encontrada",
-
                 });
-
             }
         } catch (err) {
             console.log(err)
             return res.json({
-
                 status: 400,
                 mensagem: 'Erro no processo de buscar a empresa',
-
             });
         }
     },
 
     async showCompanyServices(req, res) {
         try {
-
             const servicos = await servico.find({ 'idEmpresa': req.params.idEmpresa });
             if (servicos) {
                 return res.json({
@@ -136,27 +109,22 @@ module.exports = {
                     status: 500,
                     mensagem: 'Erro em buscar os serviços da empresa',
                 });
-
             }
         } catch (err) {
             return res.json({
                 status: 500,
                 mensagem: 'Erro no processo de buscar os serviços da empresa',
             });
-
         }
     },
 
     async showCategories(req, res) {
         try {
             const empresas = await empresa.find({ 'categoria': req.params.categoria });
-
             return res.json(empresas);
-
         } catch (err) {
             console.log(err)
             return res.json({
-
                 status: 500,
                 mensagem: 'Erro no processo de  buscar categorias de empresas',
             });
@@ -164,7 +132,6 @@ module.exports = {
     },
 
     async deleteCompany(req, res) {
-
         try {
             const company = await empresa.findById({ _id: req.params.id });
             if (!company) {
@@ -178,49 +145,37 @@ module.exports = {
             await Servico.deleteMany({ idEmpresa: req.params.id });
             await Agenda.deleteMany({ idEmpresa: req.params.id });
             await Favoritos.deleteMany({ idEmpresa: req.params.id });
-
             await empresa.findByIdAndRemove(req.params.id);
             return res.json({
                 status: 200,
                 mensagem: "A empresa foi deletada"
             })
-
         } catch (err) {
             console.log(err)
             return res.json({
                 status: 400,
                 mensagem: 'Erro no processo de deletar empresa',
-
             });
         }
-
     },
 
     async updateCompany(req, res) {
         try {
             const { numero, rua, bairro, cidade } = req.body;
-
             const request = req.body;
-
             request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
-
             const company = await empresa.findByIdAndUpdate(req.params.id, request, { new: true, useFindAndModify: false });
-
-
             if (company) {
                 return res.json({
                     status: 200,
                     mensagem: 'Empresa atualizada com sucesso',
                     company
-
                 });
             } else {
                 return res.json({
                     status: 500,
                     mensagem: 'Erro na atualização da empresa',
-
                 });
-
             }
         } catch (err) {
             return res.json({
@@ -229,10 +184,5 @@ module.exports = {
                 error: err
             });
         }
-
-
     }
-
-
-
 }
