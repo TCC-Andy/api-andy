@@ -253,7 +253,7 @@ module.exports = {
             const now = new Date();
             if ((currentToken !== usuario.pwdToken) || (now > usuario.pwdExpires)) {
                 return res.json({
-                    status: 400,
+                    status: 401,
                     mensagem: 'Token invalido',
 
                 });
@@ -285,7 +285,7 @@ module.exports = {
             console.log(err)
             return res.json({
 
-                status: 400,
+                status: 402,
                 mensagem: 'Erro em atualizar a senha',
                 error: err
             });
