@@ -163,7 +163,6 @@ module.exports = {
         try {
             const { numero, rua, bairro, cidade } = req.body;
             const request = req.body;
-            request.coordenadas = await geoService.send(numero, rua, bairro, cidade)
             const company = await empresa.findByIdAndUpdate(req.params.id, request, { new: true, useFindAndModify: false });
             if (company) {
                 return res.json({

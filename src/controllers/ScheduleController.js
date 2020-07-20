@@ -205,7 +205,7 @@ module.exports = {
             agenda.sobrenomeCliente = cliente.sobrenome;
 
 
-            agenda.hash = crypto.randomBytes(20).toString('hex');
+           
 
             const sched = await Agenda.create(agenda);
 
@@ -247,127 +247,7 @@ module.exports = {
             }
 
 
-            schedule = await Agenda.aggregate([
-
-                { $match: { $and: [{ dataAgenda: { $gte: dataAgenda } }, { status: 1 }, { idCliente: idCliente }] } },
-                { $sort: { dataAgenda: 1, inicioServico: 1 } },
-                {
-                    "$project": {
-                        "idServico": {
-                            "$toObjectId": "$idServico"
-                        },
-                        "inicioServico": 1,
-                        "fimServico": 1,
-                        "dataAgenda": 1,
-                        "nomeFuncionario": 1,
-                        "nomeCliente": 1
-                    }
-                },
-
-                {
-                    $lookup:
-                    {
-                        from: "servicos",
-                        localField: "idServico",
-                        foreignField: "_id",
-                        as: "Servico"
-                    }
-                },
-                {
-                    "$unwind": "$Servico"
-                },
-                {
-                    $addFields: {
-                        "nomeServico": "$Servico.nome",
-                        "descricaoServico": "$Servico.descricao",
-                        "precoServico": "$Servico.preco",
-                        "idServico": "$Servico._id"
-                    }
-                },
-
-                {
-                    "$project": {
-
-                        "inicioServico": 1,
-                        "fimServico": 1,
-                        "dataAgenda": 1,
-                        "nomeCliente": 1,
-                        "Servico.nome": 1,
-                        "Servico.status": 1,
-                        "Servico.descricao": 1,
-                        "Servico.tempo": 1,
-                        "Servico.preco": 1,
-                        "nomeServico": 1,
-                        "descricaoServico": 1,
-                        "nomeFuncionario": 1,
-                        "idServico": 1,
-                        "precoServico": 1,
-                        "Servico.idEmpresa": {
-                            "$toObjectId": "$Servico.idEmpresa"
-                        },
-                    }
-                },
-                {
-                    $lookup:
-                    {
-                        from: "empresas",
-                        localField: "Servico.idEmpresa",
-                        foreignField: "_id",
-                        as: "Empresa"
-                    }
-                },
-                {
-                    "$unwind": "$Empresa"
-                },
-                { $unset: ["Servico"] },
-                {
-                    $addFields: {
-                        "idEmpresa": "$Empresa._id",
-                        "nomeEmpresa": "$Empresa.nome",
-                        "categoriaEmpresa": "$Empresa.categoria",
-                        "descricaoEmpresa": "$Empresa.descricao",
-                        "telefoneEmpresa": "$Empresa.telefone",
-                        "nomeFantasiaEmpresa": "$Empresa.nomeFantasia",
-                        "ruaEmpresa": "$Empresa.rua",
-                        "bairroEmpresa": "$Empresa.bairro",
-                        "cidadeEmpresa": "$Empresa.cidade",
-                        "cepEmpresa": "$Empresa.cep",
-                        "numeroEmpresa": "$Empresa.numero",
-                        "coordenadaEmpresa": "$Empresa.coordenadas"
-                    }
-                },
-
-                {
-                    "$project": {
-                        "inicioServico": 1,
-                        "fimServico": 1,
-                        "dataAgenda": 1,
-                        "nomeCliente": 1,
-                        "nomeFuncionario": 1,
-                        "Servico.nome": 1,
-                        "Servico.status": 1,
-                        "Servico.descricao": 1,
-                        "Servico.tempo": 1,
-                        "Servico.preco": 1,
-                        "nomeServico": 1,
-                        "descricaoServico": 1,
-                        "precoServico": 1,
-                        "idServico": 1,
-                        "nomeEmpresa": 1,
-                        "nomeFantasiaEmpresa": 1,
-                        "categoriaEmpresa": 1,
-                        "descricaoEmpreesa": 1,
-                        "telefoneEempresa": 1,
-                        "ruaEmpresa": 1,
-                        "bairroEmpresa": 1,
-                        "cidadeEmpresa": 1,
-                        "cepEmpresa": 1,
-                        "numeroEmpresa": 1,
-                        "idEmpresa": 1,
-                        "coordenadaEmpresa": 1,
-
-                    }
-                },
+            schedule = await Agenda.find()
             ])
             if (schedule) {
                 return res.json({
@@ -493,7 +373,7 @@ module.exports = {
 
                 horariosDisponiveis = []
 
-                registro.agenda.forEach((valor, indice, array) => {
+                registro.agenda.forEach((valor, indice) => {
 
 
                     if (indice == 0) {
@@ -504,7 +384,7 @@ module.exports = {
                         intervalo = (horaPosterior.diff(horaAnterior, 'minutes'))
 
 
-                        for (var i = 0; i < intervalo; i += contador) {
+                        for (var i = 0; i < intervalo; i) {
 
 
                             horaAnterior.add(i, 'minutes')
@@ -512,7 +392,6 @@ module.exports = {
                                 break;
                             }
                             inicioServico = horaAnterior.format('HH:mm')
-                            horaAnterior.add(-i, 'minutes')
                             horaAnterior.add((i + contador), 'minutes')
 
                             fimServico = horaAnterior.format('HH:mm')
@@ -546,7 +425,7 @@ module.exports = {
                             intervalo = (horaPosterior.diff(horaAnterior, 'minutes'))
 
 
-                            for (var i = 0; i < intervalo; i += contador) {
+                            for (var i = 0; i < intervalo; i ) {
 
                                 horaAnterior.add(i, 'minutes')
                                 if (horaPosterior.diff(horaAnterior, 'minutes') < contador) {
@@ -555,10 +434,9 @@ module.exports = {
 
                                 inicioServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add(-i, 'minutes')
-                                horaAnterior.add((i + contador), 'minutes')
 
                                 fimServico = horaAnterior.format('HH:mm')
-                                horaAnterior.add((-i - contador), 'minutes')
+                                horaAnterior.add((i - contador), 'minutes')
 
                                 if (hoje == dataAgenda) {
                                     if ((horaAtual == inicioServico) || (horaAtual < inicioServico)) {
@@ -592,19 +470,17 @@ module.exports = {
                     else {
 
 
-                        horaAnterior = moment.tz(array[indice - 1].fimServico, "HH:mm", "UTC")
+                        horaAnterior = moment.tz(array[indice].fimServico, "HH:mm", "UTC")
                         horaPosterior = moment.tz(valor.inicioServico, "HH:mm", "UTC")
                         intervalo = (horaPosterior.diff(horaAnterior, 'minutes'))
 
-                        for (var i = 0; i < intervalo; i += contador) {
+                        for (var i = 0; i < intervalo; i ) {
                             horaAnterior.add(i, 'minutes')
 
                             if (horaPosterior.diff(horaAnterior, 'minutes') < contador) {
                                 continue;
                             }
                             inicioServico = horaAnterior.format('HH:mm')
-                            horaAnterior.add(-i, 'minutes')
-                            horaAnterior.add((i + contador), 'minutes')
 
                             fimServico = horaAnterior.format('HH:mm')
                             horaAnterior.add((-i - contador), 'minutes')
@@ -635,15 +511,13 @@ module.exports = {
                             intervalo = (horaPosterior.diff(horaAnterior, 'minutes'))
 
 
-                            for (var i = 0; i < intervalo; i += contador) {
+                            for (var i = 0; i < intervalo; i ) {
 
                                 horaAnterior.add(i, 'minutes')
                                 if (horaPosterior.diff(horaAnterior, 'minutes') < contador) {
                                     break;
                                 }
                                 inicioServico = horaAnterior.format('HH:mm')
-                                horaAnterior.add(-i, 'minutes')
-                                horaAnterior.add((i + contador), 'minutes')
 
                                 fimServico = horaAnterior.format('HH:mm')
                                 horaAnterior.add((-i - contador), 'minutes')
@@ -681,7 +555,6 @@ module.exports = {
                         nome: registro.nome,
                         _id: registro.id,
                         idEmpresa: idEmpresa,
-                        idServico: idServico,
                         dataServico: dataAgenda,
                         horariosDisponiveis: horariosDisponiveis
                     }

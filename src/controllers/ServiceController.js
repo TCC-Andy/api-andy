@@ -17,7 +17,6 @@ module.exports = {
                 const servicos = await Servico.create({
                     nome,
                     descricao,
-                    preco,
                     tempo,
                     idEmpresa
                 });

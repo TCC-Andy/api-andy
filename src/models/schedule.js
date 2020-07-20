@@ -53,7 +53,6 @@ const AgendaSchema = new mongoose.Schema({
 
 });
 
-AgendaSchema.index({hash: 1 }, { unique: true });
 
 
 mongoose.model('Agendas', AgendaSchema);
