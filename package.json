@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",
-    "bcrypt": "^4.0.0",
+    "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "cpf-cnpj-validator": "^1.0.2",
     "dateformat": "^3.0.3",
